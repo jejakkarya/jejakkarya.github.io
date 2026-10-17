@@ -1,5 +1,9 @@
 <!doctype html>
 <!--
+  © 2026 Jejak Karya (jejakkarya.github.io). Hak cipta dilindungi.
+  Template demo ini tidak boleh disalin, dijual ulang, atau dipakai tanpa izin tertulis.
+-->
+<!--
   TEMPLATE PORTOFOLIO – PAKET BASIC – DESAIN 3
   Mode tampilan: ganti data-theme di bawah menjadi "terang" atau "gelap".
   Paket Basic: maks. 8 karya, tanpa case study.
@@ -174,5 +178,27 @@
   </dialog>
 
   <script src="assets/js/main.js"></script>
+
+  <!-- Badge demo Jejak Karya -->
+  <a class="jk-badge" href="../../" title="Template ini milik Jejak Karya">
+    <span class="jk-dot" aria-hidden="true"></span>Demo template oleh <b>Jejak Karya</b>
+  </a>
+  <style>
+    .jk-badge {
+      position: fixed; z-index: 9999;
+      left: calc(14px + env(safe-area-inset-left, 0px)); bottom: calc(14px + env(safe-area-inset-bottom, 0px));
+      display: inline-flex; align-items: center; gap: 8px;
+      padding: 8px 14px; border-radius: 999px;
+      background: rgba(20, 24, 38, 0.92); color: #fff;
+      font: 500 12.5px/1.2 system-ui, -apple-system, "Segoe UI", sans-serif;
+      text-decoration: none; box-shadow: 0 8px 24px -10px rgba(0, 0, 0, 0.5);
+      backdrop-filter: blur(6px); -webkit-backdrop-filter: blur(6px);
+    }
+    .jk-badge b { font-weight: 700; }
+    .jk-badge:hover { background: #2846d8; }
+    .jk-badge:focus-visible { outline: 2px solid #ffcf4a; outline-offset: 2px; }
+    .jk-dot { width: 8px; height: 8px; border-radius: 50%; background: #ffcf4a; }
+    @media print { .jk-badge { display: none; } }
+  </style>
 </body>
 </html>
