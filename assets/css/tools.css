@@ -136,3 +136,4 @@ button.chip[aria-pressed="true"] { background: var(--ink); border-color: var(--i
 .ring span { font-family: "Gabarito", sans-serif; font-weight: 800; font-size: 1.9rem; line-height: 1; }
 .ring small { color: var(--muted); font-size: 0.8rem; }
 .field { align-content: start; }
+.logo svg { width: 34px; height: 34px; margin: -4px -2px -4px -6px; }

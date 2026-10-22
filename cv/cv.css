@@ -231,3 +231,4 @@ input:disabled { background: var(--bg); color: var(--muted); }
   .cv-entry, .cv-list li { break-inside: avoid; }
   .cv-h { break-after: avoid; }
 }
+.logo svg { width: 34px; height: 34px; margin: -4px -2px -4px -6px; }
