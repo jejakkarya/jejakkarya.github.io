@@ -365,7 +365,7 @@ details p { margin: 0 0 18px; color: var(--muted); }
   color: #fff; border-color: #141826;
   box-shadow: 0 30px 60px -36px rgba(20, 24, 38, 0.9);
 }
-.plan-profesional .rec { background: transparent; color: var(--mark); border: 1.5px solid var(--mark); }
+.plan-profesional .rec { background: #141826; color: var(--mark); border: 1.5px solid var(--mark); box-shadow: 0 4px 12px -4px rgba(20, 24, 38, 0.5); }
 .plan-profesional .who, .plan-profesional .time, .plan-profesional .old { color: rgba(255, 255, 255, 0.7); }
 .plan-profesional .price span { color: var(--mark); }
 .plan-profesional .perk { background: rgba(255, 207, 74, 0.14); color: #fff3cf; border: 1px solid rgba(255, 207, 74, 0.35); }
