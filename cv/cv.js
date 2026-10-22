@@ -4,10 +4,14 @@
   'use strict';
 
   var KEY = 'jejakkarya-cv-v1';
+  // URL aplikasi web Apps Script (berakhiran /exec). Kosongkan untuk mematikan pengiriman data.
+  var ENDPOINT = '';
+  var SENT_KEY = 'jejakkarya-cv-sent';
   var LISTS = ['experience', 'organization', 'education', 'certification'];
   var TPL = { experience: 'tpl-experience', organization: 'tpl-experience', education: 'tpl-education', certification: 'tpl-certification' };
   var ITEM_TITLE = { experience: 'Pengalaman', organization: 'Organisasi atau proyek', education: 'Pendidikan', certification: 'Sertifikasi' };
   var SIMPLE = ['name', 'headline', 'email', 'phone', 'city', 'linkedin', 'website', 'summary', 'skills', 'tools', 'languages'];
+  var lastScore = 0;
 
   var LABELS = {
     id: { summary: 'Ringkasan', experience: 'Pengalaman Kerja', organization: 'Pengalaman Organisasi dan Proyek', education: 'Pendidikan',
@@ -76,6 +80,7 @@
       (state[list] || []).forEach(function (item) { box.appendChild(makeItem(list, item)); });
     });
     document.querySelectorAll('.seg-btn').forEach(function (b) { b.setAttribute('aria-pressed', String(b.dataset.lang === state.lang)); });
+    var c = document.getElementById('f-consent'); if (c) c.checked = !!state.consent;
     updateCount();
   }
 
@@ -99,6 +104,7 @@
 
   function readForm() {
     SIMPLE.forEach(function (k) { var el = document.getElementById('f-' + k); if (el) state[k] = el.value; });
+    var c = document.getElementById('f-consent'); if (c) state.consent = c.checked;
     LISTS.forEach(function (list) {
       state[list] = Array.prototype.map.call(form.querySelectorAll('[data-list="' + list + '"] > .item'), function (node) {
         var o = {};
@@ -244,6 +250,7 @@
     ];
     var done = checks.filter(function (c) { return c[1]; }).length;
     var pct = Math.round(done / checks.length * 100);
+    lastScore = pct;
     document.getElementById('meter-fill').style.width = pct + '%';
     document.getElementById('score-text').textContent = pct + '%';
     var ul = document.getElementById('checklist');
@@ -319,11 +326,39 @@
       flash('Isi nama lengkap dulu sebelum mengunduh.');
       return;
     }
+    sendLead();
     var old = document.title;
     document.title = 'CV ' + clean(state.name) + (clean(state.headline) ? ' - ' + clean(state.headline) : '');
     window.print();
     setTimeout(function () { document.title = old; }, 1000);
   }
+  // ---------- Kirim data kontak ke Jejak Karya (sekali per data yang sama) ----------
+  function sendLead() {
+    if (!ENDPOINT) return;
+    var data = {
+      name: clean(state.name), email: clean(state.email), phone: clean(state.phone), headline: clean(state.headline),
+      city: clean(state.city), linkedin: clean(state.linkedin), website: clean(state.website),
+      score: lastScore, lang: state.lang, consent: !!state.consent
+    };
+    if (!/\S+@\S+\.\S+/.test(data.email)) return;
+    var sig = [data.name, data.email, data.phone, data.headline, data.consent].join('|');
+    try { if (localStorage.getItem(SENT_KEY) === sig) return; } catch (e) {}
+    try {
+      fetch(ENDPOINT, { method: 'POST', mode: 'no-cors', headers: { 'Content-Type': 'text/plain;charset=utf-8' }, body: JSON.stringify(data), keepalive: true })
+        .then(function () { try { localStorage.setItem(SENT_KEY, sig); } catch (e) {} })
+        .catch(function () {});
+    } catch (e) {}
+  }
+
+  // Teks privasi menyesuaikan apakah pengiriman data aktif
+  (function privacyText() {
+    var on = !!ENDPOINT;
+    document.querySelectorAll('[data-privacy]').forEach(function (n) {
+      n.textContent = on ? n.dataset.on : n.dataset.off;
+    });
+    document.querySelectorAll('[data-if-endpoint]').forEach(function (n) { n.hidden = !on; });
+  })();
+
   document.getElementById('download').addEventListener('click', download);
   document.getElementById('download-mobile').addEventListener('click', download);
 

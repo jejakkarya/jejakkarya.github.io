@@ -168,6 +168,12 @@ input:disabled { background: var(--bg); color: var(--muted); }
 .cv-list { margin: calc(var(--u) * 4) 0 0; padding-left: calc(var(--u) * 18); }
 .cv-list li + li { margin-top: calc(var(--u) * 2); }
 
+/* ---------- Catatan pengiriman data ---------- */
+.consent { align-items: flex-start; padding: 12px; border-radius: 10px; background: var(--primary-soft); font-weight: 500; }
+.consent input { margin-top: 2px; flex: none; }
+.send-note { margin: 0; font-size: 0.82rem; color: var(--muted); }
+.mobile-cta .send-note { margin-top: 6px; text-align: center; font-size: 0.75rem; }
+
 /* ---------- Footer ---------- */
 .foot { max-width: 1320px; margin: 0 auto; display: flex; flex-wrap: wrap; justify-content: space-between; gap: 8px 20px; padding: 20px max(16px, 3vw) 36px; color: var(--muted); font-size: 0.9rem; }
 .foot p { margin: 0; }

@@ -27,7 +27,7 @@
 
   <section class="intro">
     <h1>Buat CV ATS dalam 10 menit.</h1>
-    <p>Isi form di bawah, hasilnya langsung terlihat di sebelah. Formatnya satu kolom tanpa tabel atau ikon, jadi mudah dibaca sistem ATS maupun HRD. Data kamu hanya tersimpan di browser ini dan tidak dikirim ke mana pun.</p>
+    <p>Isi form di bawah, hasilnya langsung terlihat di sebelah. Formatnya satu kolom tanpa tabel atau ikon, jadi mudah dibaca sistem ATS maupun HRD. <span data-privacy data-off="Data kamu hanya tersimpan di browser ini dan tidak dikirim ke mana pun." data-on="Isian CV tersimpan di browser ini. Saat kamu mengunduh, nama, email, nomor HP, posisi, dan kota dikirim ke Jejak Karya.">Data kamu hanya tersimpan di browser ini dan tidak dikirim ke mana pun.</span></p>
   </section>
 
   <div class="mobile-tabs" role="tablist" aria-label="Tampilan">
@@ -89,6 +89,10 @@
             <span>Website portofolio</span>
             <input id="f-website" name="website" type="text" placeholder="rakapratama.github.io">
             <small>Belum punya? <a href="../#paket">Jejak Karya bisa bantu buatkan.</a></small>
+          </label>
+          <label class="check-field consent span-2" data-if-endpoint hidden>
+            <input id="f-consent" type="checkbox">
+            <span>Boleh hubungi saya soal pembuatan website portofolio <em class="opt">opsional</em></span>
           </label>
         </div>
       </fieldset>
@@ -170,6 +174,7 @@
       <div class="paper-wrap">
         <article class="paper" id="cv" aria-label="Pratinjau CV"></article>
       </div>
+      <p class="send-note" data-if-endpoint hidden>Saat mengunduh, nama, email, nomor HP, posisi, dan kota kamu dikirim ke Jejak Karya. Kami hanya menghubungi kalau kamu mencentang izin di bagian Data diri.</p>
       <p class="print-tip">Setelah menekan <b>Unduh PDF</b>, pilih <b>Simpan sebagai PDF</b> sebagai tujuan cetak. Di HP: menu bagikan atau cetak, lalu simpan PDF.</p>
 
       <div class="upsell">
@@ -182,6 +187,7 @@
 
   <div class="mobile-cta">
     <button type="button" class="btn btn-primary" id="download-mobile">Unduh PDF</button>
+    <p class="send-note" data-if-endpoint hidden>Saat mengunduh, data kontak dasar dikirim ke Jejak Karya.</p>
   </div>
 
   <footer class="foot">
