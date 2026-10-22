@@ -1,0 +1,258 @@
+<!doctype html>
+<html lang="id">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Buat CV ATS Gratis · Jejak Karya</title>
+  <meta name="description" content="Isi form, lihat hasilnya langsung, dan unduh CV ramah ATS dalam format PDF. Gratis dari Jejak Karya.">
+  <meta property="og:title" content="Buat CV ATS Gratis · Jejak Karya">
+  <meta property="og:description" content="CV satu kolom yang mudah dibaca sistem ATS dan HRD. Gratis, tanpa daftar akun.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Gabarito:wght@500..900&family=Hanken+Grotesk:wght@400..700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="cv.css">
+</head>
+<body>
+
+  <header class="nav">
+    <div class="nav-inner">
+      <a class="logo" href="../" aria-label="Jejak Karya, kembali ke beranda">
+        <svg viewBox="0 0 32 32" aria-hidden="true"><ellipse cx="11" cy="20" rx="5" ry="7" transform="rotate(-12 11 20)"/><ellipse cx="22" cy="10" rx="4.2" ry="6" transform="rotate(14 22 10)"/></svg>
+        Jejak Karya
+      </a>
+      <span class="nav-title">CV ATS Gratis</span>
+      <a class="nav-link" href="../#paket">Lihat paket portofolio</a>
+    </div>
+  </header>
+
+  <section class="intro">
+    <h1>Buat CV ATS dalam 10 menit.</h1>
+    <p>Isi form di bawah, hasilnya langsung terlihat di sebelah. Formatnya satu kolom tanpa tabel atau ikon, jadi mudah dibaca sistem ATS maupun HRD. Data kamu hanya tersimpan di browser ini dan tidak dikirim ke mana pun.</p>
+  </section>
+
+  <div class="mobile-tabs" role="tablist" aria-label="Tampilan">
+    <button role="tab" id="tab-form" aria-controls="panel-form" aria-selected="true">Isi data</button>
+    <button role="tab" id="tab-preview" aria-controls="panel-preview" aria-selected="false">Lihat hasil</button>
+  </div>
+
+  <main class="builder">
+
+    <!-- ===================== FORM ===================== -->
+    <form class="form" id="panel-form" role="tabpanel" aria-labelledby="tab-form" novalidate>
+
+      <div class="toolbar">
+        <div class="seg" role="group" aria-label="Bahasa judul bagian CV">
+          <button type="button" class="seg-btn" data-lang="id" aria-pressed="true">Bahasa Indonesia</button>
+          <button type="button" class="seg-btn" data-lang="en" aria-pressed="false">English</button>
+        </div>
+        <div class="toolbar-actions">
+          <button type="button" class="link-btn" id="fill-sample">Isi contoh</button>
+          <button type="button" class="link-btn" id="clear-all">Kosongkan</button>
+        </div>
+      </div>
+      <p class="confirm" id="confirm-clear" hidden>
+        Hapus semua isian?
+        <button type="button" class="mini danger" id="confirm-yes">Ya, hapus</button>
+        <button type="button" class="mini" id="confirm-no">Batal</button>
+      </p>
+
+      <!-- Data diri -->
+      <fieldset class="card">
+        <legend><span class="step">1</span> Data diri</legend>
+        <div class="grid">
+          <label class="field span-2">
+            <span>Nama lengkap <em>wajib</em></span>
+            <input id="f-name" name="name" type="text" autocomplete="name" placeholder="Raka Pratama">
+          </label>
+          <label class="field span-2">
+            <span>Posisi yang dilamar</span>
+            <input id="f-headline" name="headline" type="text" placeholder="Video Editor">
+            <small>Samakan dengan judul lowongan. ATS mencocokkan kata ini.</small>
+          </label>
+          <label class="field">
+            <span>Email <em>wajib</em></span>
+            <input id="f-email" name="email" type="email" autocomplete="email" placeholder="raka@email.com">
+          </label>
+          <label class="field">
+            <span>Nomor HP/WhatsApp <em>wajib</em></span>
+            <input id="f-phone" name="phone" type="tel" autocomplete="tel" placeholder="0812-3456-7890">
+          </label>
+          <label class="field">
+            <span>Kota domisili</span>
+            <input id="f-city" name="city" type="text" autocomplete="address-level2" placeholder="Jakarta Selatan">
+          </label>
+          <label class="field">
+            <span>LinkedIn</span>
+            <input id="f-linkedin" name="linkedin" type="text" placeholder="linkedin.com/in/rakapratama">
+          </label>
+          <label class="field span-2">
+            <span>Website portofolio</span>
+            <input id="f-website" name="website" type="text" placeholder="rakapratama.github.io">
+            <small>Belum punya? <a href="../#paket">Jejak Karya bisa bantu buatkan.</a></small>
+          </label>
+        </div>
+      </fieldset>
+
+      <!-- Ringkasan -->
+      <fieldset class="card">
+        <legend><span class="step">2</span> Ringkasan profil</legend>
+        <label class="field">
+          <span class="sr-only">Ringkasan profil</span>
+          <textarea id="f-summary" name="summary" rows="4" maxlength="600" placeholder="Video editor dengan 2 tahun pengalaman membuat konten short-form untuk UMKM dan kreator..."></textarea>
+          <small><span id="summary-count">0</span>/600 karakter. Tulis 2–4 kalimat: siapa kamu, keahlian utama, dan satu pencapaian dengan angka.</small>
+        </label>
+      </fieldset>
+
+      <!-- Pengalaman -->
+      <fieldset class="card">
+        <legend><span class="step">3</span> Pengalaman kerja</legend>
+        <p class="hint">Mulai dari yang terbaru. Tulis satu pencapaian per baris, awali dengan kata kerja (membuat, meningkatkan, memimpin) dan sertakan angka bila ada.</p>
+        <div class="repeat" data-list="experience"></div>
+        <button type="button" class="add" data-add="experience">+ Tambah pengalaman</button>
+      </fieldset>
+
+      <!-- Organisasi & proyek -->
+      <fieldset class="card">
+        <legend><span class="step">4</span> Organisasi & proyek <span class="opt">opsional</span></legend>
+        <p class="hint">Cocok untuk fresh graduate: organisasi kampus, kepanitiaan, magang, atau proyek freelance.</p>
+        <div class="repeat" data-list="organization"></div>
+        <button type="button" class="add" data-add="organization">+ Tambah organisasi atau proyek</button>
+      </fieldset>
+
+      <!-- Pendidikan -->
+      <fieldset class="card">
+        <legend><span class="step">5</span> Pendidikan</legend>
+        <div class="repeat" data-list="education"></div>
+        <button type="button" class="add" data-add="education">+ Tambah pendidikan</button>
+      </fieldset>
+
+      <!-- Keahlian -->
+      <fieldset class="card">
+        <legend><span class="step">6</span> Keahlian</legend>
+        <div class="grid">
+          <label class="field span-2">
+            <span>Keahlian utama</span>
+            <input id="f-skills" name="skills" type="text" placeholder="Video editing, Color grading, Motion graphic, Copywriting">
+            <small>Pisahkan dengan koma. Pakai istilah yang sama dengan lowongan.</small>
+          </label>
+          <label class="field span-2">
+            <span>Tools & software</span>
+            <input id="f-tools" name="tools" type="text" placeholder="Premiere Pro, After Effects, DaVinci Resolve, CapCut">
+          </label>
+          <label class="field span-2">
+            <span>Bahasa</span>
+            <input id="f-languages" name="languages" type="text" placeholder="Indonesia (native), Inggris (profesional)">
+          </label>
+        </div>
+      </fieldset>
+
+      <!-- Sertifikasi -->
+      <fieldset class="card">
+        <legend><span class="step">7</span> Sertifikasi & pelatihan <span class="opt">opsional</span></legend>
+        <div class="repeat" data-list="certification"></div>
+        <button type="button" class="add" data-add="certification">+ Tambah sertifikasi</button>
+      </fieldset>
+
+      <p class="saved" id="saved" aria-live="polite">Draf tersimpan otomatis di browser ini.</p>
+    </form>
+
+    <!-- ===================== PRATINJAU ===================== -->
+    <aside class="preview" id="panel-preview" role="tabpanel" aria-labelledby="tab-preview">
+      <div class="preview-bar">
+        <div class="check" aria-live="polite">
+          <div class="meter" aria-hidden="true"><span id="meter-fill"></span></div>
+          <p><strong id="score-text">0%</strong> siap ATS</p>
+        </div>
+        <button type="button" class="btn btn-primary" id="download">Unduh PDF</button>
+      </div>
+      <ul class="checklist" id="checklist"></ul>
+
+      <div class="paper-wrap">
+        <article class="paper" id="cv" aria-label="Pratinjau CV"></article>
+      </div>
+      <p class="print-tip">Setelah menekan <b>Unduh PDF</b>, pilih <b>Simpan sebagai PDF</b> sebagai tujuan cetak. Di HP: menu bagikan atau cetak, lalu simpan PDF.</p>
+
+      <div class="upsell">
+        <h2>CV sudah rapi. Portofolionya bagaimana?</h2>
+        <p>HRD agency hampir selalu meminta link portofolio. Jejak Karya membuatkan website portofolio lengkap dengan case study, mulai Rp350 ribu.</p>
+        <a class="btn btn-light" href="https://wa.me/6285183027929?text=Halo%20Jejak%20Karya%2C%20saya%20baru%20buat%20CV%20ATS%20dan%20mau%20tanya%20soal%20portofolio." target="_blank" rel="noopener">Konsultasi gratis di WhatsApp</a>
+      </div>
+    </aside>
+  </main>
+
+  <div class="mobile-cta">
+    <button type="button" class="btn btn-primary" id="download-mobile">Unduh PDF</button>
+  </div>
+
+  <footer class="foot">
+    <p>© 2026 Jejak Karya · Gratis untuk dipakai siapa saja.</p>
+    <p><a href="../">Kembali ke beranda</a></p>
+  </footer>
+
+  <!-- ===== Template baris berulang ===== -->
+  <template id="tpl-experience">
+    <div class="item">
+      <div class="item-head"><strong class="item-title">Pengalaman</strong>
+        <div class="item-tools">
+          <button type="button" class="mini" data-move="-1" aria-label="Pindah ke atas">↑</button>
+          <button type="button" class="mini" data-move="1" aria-label="Pindah ke bawah">↓</button>
+          <button type="button" class="mini danger" data-remove>Hapus</button>
+        </div>
+      </div>
+      <div class="grid">
+        <label class="field"><span>Posisi</span><input data-k="role" type="text" placeholder="Video Editor"></label>
+        <label class="field"><span>Perusahaan</span><input data-k="org" type="text" placeholder="PT Kreasi Media"></label>
+        <label class="field"><span>Kota</span><input data-k="city" type="text" placeholder="Jakarta"></label>
+        <label class="field"><span>Jenis</span>
+          <select data-k="type">
+            <option value="">Pilih</option>
+            <option>Penuh waktu</option><option>Paruh waktu</option><option>Freelance</option><option>Kontrak</option><option>Magang</option>
+          </select>
+        </label>
+        <label class="field"><span>Mulai</span><input data-k="start" type="month"></label>
+        <label class="field"><span>Selesai</span><input data-k="end" type="month"></label>
+        <label class="check-field span-2"><input data-k="current" type="checkbox"> Masih di sini</label>
+        <label class="field span-2"><span>Pencapaian dan tanggung jawab</span>
+          <textarea data-k="points" rows="4" placeholder="Mengedit 30 video short-form per bulan untuk 5 klien UMKM&#10;Meningkatkan rata-rata retensi video dari 31% menjadi 48%"></textarea>
+          <small>Satu poin per baris.</small>
+        </label>
+      </div>
+    </div>
+  </template>
+
+  <template id="tpl-education">
+    <div class="item">
+      <div class="item-head"><strong class="item-title">Pendidikan</strong>
+        <div class="item-tools">
+          <button type="button" class="mini" data-move="-1" aria-label="Pindah ke atas">↑</button>
+          <button type="button" class="mini" data-move="1" aria-label="Pindah ke bawah">↓</button>
+          <button type="button" class="mini danger" data-remove>Hapus</button>
+        </div>
+      </div>
+      <div class="grid">
+        <label class="field span-2"><span>Jenjang dan jurusan</span><input data-k="degree" type="text" placeholder="S1 Desain Komunikasi Visual"></label>
+        <label class="field"><span>Institusi</span><input data-k="school" type="text" placeholder="Universitas Pasundan"></label>
+        <label class="field"><span>Kota</span><input data-k="city" type="text" placeholder="Bandung"></label>
+        <label class="field"><span>Tahun lulus</span><input data-k="year" type="text" inputmode="numeric" placeholder="2024 atau Sedang berjalan"></label>
+        <label class="field"><span>IPK <em class="opt">opsional</em></span><input data-k="gpa" type="text" placeholder="3,52/4,00"></label>
+        <label class="field span-2"><span>Keterangan <em class="opt">opsional</em></span><input data-k="note" type="text" placeholder="Skripsi: Strategi konten video pendek untuk UMKM"></label>
+      </div>
+    </div>
+  </template>
+
+  <template id="tpl-certification">
+    <div class="item">
+      <div class="item-head"><strong class="item-title">Sertifikasi</strong>
+        <div class="item-tools"><button type="button" class="mini danger" data-remove>Hapus</button></div>
+      </div>
+      <div class="grid">
+        <label class="field span-2"><span>Nama sertifikasi atau pelatihan</span><input data-k="name" type="text" placeholder="Google Digital Marketing"></label>
+        <label class="field"><span>Penerbit</span><input data-k="issuer" type="text" placeholder="Google"></label>
+        <label class="field"><span>Tahun</span><input data-k="year" type="text" inputmode="numeric" placeholder="2025"></label>
+      </div>
+    </div>
+  </template>
+
+  <script src="cv.js"></script>
+</body>
+</html>

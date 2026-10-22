@@ -1,0 +1,216 @@
+/* Jejak Karya – CV ATS builder */
+:root {
+  --bg: #f6f7fb;
+  --surface: #ffffff;
+  --ink: #141826;
+  --muted: #5b6175;
+  --line: #e1e4ee;
+  --primary: #2846d8;
+  --primary-soft: #e7ecff;
+  --mark: #ffcf4a;
+  --ok: #16834a;
+  --danger: #c0392b;
+  --radius: 16px;
+}
+
+*, *::before, *::after { box-sizing: border-box; }
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--ink);
+  font-family: "Hanken Grotesk", system-ui, sans-serif;
+  font-size: 1rem;
+  line-height: 1.55;
+  -webkit-font-smoothing: antialiased;
+}
+a { color: var(--primary); }
+:focus-visible { outline: 3px solid var(--primary); outline-offset: 2px; }
+h1, h2, legend, .logo { font-family: "Gabarito", system-ui, sans-serif; }
+[hidden] { display: none !important; }
+.sr-only { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+
+.btn {
+  display: inline-block; padding: 11px 22px; border-radius: 999px; border: 0;
+  font: 700 0.97rem/1.2 "Hanken Grotesk", system-ui, sans-serif; text-decoration: none; text-align: center; cursor: pointer;
+  transition: background-color 0.2s ease, transform 0.15s ease;
+}
+.btn:active { transform: scale(0.97); }
+.btn-primary { background: var(--primary); color: #fff; }
+.btn-primary:hover { background: var(--ink); }
+.btn-light { background: #fff; color: var(--primary); }
+.btn-light:hover { background: var(--mark); color: var(--ink); }
+
+/* ---------- Header ---------- */
+.nav { position: sticky; top: 0; z-index: 10; background: rgba(246, 247, 251, 0.9); backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px); border-bottom: 1px solid var(--line); }
+.nav-inner { max-width: 1320px; margin: 0 auto; display: flex; align-items: center; gap: 16px; padding: 12px max(16px, 3vw); }
+.logo { display: inline-flex; align-items: center; gap: 8px; font-weight: 800; font-size: 1.15rem; color: var(--ink); text-decoration: none; }
+.logo svg { width: 26px; height: 26px; fill: var(--primary); }
+.nav-title { padding: 3px 10px; border-radius: 999px; background: var(--mark); font-weight: 700; font-size: 0.82rem; }
+.nav-link { margin-left: auto; color: var(--muted); font-weight: 600; font-size: 0.93rem; text-decoration: none; }
+.nav-link:hover { color: var(--ink); }
+
+.intro { max-width: 1320px; margin: 0 auto; padding: clamp(28px, 4vw, 48px) max(16px, 3vw) 8px; }
+.intro h1 { margin: 0; font-size: clamp(2rem, 4.4vw, 3.2rem); font-weight: 800; line-height: 1.05; letter-spacing: -0.03em; }
+.intro p { margin: 12px 0 0; max-width: 70ch; color: var(--muted); }
+
+/* ---------- Layout ---------- */
+.builder {
+  max-width: 1320px; margin: 0 auto;
+  display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.05fr);
+  gap: 28px; align-items: start;
+  padding: 24px max(16px, 3vw) 48px;
+}
+.mobile-tabs, .mobile-cta { display: none; }
+
+/* ---------- Form ---------- */
+.form { display: grid; gap: 16px; min-width: 0; }
+.toolbar { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: 10px; }
+.seg { display: inline-flex; padding: 4px; border-radius: 999px; background: var(--surface); border: 1px solid var(--line); }
+.seg-btn { font: 600 0.88rem/1 inherit; font-family: inherit; padding: 8px 14px; border: 0; border-radius: 999px; background: transparent; color: var(--muted); cursor: pointer; }
+.seg-btn[aria-pressed="true"] { background: var(--ink); color: #fff; }
+.toolbar-actions { display: flex; gap: 14px; }
+.link-btn { font: 600 0.92rem/1 inherit; font-family: inherit; padding: 6px 2px; border: 0; background: none; color: var(--primary); cursor: pointer; text-decoration: underline; text-underline-offset: 4px; }
+.confirm { display: flex; flex-wrap: wrap; align-items: center; gap: 10px; margin: 0; padding: 12px 14px; border-radius: 12px; background: #fff4f2; color: var(--danger); font-weight: 600; }
+
+.card { margin: 0; padding: 20px; border: 1px solid var(--line); border-radius: var(--radius); background: var(--surface); min-width: 0; }
+.card legend { float: left; width: 100%; display: flex; align-items: center; gap: 10px; margin: 0 0 14px; padding: 0; font-size: 1.15rem; font-weight: 700; }
+.card legend + * { clear: both; }
+.step { display: inline-grid; place-items: center; width: 26px; height: 26px; border-radius: 50%; background: var(--primary-soft); color: var(--primary); font-size: 0.85rem; font-weight: 800; }
+.opt { font-family: "Hanken Grotesk", sans-serif; font-weight: 500; font-size: 0.8rem; font-style: normal; color: var(--muted); }
+.hint { margin: 0 0 14px; font-size: 0.92rem; color: var(--muted); }
+
+.grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px 14px; }
+.span-2 { grid-column: 1 / -1; }
+.field { display: grid; gap: 5px; min-width: 0; }
+.field > span { font-weight: 600; font-size: 0.9rem; }
+.field em { font-style: normal; font-weight: 500; font-size: 0.78rem; color: var(--primary); margin-left: 4px; }
+.field small { color: var(--muted); font-size: 0.82rem; line-height: 1.4; }
+input[type="text"], input[type="email"], input[type="tel"], input[type="month"], select, textarea {
+  width: 100%; min-width: 0; padding: 10px 12px;
+  border: 1.5px solid var(--line); border-radius: 10px; background: #fff; color: var(--ink);
+  font: 400 0.97rem/1.4 "Hanken Grotesk", system-ui, sans-serif;
+  transition: border-color 0.15s ease;
+}
+textarea { resize: vertical; min-height: 96px; }
+input:focus, select:focus, textarea:focus { outline: none; border-color: var(--primary); box-shadow: 0 0 0 3px var(--primary-soft); }
+input:disabled { background: var(--bg); color: var(--muted); }
+.check-field { display: flex; align-items: center; gap: 8px; font-size: 0.92rem; font-weight: 600; }
+.check-field input { width: 18px; height: 18px; accent-color: var(--primary); }
+
+.repeat { display: grid; gap: 12px; }
+.repeat:empty { display: none; }
+.item { padding: 14px; border: 1px dashed var(--line); border-radius: 12px; background: #fbfcfe; }
+.item-head { display: flex; justify-content: space-between; align-items: center; gap: 10px; margin-bottom: 10px; }
+.item-title { font-size: 0.92rem; }
+.item-tools { display: flex; gap: 6px; }
+.mini { font: 600 0.82rem/1 inherit; font-family: inherit; padding: 6px 10px; border-radius: 8px; border: 1px solid var(--line); background: #fff; color: var(--ink); cursor: pointer; }
+.mini:hover { border-color: var(--ink); }
+.mini.danger { color: var(--danger); }
+.mini.danger:hover { border-color: var(--danger); }
+.add { margin-top: 12px; width: 100%; padding: 11px; border-radius: 10px; border: 1.5px dashed var(--primary); background: var(--primary-soft); color: var(--primary); font: 700 0.93rem/1 inherit; font-family: inherit; cursor: pointer; }
+.add:hover { background: #dbe3ff; }
+.saved { margin: 0; font-size: 0.85rem; color: var(--muted); }
+
+/* ---------- Pratinjau ---------- */
+.preview { position: sticky; top: 72px; display: grid; gap: 14px; min-width: 0; }
+.preview-bar { display: flex; justify-content: space-between; align-items: center; gap: 16px; }
+.check { display: flex; align-items: center; gap: 12px; }
+.check p { margin: 0; font-size: 0.93rem; color: var(--muted); }
+.check strong { color: var(--ink); }
+.meter { width: 120px; height: 8px; border-radius: 8px; background: var(--line); overflow: hidden; }
+.meter span { display: block; height: 100%; width: 0; background: var(--ok); border-radius: 8px; transition: width 0.3s ease; }
+.checklist { list-style: none; margin: 0; padding: 0; display: flex; flex-wrap: wrap; gap: 6px; }
+.checklist li { padding: 4px 10px 4px 24px; border-radius: 999px; background: var(--surface); border: 1px solid var(--line); font-size: 0.8rem; color: var(--muted); position: relative; }
+.checklist li::before { content: ""; position: absolute; left: 9px; top: 50%; width: 8px; height: 8px; margin-top: -4px; border-radius: 50%; border: 1.5px solid var(--muted); }
+.checklist li.ok { color: var(--ok); border-color: #bfe3cd; background: #f1faf4; }
+.checklist li.ok::before { background: var(--ok); border-color: var(--ok); }
+
+.paper-wrap {
+  container-type: inline-size;
+  max-height: calc(100vh - 230px); overflow: auto;
+  border-radius: 12px; background: #dfe3ec; padding: 14px;
+}
+.print-tip { margin: 0; font-size: 0.84rem; color: var(--muted); }
+
+.upsell { padding: 22px; border-radius: var(--radius); background: var(--primary); color: #fff; }
+.upsell h2 { margin: 0; font-size: 1.25rem; font-weight: 800; }
+.upsell p { margin: 8px 0 16px; font-size: 0.95rem; opacity: 0.92; }
+
+/* ---------- Kertas CV (format ATS) ---------- */
+.paper {
+  --u: calc(100cqw / 794);
+  width: 100%;
+  min-height: calc(var(--u) * 1123);
+  padding: calc(var(--u) * 52) calc(var(--u) * 60);
+  background: #fff; color: #111;
+  font-family: Arial, Helvetica, sans-serif;
+  font-size: calc(var(--u) * 13.5);
+  line-height: 1.42;
+  box-shadow: 0 10px 30px -18px rgba(20, 24, 38, 0.5);
+}
+.cv-head { text-align: center; margin-bottom: calc(var(--u) * 14); }
+.cv-name { margin: 0; font-family: Arial, Helvetica, sans-serif; font-size: 2em; font-weight: 700; letter-spacing: 0.01em; line-height: 1.15; }
+.cv-headline { margin: calc(var(--u) * 3) 0 0; font-size: 1.12em; }
+.cv-contact { margin: calc(var(--u) * 5) 0 0; font-size: 0.93em; white-space: pre-wrap; }
+.cv-sec { margin-top: calc(var(--u) * 14); }
+.cv-h {
+  margin: 0 0 calc(var(--u) * 7); padding-bottom: calc(var(--u) * 3);
+  border-bottom: 1px solid #111;
+  font-family: Arial, Helvetica, sans-serif; font-size: 1.05em; font-weight: 700; text-transform: uppercase; letter-spacing: 0.04em;
+}
+.cv-entry + .cv-entry { margin-top: calc(var(--u) * 10); }
+.cv-row { display: flex; justify-content: space-between; align-items: baseline; gap: calc(var(--u) * 12); }
+.cv-title { margin: 0; font-size: 1em; font-weight: 700; }
+.cv-date { flex: none; font-size: 0.95em; }
+.cv-sub { margin: 0; font-style: italic; }
+.cv-text { margin: calc(var(--u) * 2) 0 0; }
+.cv-skill + .cv-skill { margin-top: calc(var(--u) * 3); }
+.cv-list { margin: calc(var(--u) * 4) 0 0; padding-left: calc(var(--u) * 18); }
+.cv-list li + li { margin-top: calc(var(--u) * 2); }
+
+/* ---------- Footer ---------- */
+.foot { max-width: 1320px; margin: 0 auto; display: flex; flex-wrap: wrap; justify-content: space-between; gap: 8px 20px; padding: 20px max(16px, 3vw) 36px; color: var(--muted); font-size: 0.9rem; }
+.foot p { margin: 0; }
+
+/* ---------- HP ---------- */
+@media (max-width: 900px) {
+  .builder { grid-template-columns: 1fr; padding-top: 12px; padding-bottom: 96px; }
+  .mobile-tabs {
+    position: sticky; top: 53px; z-index: 9;
+    display: flex; gap: 6px; margin: 16px max(16px, 3vw) 0; padding: 5px;
+    border-radius: 999px; background: var(--surface); border: 1px solid var(--line);
+  }
+  .mobile-tabs button { flex: 1; padding: 10px; border: 0; border-radius: 999px; background: transparent; color: var(--muted); font: 700 0.95rem/1 "Hanken Grotesk", sans-serif; cursor: pointer; }
+  .mobile-tabs button[aria-selected="true"] { background: var(--ink); color: #fff; }
+  body[data-view="form"] .preview { display: none; }
+  body[data-view="preview"] .form { display: none; }
+  .preview { position: static; }
+  .preview-bar .btn { display: none; }
+  .paper-wrap { max-height: none; padding: 8px; }
+  .mobile-cta {
+    position: fixed; left: 0; right: 0; bottom: 0; z-index: 9;
+    display: block; padding: 12px max(16px, 3vw) calc(12px + env(safe-area-inset-bottom, 0px));
+    background: rgba(246, 247, 251, 0.94); backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px);
+    border-top: 1px solid var(--line);
+  }
+  .mobile-cta .btn { width: 100%; }
+  .nav-link { display: none; }
+}
+@media (max-width: 520px) {
+  .grid { grid-template-columns: 1fr; }
+  .card { padding: 16px; }
+}
+
+/* ---------- Cetak / Simpan PDF ---------- */
+@page { size: A4; margin: 15mm 17mm; }
+@media print {
+  body { background: #fff; }
+  body > *:not(.builder) { display: none !important; }
+  .builder { display: block; padding: 0; max-width: none; }
+  .form, .preview > *:not(.paper-wrap) { display: none !important; }
+  .preview { display: block !important; position: static; }
+  .paper-wrap { container-type: normal; max-height: none; overflow: visible; padding: 0; background: none; border-radius: 0; }
+  .paper { --u: 1px; width: auto; min-height: 0; padding: 0; box-shadow: none; font-size: 10.5pt; }
+  .cv-entry, .cv-list li { break-inside: avoid; }
+  .cv-h { break-after: avoid; }
+}
