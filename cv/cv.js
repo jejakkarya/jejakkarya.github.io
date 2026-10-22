@@ -327,10 +327,151 @@
       return;
     }
     sendLead();
+    var fname = 'CV ' + clean(state.name) + (clean(state.headline) ? ' - ' + clean(state.headline) : '');
+    if (window.jspdf && window.jspdf.jsPDF) {
+      try {
+        buildPdf().save(fname.replace(/[\\/:*?"<>|]+/g, '') + '.pdf');
+        flash('PDF terunduh. Cek folder Unduhan/Downloads kamu.');
+        return;
+      } catch (e) { /* lanjut ke cara cadangan */ }
+    }
+    // Cadangan kalau pembuat PDF gagal dimuat: lewat menu cetak browser
     var old = document.title;
-    document.title = 'CV ' + clean(state.name) + (clean(state.headline) ? ' - ' + clean(state.headline) : '');
+    document.title = fname;
     window.print();
     setTimeout(function () { document.title = old; }, 1000);
+  }
+
+  // ---------- PDF langsung (teks asli, bisa dibaca ATS) ----------
+  // Font standar PDF hanya mendukung karakter Latin; karakter lain diganti.
+  function pdfSafe(s) {
+    return (s || '').replace(/[\u2018\u2019]/g, "'").replace(/[\u201C\u201D]/g, '"')
+      .replace(/[\u2013\u2014]/g, '-').replace(/\u2022/g, '-')
+      .replace(/[^\x20-\x7E\u00A0-\u00FF]/g, '');
+  }
+  function buildPdf() {
+    var L = LABELS[state.lang] || LABELS.id;
+    var doc = new window.jspdf.jsPDF({ unit: 'pt', format: 'a4' });
+    var W = doc.internal.pageSize.getWidth(), H = doc.internal.pageSize.getHeight();
+    var M = 48, TOP = 44, BOTTOM = 44, maxW = W - M * 2;
+    var y = TOP;
+    doc.setProperties({ title: 'CV ' + pdfSafe(clean(state.name)), author: pdfSafe(clean(state.name)), creator: 'Jejak Karya CV ATS' });
+
+    function font(style, size) { doc.setFont('helvetica', style); doc.setFontSize(size); }
+    function lh(size) { return size * 1.38; }
+    function need(h) { if (y + h > H - BOTTOM) { doc.addPage(); y = TOP; } }
+    function para(text, size, style, opts) {
+      opts = opts || {};
+      font(style || 'normal', size);
+      var x = opts.x || M, w = opts.w || maxW;
+      doc.splitTextToSize(pdfSafe(text), w).forEach(function (line) {
+        need(lh(size));
+        if (opts.center) doc.text(line, W / 2, y + size, { align: 'center' });
+        else doc.text(line, x, y + size);
+        y += lh(size);
+      });
+    }
+    function heading(t) {
+      need(34);
+      y += 10;
+      font('bold', 10.5);
+      doc.text(pdfSafe(t).toUpperCase(), M, y + 10.5, { charSpace: 0.4 });
+      y += lh(10.5) + 1;
+      doc.setLineWidth(0.7); doc.line(M, y, W - M, y);
+      y += 6;
+    }
+    function rowTitle(left, right) {
+      need(lh(10.5) + 14);
+      font('normal', 10);
+      var rw = right ? doc.getTextWidth(pdfSafe(right)) + 12 : 0;
+      font('bold', 10.5);
+      var lines = doc.splitTextToSize(pdfSafe(left), maxW - rw);
+      lines.forEach(function (line, i) {
+        need(lh(10.5));
+        font('bold', 10.5); doc.text(line, M, y + 10.5);
+        if (i === 0 && right) { font('normal', 10); doc.text(pdfSafe(right), W - M, y + 10.5, { align: 'right' }); }
+        y += lh(10.5);
+      });
+    }
+    function bullets(items) {
+      items.forEach(function (it) {
+        font('normal', 10);
+        var lines = doc.splitTextToSize(pdfSafe(it), maxW - 14);
+        lines.forEach(function (line, i) {
+          need(lh(10));
+          if (i === 0) doc.circle(M + 5, y + 6.6, 1.4, 'F');
+          doc.text(line, M + 14, y + 10);
+          y += lh(10);
+        });
+        y += 1.5;
+      });
+    }
+    function labeled(label, value) {
+      font('bold', 10);
+      var lab = pdfSafe(label) + ': ', lw = doc.getTextWidth(lab);
+      font('normal', 10);
+      var words = pdfSafe(value), first = doc.splitTextToSize(words, maxW - lw)[0] || '';
+      need(lh(10));
+      font('bold', 10); doc.text(lab, M, y + 10);
+      font('normal', 10); doc.text(first, M + lw, y + 10);
+      y += lh(10);
+      var rest = words.slice(first.length).trim();
+      if (rest) para(rest, 10);
+      y += 1.5;
+    }
+
+    // Kepala
+    para(clean(state.name), 20, 'bold', { center: true });
+    if (clean(state.headline)) para(clean(state.headline), 11.5, 'normal', { center: true });
+    var contact = [state.city, state.phone, state.email, state.linkedin, state.website].map(clean).filter(Boolean);
+    if (contact.length) { y += 2; para(contact.join('  |  '), 9.5, 'normal', { center: true }); }
+
+    if (clean(state.summary)) { heading(L.summary); para(clean(state.summary), 10); }
+
+    [['experience', L.experience], ['organization', L.organization]].forEach(function (pair) {
+      var items = (state[pair[0]] || []).filter(function (it) { return clean(it.role) || clean(it.org); });
+      if (!items.length) return;
+      heading(pair[1]);
+      items.forEach(function (it, k) {
+        if (k) y += 6;
+        var sub = [clean(it.org), clean(it.city), clean(it.type)].filter(Boolean).join(', ');
+        rowTitle(clean(it.role) || clean(it.org), range(it, L));
+        var subLine = clean(it.role) ? sub : [clean(it.city), clean(it.type)].filter(Boolean).join(', ');
+        if (subLine) para(subLine, 10, 'italic');
+        var pts = lines(it.points);
+        if (pts.length) { y += 2; bullets(pts); }
+      });
+    });
+
+    var edu = (state.education || []).filter(function (it) { return clean(it.degree) || clean(it.school); });
+    if (edu.length) {
+      heading(L.education);
+      edu.forEach(function (it, k) {
+        if (k) y += 6;
+        rowTitle(clean(it.degree) || clean(it.school), clean(it.year));
+        var sub = clean(it.degree) ? [clean(it.school), clean(it.city)].filter(Boolean).join(', ') : clean(it.city);
+        if (sub) para(sub, 10, 'italic');
+        var extra = [];
+        if (clean(it.gpa)) extra.push(L.gpa + ' ' + clean(it.gpa));
+        if (clean(it.note)) extra.push(clean(it.note));
+        if (extra.length) para(extra.join('. '), 10);
+      });
+    }
+
+    var sk = split(state.skills), tl = split(state.tools), lg = clean(state.languages);
+    if (sk.length || tl.length || lg) {
+      heading(L.skills);
+      if (sk.length) labeled(L.skillsMain, sk.join(', '));
+      if (tl.length) labeled(L.tools, tl.join(', '));
+      if (lg) labeled(L.languages, lg);
+    }
+
+    var certs = (state.certification || []).filter(function (it) { return clean(it.name); });
+    if (certs.length) {
+      heading(L.certification);
+      bullets(certs.map(function (it) { return [clean(it.name), clean(it.issuer), clean(it.year)].filter(Boolean).join(', '); }));
+    }
+    return doc;
   }
   // ---------- Kirim data kontak ke Jejak Karya (sekali per data yang sama) ----------
   function sendLead() {
