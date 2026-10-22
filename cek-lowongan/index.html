@@ -1,0 +1,115 @@
+<!doctype html>
+<html lang="id">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Cek Kecocokan CV dengan Lowongan (ATS) · Jejak Karya</title>
+  <meta name="description" content="Tempel teks lowongan dan CV kamu, lihat persentase kecocokan dan kata kunci yang belum ada. Gratis, tanpa daftar.">
+  <meta property="og:title" content="Cek Kecocokan CV dengan Lowongan (ATS) · Jejak Karya">
+  <meta property="og:description" content="Tempel teks lowongan dan CV kamu, lihat persentase kecocokan dan kata kunci yang belum ada. Gratis, tanpa daftar.">
+  <meta property="og:type" content="website">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Gabarito:wght@500..900&family=Hanken+Grotesk:wght@400..700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../assets/css/tools.css">
+  <link rel="stylesheet" href="match.css">
+</head>
+<body>
+
+  <header class="nav">
+    <div class="nav-inner">
+      <a class="logo" href="../" aria-label="Jejak Karya, kembali ke beranda">
+        <svg viewBox="0 0 32 32" aria-hidden="true"><ellipse cx="11" cy="20" rx="5" ry="7" transform="rotate(-12 11 20)"/><ellipse cx="22" cy="10" rx="4.2" ry="6" transform="rotate(14 22 10)"/></svg>
+        Jejak Karya
+      </a>
+      <span class="nav-title">Alat gratis</span>
+      <a class="nav-link" href="../#alat">Semua alat gratis</a>
+    </div>
+  </header>
+
+  <main>
+  <section class="wrap intro">
+    <h1>Cek kecocokan CV dengan lowongan.</h1>
+    <p>Sistem ATS menyaring CV berdasarkan kata kunci dari lowongan. Tempel teks lowongan dan CV kamu, lalu lihat kata kunci mana yang sudah ada dan mana yang masih kurang.</p>
+    <p class="privacy">Semua dihitung di browser kamu. Tidak ada data yang dikirim.</p>
+  </section>
+
+  <section class="wrap match">
+    <div class="match-inputs">
+      <div class="card">
+        <h2>1. Teks lowongan</h2>
+        <p class="sub">Salin seluruh isi lowongan: tanggung jawab, kualifikasi, dan skill yang dicari.</p>
+        <label class="field"><span class="sr-only">Teks lowongan</span>
+          <textarea id="job" rows="12" placeholder="Contoh: Kami mencari Video Editor yang menguasai Adobe Premiere Pro dan After Effects, berpengalaman membuat konten short-form untuk TikTok dan Instagram Reels..."></textarea>
+        </label>
+        <div class="row-actions"><button type="button" class="link-btn" id="sample-job">Pakai contoh lowongan</button></div>
+      </div>
+      <div class="card">
+        <h2>2. Teks CV kamu</h2>
+        <p class="sub">Buka CV, pilih semua teks (Ctrl+A), lalu tempel di sini.</p>
+        <label class="field"><span class="sr-only">Teks CV</span>
+          <textarea id="cvtext" rows="12" placeholder="Tempel isi CV kamu di sini..."></textarea>
+        </label>
+        <div class="row-actions">
+          <button type="button" class="link-btn" id="from-cv" hidden>Ambil dari CV ATS yang kamu buat</button>
+          <a class="link-btn" href="../cv/" id="make-cv">Belum punya CV? Buat dulu di CV ATS</a>
+        </div>
+      </div>
+    </div>
+    <div class="match-cta">
+      <button type="button" class="btn btn-primary" id="check">Cek kecocokan</button>
+      <p class="note" id="msg" aria-live="polite"></p>
+    </div>
+
+    <div class="card result" id="result" hidden aria-live="polite">
+      <div class="score-row">
+        <div class="ring" id="ring" style="--p:0"><span id="pct">0%</span></div>
+        <div>
+          <h2 id="verdict">Hasil</h2>
+          <p class="sub" id="verdict-sub"></p>
+        </div>
+      </div>
+      <div class="kw-cols">
+        <div>
+          <h3>Belum ada di CV <span class="count" id="miss-n"></span></h3>
+          <p class="note">Tambahkan hanya yang benar-benar kamu kuasai, di bagian Keahlian atau poin pengalaman.</p>
+          <ul class="chips" id="missing"></ul>
+        </div>
+        <div>
+          <h3>Sudah ada <span class="count" id="have-n"></span></h3>
+          <ul class="chips" id="found"></ul>
+        </div>
+      </div>
+      <div class="tips">
+        <h3>Cek tambahan</h3>
+        <ul id="checks"></ul>
+      </div>
+    </div>
+  </section>
+  </main>
+
+  <section class="wrap others" aria-labelledby="judul-lain">
+    <h2 id="judul-lain">Alat gratis lainnya</h2>
+    <div class="others-grid">
+        <a class="other" href="../cv/"><b>CV ATS gratis</b><span>Buat CV satu kolom yang mudah dibaca ATS, lalu unduh PDF.</span><i>Coba gratis</i></a>
+        <a class="other" href="../kalkulator-tarif/"><b>Kalkulator tarif freelance</b><span>Hitung tarif per jam, per hari, dan per proyek yang masuk akal.</span><i>Coba gratis</i></a>
+        <a class="other" href="../surat-lamaran/"><b>Generator surat lamaran</b><span>Susun email atau surat lamaran rapi dalam 2 menit.</span><i>Coba gratis</i></a>
+        <a class="other" href="../cek-portofolio/"><b>Cek kesiapan portofolio</b><span>Jawab 10 pertanyaan, dapatkan skor dan saran perbaikan.</span><i>Coba gratis</i></a>
+    </div>
+    <div class="upsell">
+      <div>
+        <h2>Sudah siap melamar? Lengkapi dengan website portofolio.</h2>
+        <p>Jejak Karya membuatkan portofolio web lengkap dengan case study, disusun dari kacamata orang yang biasa merekrut tim kreatif. Mulai Rp350 ribu.</p>
+      </div>
+      <a class="btn btn-light" href="../#paket">Lihat paket</a>
+    </div>
+  </section>
+
+  <footer class="wrap foot">
+    <p>© 2026 Jejak Karya · Cek kecocokan CV gratis untuk siapa saja.</p>
+    <p><a href="../">Beranda</a> · <a href="https://wa.me/6285183027929?text=Halo%20Jejak%20Karya" target="_blank" rel="noopener">WhatsApp 0851-8302-7929</a></p>
+  </footer>
+
+  <script src="match.js"></script>
+</body>
+</html>

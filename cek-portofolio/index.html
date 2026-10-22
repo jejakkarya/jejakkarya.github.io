@@ -1,0 +1,101 @@
+<!doctype html>
+<html lang="id">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Cek Kesiapan Portofolio Kreatif (Kuis 2 Menit) · Jejak Karya</title>
+  <meta name="description" content="Jawab 10 pertanyaan singkat dan dapatkan skor kesiapan portofolio beserta saran perbaikan dari sudut pandang perekrut. Gratis.">
+  <meta property="og:title" content="Cek Kesiapan Portofolio Kreatif (Kuis 2 Menit) · Jejak Karya">
+  <meta property="og:description" content="Jawab 10 pertanyaan singkat dan dapatkan skor kesiapan portofolio beserta saran perbaikan dari sudut pandang perekrut. Gratis.">
+  <meta property="og:type" content="website">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Gabarito:wght@500..900&family=Hanken+Grotesk:wght@400..700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../assets/css/tools.css">
+  <link rel="stylesheet" href="quiz.css">
+</head>
+<body>
+
+  <header class="nav">
+    <div class="nav-inner">
+      <a class="logo" href="../" aria-label="Jejak Karya, kembali ke beranda">
+        <svg viewBox="0 0 32 32" aria-hidden="true"><ellipse cx="11" cy="20" rx="5" ry="7" transform="rotate(-12 11 20)"/><ellipse cx="22" cy="10" rx="4.2" ry="6" transform="rotate(14 22 10)"/></svg>
+        Jejak Karya
+      </a>
+      <span class="nav-title">Alat gratis</span>
+      <a class="nav-link" href="../#alat">Semua alat gratis</a>
+    </div>
+  </header>
+
+  <main>
+  <section class="wrap intro">
+    <h1>Seberapa siap portofoliomu dilirik HRD?</h1>
+    <p>Jawab 10 pertanyaan singkat. Kamu akan mendapat skor, bagian mana yang paling perlu diperbaiki, dan saran konkret dari sudut pandang orang yang biasa merekrut tim kreatif.</p>
+    <p class="privacy">Semua dihitung di browser kamu. Tidak ada data yang dikirim.</p>
+  </section>
+
+  <section class="wrap quiz">
+    <div class="card quiz-card" id="quiz">
+      <div class="quiz-top">
+        <p class="q-count" id="q-count">Pertanyaan 1 dari 10</p>
+        <div class="q-bar" aria-hidden="true"><span id="q-bar"></span></div>
+      </div>
+      <fieldset class="q" id="q">
+        <legend id="q-text"></legend>
+        <div class="answers" id="answers"></div>
+      </fieldset>
+      <div class="quiz-nav">
+        <button type="button" class="btn btn-line" id="back" disabled>Kembali</button>
+        <button type="button" class="btn btn-primary" id="next" disabled>Lanjut</button>
+      </div>
+    </div>
+
+    <div class="result" id="result" hidden>
+      <div class="card score-card">
+        <div class="ring" id="ring" style="--p:0"><span id="score">0</span><small>/100</small></div>
+        <div>
+          <p class="level" id="level"></p>
+          <h2 id="headline"></h2>
+          <p class="sub" id="summary"></p>
+        </div>
+      </div>
+      <div class="areas" id="areas"></div>
+      <div class="card">
+        <h2>Yang perlu kamu perbaiki dulu</h2>
+        <ol class="fixes" id="fixes"></ol>
+      </div>
+      <div class="card rec" id="rec"></div>
+      <div class="row-actions">
+        <button type="button" class="btn btn-line" id="again">Ulangi kuis</button>
+        <button type="button" class="btn btn-line" id="share">Salin hasil</button>
+        <span class="toast" id="toast" aria-live="polite"></span>
+      </div>
+    </div>
+  </section>
+  </main>
+
+  <section class="wrap others" aria-labelledby="judul-lain">
+    <h2 id="judul-lain">Alat gratis lainnya</h2>
+    <div class="others-grid">
+        <a class="other" href="../cv/"><b>CV ATS gratis</b><span>Buat CV satu kolom yang mudah dibaca ATS, lalu unduh PDF.</span><i>Coba gratis</i></a>
+        <a class="other" href="../cek-lowongan/"><b>Cek kecocokan CV</b><span>Bandingkan CV dengan lowongan dan temukan kata kunci yang belum ada.</span><i>Coba gratis</i></a>
+        <a class="other" href="../kalkulator-tarif/"><b>Kalkulator tarif freelance</b><span>Hitung tarif per jam, per hari, dan per proyek yang masuk akal.</span><i>Coba gratis</i></a>
+        <a class="other" href="../surat-lamaran/"><b>Generator surat lamaran</b><span>Susun email atau surat lamaran rapi dalam 2 menit.</span><i>Coba gratis</i></a>
+    </div>
+    <div class="upsell">
+      <div>
+        <h2>Sudah siap melamar? Lengkapi dengan website portofolio.</h2>
+        <p>Jejak Karya membuatkan portofolio web lengkap dengan case study, disusun dari kacamata orang yang biasa merekrut tim kreatif. Mulai Rp350 ribu.</p>
+      </div>
+      <a class="btn btn-light" href="../#paket">Lihat paket</a>
+    </div>
+  </section>
+
+  <footer class="wrap foot">
+    <p>© 2026 Jejak Karya · Cek kesiapan portofolio gratis untuk siapa saja.</p>
+    <p><a href="../">Beranda</a> · <a href="https://wa.me/6285183027929?text=Halo%20Jejak%20Karya" target="_blank" rel="noopener">WhatsApp 0851-8302-7929</a></p>
+  </footer>
+
+  <script src="quiz.js"></script>
+</body>
+</html>

@@ -1,0 +1,125 @@
+<!doctype html>
+<html lang="id">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Kalkulator Tarif Freelance (Editor, Desainer, Writer) · Jejak Karya</title>
+  <meta name="description" content="Hitung tarif freelance per jam, per hari, dan per proyek dari target penghasilan, biaya, dan jam kerjamu. Gratis.">
+  <meta property="og:title" content="Kalkulator Tarif Freelance (Editor, Desainer, Writer) · Jejak Karya">
+  <meta property="og:description" content="Hitung tarif freelance per jam, per hari, dan per proyek dari target penghasilan, biaya, dan jam kerjamu. Gratis.">
+  <meta property="og:type" content="website">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Gabarito:wght@500..900&family=Hanken+Grotesk:wght@400..700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../assets/css/tools.css">
+  <link rel="stylesheet" href="calc.css">
+</head>
+<body>
+
+  <header class="nav">
+    <div class="nav-inner">
+      <a class="logo" href="../" aria-label="Jejak Karya, kembali ke beranda">
+        <svg viewBox="0 0 32 32" aria-hidden="true"><ellipse cx="11" cy="20" rx="5" ry="7" transform="rotate(-12 11 20)"/><ellipse cx="22" cy="10" rx="4.2" ry="6" transform="rotate(14 22 10)"/></svg>
+        Jejak Karya
+      </a>
+      <span class="nav-title">Alat gratis</span>
+      <a class="nav-link" href="../#alat">Semua alat gratis</a>
+    </div>
+  </header>
+
+  <main>
+  <section class="wrap intro">
+    <h1>Kalkulator tarif freelance.</h1>
+    <p>Mulai dari penghasilan yang kamu butuhkan, bukan dari menebak harga. Masukkan target, biaya, dan jam kerja, lalu lihat tarif minimum per jam, per hari, dan per proyek.</p>
+    <p class="privacy">Semua dihitung di browser kamu. Tidak ada data yang dikirim.</p>
+  </section>
+
+  <section class="wrap calc">
+    <form class="card calc-form" id="calc" novalidate>
+      <h2>Data kamu</h2>
+      <p class="sub">Angka bisa diubah kapan saja, hasilnya langsung menyesuaikan.</p>
+      <div class="grid">
+        <label class="field span-2"><span>Target penghasilan bersih per bulan</span>
+          <div class="input-rp"><input id="target" type="text" inputmode="numeric" value="6.000.000"></div>
+          <small>Uang yang ingin kamu bawa pulang untuk kebutuhan hidup.</small>
+        </label>
+        <label class="field span-2"><span>Biaya kerja per bulan</span>
+          <div class="input-rp"><input id="cost" type="text" inputmode="numeric" value="750.000"></div>
+          <small>Internet, langganan software, cicilan alat, listrik, transport.</small>
+        </label>
+        <label class="field"><span>Hari kerja per minggu</span><input id="days" type="number" min="1" max="7" step="1" value="5"></label>
+        <label class="field"><span>Jam produktif per hari</span><input id="hours" type="number" min="1" max="12" step="0.5" value="5">
+          <small>Jam yang benar-benar dibayar klien, di luar cari klien dan admin.</small></label>
+        <label class="field"><span>Minggu libur per tahun</span><input id="off" type="number" min="0" max="20" step="1" value="4"></label>
+        <label class="field"><span>Cadangan pajak dan dana darurat</span>
+          <select id="buffer"><option value="10">10%</option><option value="15" selected>15%</option><option value="20">20%</option><option value="25">25%</option><option value="30">30%</option></select></label>
+      </div>
+      <div class="project">
+        <h3>Hitung harga satu proyek</h3>
+        <ul class="chips" id="presets" aria-label="Contoh proyek">
+          <li><button type="button" class="chip" data-h="4" data-n="Video short-form 60 detik">Video short-form</button></li>
+          <li><button type="button" class="chip" data-h="12" data-n="Video YouTube 10 menit">Video YouTube</button></li>
+          <li><button type="button" class="chip" data-h="1.5" data-n="1 desain feed Instagram">Desain feed</button></li>
+          <li><button type="button" class="chip" data-h="16" data-n="Logo dan identitas sederhana">Logo</button></li>
+          <li><button type="button" class="chip" data-h="3" data-n="Artikel 1.000 kata">Artikel</button></li>
+        </ul>
+        <div class="grid">
+          <label class="field"><span>Nama proyek</span><input id="pname" type="text" value="Video short-form 60 detik"></label>
+          <label class="field"><span>Perkiraan jam pengerjaan</span><input id="phours" type="number" min="0.5" step="0.5" value="4">
+            <small>Termasuk revisi dan komunikasi.</small></label>
+        </div>
+      </div>
+    </form>
+
+    <div class="calc-result" aria-live="polite">
+      <div class="card hero-rate">
+        <p class="label">Tarif minimum per jam</p>
+        <p class="big-num" id="r-hour">Rp0</p>
+        <div class="rate-row">
+          <div><p class="label">Per hari</p><p class="mid-num" id="r-day">Rp0</p></div>
+          <div><p class="label" id="r-pname-label">Per proyek</p><p class="mid-num" id="r-project">Rp0</p></div>
+        </div>
+      </div>
+      <div class="card">
+        <h2>Rincian</h2>
+        <dl class="breakdown">
+          <div><dt>Kebutuhan per tahun (termasuk cadangan)</dt><dd id="b-year">Rp0</dd></div>
+          <div><dt>Jam yang bisa ditagih per tahun</dt><dd id="b-hours">0 jam</dd></div>
+          <div><dt>Pendapatan kotor yang perlu dicapai per bulan</dt><dd id="b-month">Rp0</dd></div>
+          <div><dt>Proyek seperti ini yang perlu kamu dapat per bulan</dt><dd id="b-projects">0</dd></div>
+        </dl>
+        <p class="note">Ini tarif minimum agar target tercapai. Bandingkan dengan harga pasar di bidangmu sebelum menawarkan, dan naikkan seiring pengalaman.</p>
+        <div class="row-actions">
+          <button type="button" class="btn btn-line" id="copy">Salin ringkasan</button>
+          <span class="toast" id="copied" aria-live="polite"></span>
+        </div>
+      </div>
+    </div>
+  </section>
+  </main>
+
+  <section class="wrap others" aria-labelledby="judul-lain">
+    <h2 id="judul-lain">Alat gratis lainnya</h2>
+    <div class="others-grid">
+        <a class="other" href="../cv/"><b>CV ATS gratis</b><span>Buat CV satu kolom yang mudah dibaca ATS, lalu unduh PDF.</span><i>Coba gratis</i></a>
+        <a class="other" href="../cek-lowongan/"><b>Cek kecocokan CV</b><span>Bandingkan CV dengan lowongan dan temukan kata kunci yang belum ada.</span><i>Coba gratis</i></a>
+        <a class="other" href="../surat-lamaran/"><b>Generator surat lamaran</b><span>Susun email atau surat lamaran rapi dalam 2 menit.</span><i>Coba gratis</i></a>
+        <a class="other" href="../cek-portofolio/"><b>Cek kesiapan portofolio</b><span>Jawab 10 pertanyaan, dapatkan skor dan saran perbaikan.</span><i>Coba gratis</i></a>
+    </div>
+    <div class="upsell">
+      <div>
+        <h2>Sudah siap melamar? Lengkapi dengan website portofolio.</h2>
+        <p>Jejak Karya membuatkan portofolio web lengkap dengan case study, disusun dari kacamata orang yang biasa merekrut tim kreatif. Mulai Rp350 ribu.</p>
+      </div>
+      <a class="btn btn-light" href="../#paket">Lihat paket</a>
+    </div>
+  </section>
+
+  <footer class="wrap foot">
+    <p>© 2026 Jejak Karya · Kalkulator tarif freelance gratis untuk siapa saja.</p>
+    <p><a href="../">Beranda</a> · <a href="https://wa.me/6285183027929?text=Halo%20Jejak%20Karya" target="_blank" rel="noopener">WhatsApp 0851-8302-7929</a></p>
+  </footer>
+
+  <script src="calc.js"></script>
+</body>
+</html>

@@ -1,0 +1,39 @@
+.quiz { max-width: 760px; }
+.quiz-card { padding: clamp(20px, 3.5vw, 36px); }
+.quiz-top { display: grid; gap: 10px; margin-bottom: 18px; }
+.q-count { margin: 0; font-weight: 700; font-size: 0.9rem; color: var(--primary); }
+.q-bar { height: 6px; border-radius: 6px; background: var(--line); overflow: hidden; }
+.q-bar span { display: block; height: 100%; width: 0; background: var(--primary); border-radius: 6px; transition: width 0.3s ease; }
+.q { margin: 0; padding: 0; border: 0; min-width: 0; }
+.q legend { padding: 0; margin-bottom: 18px; font-family: "Gabarito", sans-serif; font-size: clamp(1.35rem, 3.2vw, 1.8rem); font-weight: 800; line-height: 1.2; letter-spacing: -0.015em; }
+.answers { display: grid; gap: 10px; }
+.answer {
+  display: flex; align-items: center; gap: 12px; padding: 15px 16px; border-radius: 12px;
+  border: 1.5px solid var(--line); background: var(--surface); cursor: pointer; font-weight: 600;
+  transition: border-color 0.15s ease, background-color 0.15s ease;
+}
+.answer:hover { border-color: var(--primary); }
+.answer input { width: 20px; height: 20px; margin: 0; flex: none; accent-color: var(--primary); }
+.answer:has(input:checked) { border-color: var(--primary); background: var(--primary-soft); }
+.answer:has(input:focus-visible) { outline: 3px solid var(--primary); outline-offset: 2px; }
+.quiz-nav { display: flex; justify-content: space-between; gap: 12px; margin-top: 22px; }
+
+.result { display: grid; gap: 14px; scroll-margin-top: 80px; }
+.score-card { display: flex; flex-wrap: wrap; align-items: center; gap: 18px 26px; }
+.score-card .ring { width: 128px; height: 128px; }
+.score-card .ring span { font-size: 2.3rem; }
+.level { margin: 0; font-weight: 800; font-size: 0.95rem; }
+.score-card h2 { margin: 2px 0 4px; font-size: clamp(1.3rem, 3vw, 1.7rem); }
+.score-card .sub { margin: 0; }
+.areas { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 10px; }
+.area { padding: 16px; }
+.area-name { margin: 0; font-size: 0.85rem; color: var(--muted); font-weight: 600; }
+.area-num { margin: 2px 0 8px; font-family: "Gabarito", sans-serif; font-size: 1.5rem; font-weight: 800; }
+.area-bar { height: 6px; border-radius: 6px; background: var(--line); overflow: hidden; }
+.area-bar span { display: block; height: 100%; border-radius: 6px; }
+.fixes { margin: 10px 0 0; padding-left: 22px; display: grid; gap: 10px; }
+.fixes li { padding-left: 4px; }
+.rec { background: var(--ink); color: #fff; border-color: var(--ink); }
+.rec p { margin: 6px 0 0; opacity: 0.88; max-width: 60ch; }
+.rec-link { color: #fff; font-weight: 600; }
+@media (max-width: 700px) { .areas { grid-template-columns: repeat(2, minmax(0, 1fr)); } }

@@ -1,0 +1,122 @@
+<!doctype html>
+<html lang="id">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Generator Surat Lamaran &amp; Email Lamaran Kerja · Jejak Karya</title>
+  <meta name="description" content="Buat email lamaran atau surat lamaran kerja yang rapi dalam Bahasa Indonesia atau Inggris. Salin atau unduh PDF, gratis.">
+  <meta property="og:title" content="Generator Surat Lamaran &amp; Email Lamaran Kerja · Jejak Karya">
+  <meta property="og:description" content="Buat email lamaran atau surat lamaran kerja yang rapi dalam Bahasa Indonesia atau Inggris. Salin atau unduh PDF, gratis.">
+  <meta property="og:type" content="website">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Gabarito:wght@500..900&family=Hanken+Grotesk:wght@400..700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../assets/css/tools.css">
+  <link rel="stylesheet" href="letter.css">
+</head>
+<body>
+
+  <header class="nav">
+    <div class="nav-inner">
+      <a class="logo" href="../" aria-label="Jejak Karya, kembali ke beranda">
+        <svg viewBox="0 0 32 32" aria-hidden="true"><ellipse cx="11" cy="20" rx="5" ry="7" transform="rotate(-12 11 20)"/><ellipse cx="22" cy="10" rx="4.2" ry="6" transform="rotate(14 22 10)"/></svg>
+        Jejak Karya
+      </a>
+      <span class="nav-title">Alat gratis</span>
+      <a class="nav-link" href="../#alat">Semua alat gratis</a>
+    </div>
+  </header>
+
+  <main>
+  <section class="wrap intro">
+    <h1>Generator surat dan email lamaran.</h1>
+    <p>Isi data singkat, pilih format dan bahasanya, lalu salin hasilnya atau unduh sebagai PDF. Hasil bisa kamu edit langsung sebelum dikirim.</p>
+    <p class="privacy">Semua dihitung di browser kamu. Tidak ada data yang dikirim.</p>
+  </section>
+
+  <section class="wrap letter">
+    <form class="letter-form" id="lform" novalidate>
+      <div class="card">
+        <h2>Format</h2>
+        <div class="opts">
+          <div><p class="opt-label">Jenis</p><div class="seg" data-opt="kind"><button type="button" data-v="email" aria-pressed="true">Email lamaran</button><button type="button" data-v="letter" aria-pressed="false">Surat lamaran</button></div></div>
+          <div><p class="opt-label">Bahasa</p><div class="seg" data-opt="lang"><button type="button" data-v="id" aria-pressed="true">Indonesia</button><button type="button" data-v="en" aria-pressed="false">English</button></div></div>
+          <div><p class="opt-label">Nada</p><div class="seg" data-opt="tone"><button type="button" data-v="formal" aria-pressed="true">Formal</button><button type="button" data-v="casual" aria-pressed="false">Santai profesional</button></div></div>
+        </div>
+      </div>
+      <div class="card">
+        <h2>Lowongan</h2>
+        <div class="grid">
+          <label class="field"><span>Posisi yang dilamar</span><input id="position" type="text" placeholder="Video Editor"></label>
+          <label class="field"><span>Nama perusahaan</span><input id="company" type="text" placeholder="PT Kreasi Media"></label>
+          <label class="field"><span>Nama penerima <em>opsional</em></span><input id="recipient" type="text" placeholder="Ibu Sinta"></label>
+          <label class="field"><span>Info lowongan dari</span>
+            <select id="source"><option value="">Pilih</option><option>LinkedIn</option><option>Instagram</option><option>website perusahaan</option><option>Glints</option><option>Jobstreet</option><option>rekomendasi rekan</option></select></label>
+        </div>
+      </div>
+      <div class="card">
+        <h2>Tentang kamu</h2>
+        <div class="grid">
+          <label class="field"><span>Nama lengkap</span><input id="name" type="text" autocomplete="name" placeholder="Raka Pratama"></label>
+          <label class="field"><span>Kota</span><input id="city" type="text" placeholder="Jakarta"></label>
+          <label class="field"><span>Email</span><input id="email" type="email" autocomplete="email" placeholder="raka@email.com"></label>
+          <label class="field"><span>Nomor HP</span><input id="phone" type="tel" autocomplete="tel" placeholder="0812-3456-7890"></label>
+          <label class="field"><span>Pengalaman</span>
+            <select id="exp"><option value="fresh">Fresh graduate</option><option value="1">1 tahun</option><option value="2" selected>2 tahun</option><option value="3">3 tahun</option><option value="5">5 tahun atau lebih</option></select></label>
+          <label class="field"><span>Bidang keahlian utama</span><input id="field" type="text" placeholder="editing video short-form dan YouTube"></label>
+          <label class="field span-2"><span>3 keahlian yang relevan</span><input id="skills" type="text" placeholder="Premiere Pro, color grading, motion graphic">
+            <small>Pisahkan dengan koma. Pakai istilah dari lowongan.</small></label>
+          <label class="field span-2"><span>Satu pencapaian terbaik</span><input id="win" type="text" placeholder="meningkatkan retensi video klien dari 31% menjadi 48%">
+            <small>Lebih kuat kalau ada angka.</small></label>
+          <label class="field span-2"><span>Link portofolio <em>opsional</em></span><input id="link" type="text" placeholder="rakapratama.github.io"></label>
+        </div>
+        <div class="row-actions"><button type="button" class="link-btn" id="sample">Isi contoh</button></div>
+      </div>
+    </form>
+
+    <div class="letter-out">
+      <div class="card out-card">
+        <div class="out-head">
+          <h2>Hasil</h2>
+          <p class="note">Klik teks untuk mengedit langsung.</p>
+        </div>
+        <div class="subject-row" id="subject-row"><span class="opt-label">Subjek</span><p id="subject" contenteditable="true" spellcheck="false"></p></div>
+        <div class="paper" id="out" contenteditable="true" spellcheck="false"></div>
+        <div class="row-actions out-actions">
+          <button type="button" class="btn btn-primary" id="copy">Salin teks</button>
+          <button type="button" class="btn btn-line" id="pdf">Unduh PDF</button>
+          <a class="btn btn-line" id="mailto" href="#">Buka di aplikasi email</a>
+          <span class="toast" id="toast" aria-live="polite"></span>
+        </div>
+        <p class="note">Lampirkan CV dan sebutkan link portofolio. Kirim di hari kerja, pagi hari, dan pakai email dengan nama asli.</p>
+      </div>
+    </div>
+  </section>
+  </main>
+
+  <section class="wrap others" aria-labelledby="judul-lain">
+    <h2 id="judul-lain">Alat gratis lainnya</h2>
+    <div class="others-grid">
+        <a class="other" href="../cv/"><b>CV ATS gratis</b><span>Buat CV satu kolom yang mudah dibaca ATS, lalu unduh PDF.</span><i>Coba gratis</i></a>
+        <a class="other" href="../cek-lowongan/"><b>Cek kecocokan CV</b><span>Bandingkan CV dengan lowongan dan temukan kata kunci yang belum ada.</span><i>Coba gratis</i></a>
+        <a class="other" href="../kalkulator-tarif/"><b>Kalkulator tarif freelance</b><span>Hitung tarif per jam, per hari, dan per proyek yang masuk akal.</span><i>Coba gratis</i></a>
+        <a class="other" href="../cek-portofolio/"><b>Cek kesiapan portofolio</b><span>Jawab 10 pertanyaan, dapatkan skor dan saran perbaikan.</span><i>Coba gratis</i></a>
+    </div>
+    <div class="upsell">
+      <div>
+        <h2>Sudah siap melamar? Lengkapi dengan website portofolio.</h2>
+        <p>Jejak Karya membuatkan portofolio web lengkap dengan case study, disusun dari kacamata orang yang biasa merekrut tim kreatif. Mulai Rp350 ribu.</p>
+      </div>
+      <a class="btn btn-light" href="../#paket">Lihat paket</a>
+    </div>
+  </section>
+
+  <footer class="wrap foot">
+    <p>© 2026 Jejak Karya · Generator surat lamaran gratis untuk siapa saja.</p>
+    <p><a href="../">Beranda</a> · <a href="https://wa.me/6285183027929?text=Halo%20Jejak%20Karya" target="_blank" rel="noopener">WhatsApp 0851-8302-7929</a></p>
+  </footer>
+
+  <script src="../cv/jspdf.umd.min.js"></script>
+  <script src="letter.js"></script>
+</body>
+</html>
