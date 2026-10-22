@@ -159,6 +159,7 @@
     doc.setProperties({ title: 'Surat Lamaran ' + pdfSafe(name), author: pdfSafe(name), creator: 'Jejak Karya' });
     doc.save(('Surat Lamaran - ' + name + (pos ? ' - ' + pos : '')).replace(/[\\/:*?"<>|]+/g, '') + '.pdf');
     toast('PDF terunduh.');
+    if (window.goatcounter && window.goatcounter.count) window.goatcounter.count({ path: 'unduh-surat-lamaran', title: 'Unduh surat lamaran PDF', event: true });
   });
 
   load(); syncSegs(); build();

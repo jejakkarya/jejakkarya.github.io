@@ -327,6 +327,7 @@
       return;
     }
     sendLead();
+    if (window.goatcounter && window.goatcounter.count) window.goatcounter.count({ path: 'unduh-cv-pdf', title: 'Unduh CV PDF', event: true });
     var fname = 'CV ' + clean(state.name) + (clean(state.headline) ? ' - ' + clean(state.headline) : '');
     if (window.jspdf && window.jspdf.jsPDF) {
       try {

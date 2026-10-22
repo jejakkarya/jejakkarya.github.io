@@ -135,6 +135,7 @@
     });
 
     $('result').hidden = false;
+    if (window.goatcounter && window.goatcounter.count) window.goatcounter.count({ path: 'cek-lowongan-dipakai', title: 'Cek kecocokan CV dipakai', event: true });
     $('result').scrollIntoView({ behavior: 'smooth', block: 'start' });
   }
 

@@ -143,6 +143,7 @@
     rec.appendChild(h2); rec.appendChild(p); var row = document.createElement('div'); row.className = 'row-actions'; row.appendChild(a); row.appendChild(a2); rec.appendChild(row);
 
     window.__score = score;
+    if (window.goatcounter && window.goatcounter.count) window.goatcounter.count({ path: 'kuis-portofolio-selesai', title: 'Kuis portofolio selesai', event: true });
     res.scrollIntoView({ behavior: 'smooth', block: 'start' });
   }
 
