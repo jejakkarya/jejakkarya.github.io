@@ -78,3 +78,14 @@
     update();
   });
 })();
+
+// Pita info CV ATS gratis: bisa ditutup, diingat di browser ini
+(function () {
+  var bar = document.getElementById('topbar');
+  var close = bar && bar.querySelector('.topbar-close');
+  if (!close) return;
+  close.addEventListener('click', function () {
+    bar.hidden = true;
+    try { localStorage.setItem('jk-topbar', 'tutup'); } catch (e) {}
+  });
+})();
