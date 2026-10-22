@@ -23,7 +23,7 @@
         <svg viewBox="0 0 32 32" aria-hidden="true"><ellipse cx="11" cy="20" rx="5" ry="7" transform="rotate(-12 11 20)"/><ellipse cx="22" cy="10" rx="4.2" ry="6" transform="rotate(14 22 10)"/></svg>
         Jejak Karya
       </a>
-      <nav aria-label="Navigasi utama">
+      <nav id="menu" aria-label="Navigasi utama">
         <a href="#template">Template</a>
         <a href="#paket">Paket</a>
         <a href="#cara-kerja">Cara kerja</a>
@@ -31,6 +31,9 @@
         <a class="nav-free" href="cv/">CV ATS gratis</a>
       </nav>
       <a class="btn btn-primary btn-small" href="https://wa.me/6285183027929?text=Halo%20Jejak%20Karya%2C%20saya%20mau%20konsultasi%20bikin%20portofolio." target="_blank" rel="noopener">Konsultasi gratis</a>
+      <button class="menu-btn" type="button" aria-expanded="false" aria-controls="menu" aria-label="Buka menu">
+        <span></span><span></span><span></span>
+      </button>
     </div>
   </header>
 
@@ -88,7 +91,7 @@
       </div>
       <div class="tpl-group" data-paket="basic">
         <div class="tpl-group-head"><h3>Template Basic</h3><p>Rapi, ringan, dan fokus ke karya.</p></div>
-        <div class="tpl-grid">
+        <div class="tpl-grid" data-carousel>
           <article class="tpl" data-paket="basic">
             <a class="tpl-frame" href="demo/contoh-basic-1/" target="_blank" rel="noopener">
               <span class="tpl-bar" aria-hidden="true"><i></i><i></i><i></i></span>
@@ -148,7 +151,7 @@
       </div>
       <div class="tpl-group" data-paket="serius">
         <div class="tpl-group-head"><h3>Template Serius</h3><p>Interaktif, dengan 2 case study dan slider sebelum/sesudah.</p></div>
-        <div class="tpl-grid">
+        <div class="tpl-grid" data-carousel>
           <article class="tpl" data-paket="serius">
             <a class="tpl-frame" href="demo/contoh-serius-1/" target="_blank" rel="noopener">
               <span class="tpl-bar" aria-hidden="true"><i></i><i></i><i></i></span>
@@ -217,7 +220,7 @@
             <p class="sub">Harga perkenalan untuk klien pertama Jejak Karya.</p>
           </div>
         </div>
-        <div class="plans">
+        <div class="plans" data-carousel data-start=".plan-rec">
           <article class="plan">
             
             <h3>Basic</h3>
