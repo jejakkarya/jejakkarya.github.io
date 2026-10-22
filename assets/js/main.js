@@ -89,3 +89,20 @@
     try { localStorage.setItem('jk-topbar', 'tutup'); } catch (e) {}
   });
 })();
+
+// Kartu paket: "Lihat detail" membuka daftar lengkap di tempat
+(function () {
+  document.querySelectorAll('.more-btn').forEach(function (btn) {
+    var panel = document.getElementById(btn.getAttribute('aria-controls'));
+    var label = btn.querySelector('.more-label');
+    var count = btn.querySelector('.more-count');
+    if (!panel) return;
+    btn.addEventListener('click', function () {
+      var open = btn.getAttribute('aria-expanded') !== 'true';
+      btn.setAttribute('aria-expanded', String(open));
+      panel.classList.toggle('open', open);
+      label.textContent = open ? 'Sembunyikan detail' : 'Lihat detail';
+      if (count) count.hidden = open;
+    });
+  });
+})();

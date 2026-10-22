@@ -338,3 +338,60 @@ details p { margin: 0 0 18px; color: var(--muted); }
   .topbar-short { display: inline; }
   .topbar-link { flex-wrap: nowrap; gap: 8px; padding: 9px 44px 9px 16px; font-size: 0.85rem; justify-content: flex-start; text-align: left; white-space: nowrap; }
 }
+
+/* ---------- Kartu paket: Profesional, Custom, dan "Lihat detail" ---------- */
+.plans { align-items: stretch; padding-top: 14px; }
+.plan-body { flex: 1; display: flex; flex-direction: column; margin: 20px 0 22px; }
+.plan-body .feats { margin: 0; flex: none; }
+.more { display: grid; grid-template-rows: 0fr; transition: grid-template-rows 0.35s ease; }
+.more > .feats-more { min-height: 0; overflow: hidden; }
+.more.open { grid-template-rows: 1fr; }
+.more.open > .feats-more { padding-top: 10px; }
+.more-btn {
+  align-self: flex-start; margin-top: 12px; padding: 4px 0; border: 0; background: none;
+  font: 700 0.92rem/1.2 "Hanken Grotesk", system-ui, sans-serif; color: var(--primary); cursor: pointer;
+  text-decoration: underline; text-underline-offset: 4px;
+}
+.more-btn::after { content: ""; display: inline-block; width: 7px; height: 7px; margin-left: 8px; border-right: 2px solid currentColor; border-bottom: 2px solid currentColor; transform: translateY(-3px) rotate(45deg); transition: transform 0.25s ease; }
+.more-btn[aria-expanded="true"]::after { transform: translateY(1px) rotate(-135deg); }
+.more-count { font-weight: 500; opacity: 0.8; }
+.plan-rec .more-btn { color: #fff; }
+
+.perk { margin: 16px 0 0; padding: 10px 12px; border-radius: 10px; font-size: 0.9rem; line-height: 1.45; }
+
+/* Profesional: kartu gelap premium */
+.plan-profesional {
+  background: radial-gradient(120% 80% at 100% 0%, #3a3320 0%, transparent 55%), linear-gradient(160deg, #141826 0%, #232843 100%);
+  color: #fff; border-color: #141826;
+  box-shadow: 0 30px 60px -36px rgba(20, 24, 38, 0.9);
+}
+.plan-profesional .rec { background: transparent; color: var(--mark); border: 1.5px solid var(--mark); }
+.plan-profesional .who, .plan-profesional .time, .plan-profesional .old { color: rgba(255, 255, 255, 0.7); }
+.plan-profesional .price span { color: var(--mark); }
+.plan-profesional .perk { background: rgba(255, 207, 74, 0.14); color: #fff3cf; border: 1px solid rgba(255, 207, 74, 0.35); }
+.plan-profesional .feats li::before { color: var(--mark); }
+.plan-profesional .more-btn { color: var(--mark); }
+.btn-gold { background: var(--mark); color: var(--ink); }
+.btn-gold:hover { background: #fff; color: var(--ink); }
+
+/* Custom: kartu terang bermotif */
+.plan-custom {
+  border: 1.5px solid #c9d3ff; border-style: solid;
+  background:
+    radial-gradient(circle at 1px 1px, rgba(40, 70, 216, 0.16) 1px, transparent 0) 0 0 / 14px 14px,
+    var(--primary-soft);
+}
+.plan-custom .rec { background: var(--surface); color: var(--primary); border: 1.5px solid #c9d3ff; }
+.plan-custom .price span { font-size: 1.6rem; color: var(--primary); }
+.plan-custom .perk { background: var(--surface); color: var(--ink); border: 1px solid #c9d3ff; }
+.plan-chips { list-style: none; display: flex; flex-wrap: wrap; gap: 6px; margin: 12px 0 0; padding: 0; }
+.plan-chips li { padding: 4px 10px; border-radius: 999px; background: var(--surface); border: 1px solid #c9d3ff; font-size: 0.8rem; font-weight: 600; color: var(--primary); }
+.plan-custom .btn-line { border-color: var(--primary); color: var(--primary); background: var(--surface); }
+.plan-custom .btn-line:hover { background: var(--primary); color: #fff; }
+
+@media (max-width: 820px) {
+  .plans { align-items: flex-start; }
+}
+@media (prefers-reduced-motion: reduce) { .more { transition: none; } }
+.more:not(.open) > .feats-more { visibility: hidden; transition: visibility 0s 0.35s; }
+.plan-custom .perk { padding: 0; background: none; border: 0; color: var(--muted); }
