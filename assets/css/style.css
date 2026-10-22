@@ -420,3 +420,5 @@ details p { margin: 0 0 18px; color: var(--muted); }
 .more:not(.open) > .feats-more { visibility: hidden; transition: visibility 0s 0.35s; }
 .plan-custom .perk { padding: 0; background: none; border: 0; color: var(--muted); }
 .free .section-head h2 { margin: 0; font-size: clamp(2rem, 4.4vw, 3.2rem); font-weight: 800; line-height: 1.05; letter-spacing: -0.03em; }
+.final-ig { margin: 18px 0 0 !important; font-size: 0.95rem !important; opacity: 0.85; }
+.final-ig a { color: #fff; font-weight: 700; }
