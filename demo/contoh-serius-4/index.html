@@ -1,4 +1,5 @@
-<!doctype html>
+<!DOCTYPE html>
+
 <!--
   © 2026 Jejak Karya (jejakkarya.github.io). Hak cipta dilindungi.
   Template demo ini tidak boleh disalin, dijual ulang, atau dipakai tanpa izin tertulis.
@@ -8,338 +9,222 @@
   Mode tampilan: ganti data-theme di bawah menjadi "terang" atau "gelap".
   Paket Serius: maks. 12 karya dan 2 case study.
 -->
-<html lang="id" data-theme="gelap">
+<html data-theme="gelap" lang="id">
 <head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Sekar Ayu Lestari · Content Designer</title>
-  <meta name="description" content="Portofolio Sekar Ayu Lestari, content designer untuk desain, video, dan copy brand lokal.">
-  <meta property="og:title" content="Sekar Ayu Lestari · Content Designer">
-  <meta property="og:description" content="Portofolio Sekar Ayu Lestari, content designer untuk desain, video, dan copy brand lokal.">
-  <meta property="og:image" content="assets/img/karya-1.jpg">
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@500..800&family=Albert+Sans:wght@400..700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="assets/css/style.css">
-</head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1" name="viewport"/>
+<title>Sekar Ayu Lestari · Content Designer</title>
+<meta content="Portofolio Sekar Ayu Lestari, content designer untuk desain, video, dan copy brand lokal." name="description"/>
+<meta content="Sekar Ayu Lestari · Content Designer" property="og:title"/>
+<meta content="Portofolio Sekar Ayu Lestari, content designer untuk desain, video, dan copy brand lokal." property="og:description"/>
+<meta content="assets/img/karya-1.jpg" property="og:image"/>
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@500..800&amp;family=Albert+Sans:wght@400..700&amp;display=swap" rel="stylesheet"/>
+<link href="assets/css/style.css" rel="stylesheet"/>
+
+<style>
+    .jk-cut { position: relative; z-index: 5; margin-top: -190px; padding: 0 max(16px, 4vw) 72px; }
+    .jk-cut::after { content: ""; position: absolute; inset: 0; z-index: -1; background: var(--bg); }
+    .jk-cut::before {
+      content: ""; position: absolute; left: 0; right: 0; bottom: 100%; height: 300px;
+      background: linear-gradient(to bottom, transparent, var(--bg) 70%);
+      pointer-events: none;
+    }
+    .jk-cut-serius { margin-top: 48px; }
+    .jk-cut-serius::before { height: 90px; }
+    .jk-cut-serius .jk-cut-card { margin-top: 24px; }
+    .jk-cut-card {
+      position: relative; margin-top: 60px; max-width: 640px; margin: 0 auto; padding: 32px 28px; text-align: center;
+      border-radius: 20px; background: var(--surface); color: var(--ink);
+      border: 1px solid var(--line); box-shadow: 0 24px 60px -32px rgba(0, 0, 0, 0.45);
+      font-family: system-ui, -apple-system, "Segoe UI", sans-serif;
+    }
+    .jk-cut-card h2 { margin: 0; font: 800 clamp(1.5rem, 4vw, 2rem)/1.15 system-ui, -apple-system, "Segoe UI", sans-serif; letter-spacing: -0.02em; text-transform: none; }
+    .jk-cut-card p { margin: 12px auto 0; max-width: 46ch; color: var(--muted); font-size: 1rem; line-height: 1.55; }
+    .jk-cut-actions { display: flex; flex-wrap: wrap; justify-content: center; gap: 10px; margin-top: 22px; }
+    .jk-cut-actions a {
+      display: inline-block; padding: 12px 22px; border-radius: 999px; text-decoration: none;
+      font: 700 0.95rem/1.2 system-ui, -apple-system, "Segoe UI", sans-serif;
+    }
+    .jk-cut-wa { background: #2846d8; color: #fff; }
+    .jk-cut-wa:hover { background: #141826; }
+    .jk-cut-back { border: 1.5px solid var(--line); color: var(--ink); }
+    .jk-cut-back:hover { border-color: var(--ink); }
+    .jk-cut-list { display: flex; flex-wrap: wrap; justify-content: center; gap: 6px; margin: 16px 0 0; padding: 0; list-style: none; }
+    .jk-cut-list li { padding: 4px 11px; border-radius: 999px; border: 1px dashed var(--line); color: var(--muted); font-size: 0.82rem; }
+  </style></head>
 <body>
-
-  <a class="skip" href="#karya">Langsung ke karya</a>
-
-  <header class="top wrap">
-    <a class="top-name" href="#">Sekar Ayu Lestari</a>
-    <nav aria-label="Navigasi utama">
-      <a href="#karya">Karya</a>
-      <a href="#case-study">Case study</a>
-      <a href="#kontak">Kontak</a>
-    </nav>
-  </header>
-
-  <main>
-
-    <!-- ===================== HERO =====================
+<a class="skip" href="#karya">Langsung ke karya</a>
+<header class="top wrap">
+<a class="top-name" href="#">Sekar Ayu Lestari</a>
+<nav aria-label="Navigasi utama">
+<a href="#karya">Karya</a>
+<a href="#case-study">Case study</a>
+<a href="#cuplikan">Kontak</a>
+</nav>
+</header>
+<main>
+<!-- ===================== HERO =====================
       Arahkan kursor ke nama: sorotan cahaya mengikuti kursor.
       Kata di kalimat bawah berganti otomatis (atur di data-words, pisahkan dengan |). -->
-    <section class="hero wrap spot-area">
-      <div class="spot" aria-hidden="true">
-        <p class="spot-base">Sekar Ayu<br>Lestari</p>
-        <p class="spot-lit">Sekar Ayu<br>Lestari</p>
-      </div>
-      <h1 class="visually-hidden">Sekar Ayu Lestari</h1>
-      <div class="hero-body enter" style="--d:.2s">
-        <p class="hero-line">Content Designer yang membuat <span class="rotate" data-words="desain|video|copy">desain</span> untuk brand lokal.</p>
-        <p class="statement">Content designer yang mengerjakan konten dari ide sampai jadi: desain, video, dan copy. Tiga tahun membantu brand lokal tampil konsisten di media sosial.</p>
-        <p class="status"><span class="dot" aria-hidden="true"></span>Terbuka untuk posisi Content Designer atau Creative Associate di agency, Jakarta</p>
-        <div class="actions">
-          <a class="btn btn-primary" href="#karya">Lihat karya</a>
-          <a class="btn" href="#kontak">Hubungi saya</a>
-        </div>
-      </div>
-      <dl class="stats enter" style="--d:.35s">
-        <div><dt>tahun berkarya</dt><dd>3</dd></div>
-        <div><dt>brand ditangani</dt><dd>40+</dd></div>
-        <div><dt>views kampanye terbaik</dt><dd>1,2 jt</dd></div>
-      </dl>
-    </section>
-
-    <!-- ===================== KARYA =====================
+<section class="hero wrap spot-area">
+<div aria-hidden="true" class="spot">
+<p class="spot-base">Sekar Ayu<br/>Lestari</p>
+<p class="spot-lit">Sekar Ayu<br/>Lestari</p>
+</div>
+<h1 class="visually-hidden">Sekar Ayu Lestari</h1>
+<div class="hero-body enter" style="--d:.2s">
+<p class="hero-line">Content Designer yang membuat <span class="rotate" data-words="desain|video|copy">desain</span> untuk brand lokal.</p>
+<p class="statement">Content designer yang mengerjakan konten dari ide sampai jadi: desain, video, dan copy. Tiga tahun membantu brand lokal tampil konsisten di media sosial.</p>
+<p class="status"><span aria-hidden="true" class="dot"></span>Terbuka untuk posisi Content Designer atau Creative Associate di agency, Jakarta</p>
+<div class="actions">
+<a class="btn btn-primary" href="#karya">Lihat karya</a>
+<a class="btn" href="#cuplikan">Hubungi saya</a>
+</div>
+</div>
+<dl class="stats enter" style="--d:.35s">
+<div><dt>tahun berkarya</dt><dd>3</dd></div>
+<div><dt>brand ditangani</dt><dd>40+</dd></div>
+<div><dt>views kampanye terbaik</dt><dd>1,2 jt</dd></div>
+</dl>
+</section>
+<!-- ===================== KARYA =====================
       Kartu berbalik saat kursor diarahkan. Paket Serius: maks. 12 karya. -->
-    <section class="section wrap" id="karya" aria-labelledby="judul-karya">
-      <div class="section-head">
-        <h2 id="judul-karya">Karya pilihan</h2>
-        <div class="filters" role="group" aria-label="Filter karya">
-          <button class="chip" aria-pressed="true" data-filter="semua">Semua</button>
-          <button class="chip" aria-pressed="false" data-filter="desain">Desain</button>
-          <button class="chip" aria-pressed="false" data-filter="video">Video</button>
-          <button class="chip" aria-pressed="false" data-filter="copy">Copy</button>
-        </div>
-      </div>
-      <div class="works">
+<section aria-labelledby="judul-karya" class="section wrap" id="karya">
+<div class="section-head">
+<h2 id="judul-karya">Karya pilihan</h2>
+<div aria-label="Filter karya" class="filters" role="group">
+<button aria-pressed="true" class="chip" data-filter="semua">Semua</button>
+<button aria-pressed="false" class="chip" data-filter="desain">Desain</button>
+<button aria-pressed="false" class="chip" data-filter="video">Video</button>
+<button aria-pressed="false" class="chip" data-filter="copy">Copy</button>
+</div>
+</div>
+<div class="works">
+<article class="work flip" data-kategori="video" data-src="https://www.youtube.com/embed/ID_VIDEO" data-thumb="assets/img/karya-1.jpg" data-tipe="video">
+<div class="flip-inner">
+<div class="face front"><img alt="Kampanye peluncuran sepatu lari" loading="lazy" src="assets/img/karya-1.jpg"/><span aria-hidden="true" class="play"></span></div>
+<div class="face back">
+<span class="tag">Video</span>
+<h3>Kampanye peluncuran sepatu lari</h3>
+<p>Video utama 60 detik dan 6 potongan Reels. 1,2 juta views gabungan.</p>
+<span class="back-cta">Putar video</span>
+</div>
+</div>
+<button aria-label="Putar video: Kampanye peluncuran sepatu lari" class="work-open"></button>
+</article>
+<article class="work flip vertikal" data-kategori="desain" data-src="assets/img/karya-2.jpg" data-thumb="assets/img/karya-2.jpg" data-tipe="gambar">
+<div class="flip-inner">
+<div class="face front"><img alt="Feed Instagram brand skincare" loading="lazy" src="assets/img/karya-2.jpg"/></div>
+<div class="face back">
+<span class="tag">Desain</span>
+<h3>Feed Instagram brand skincare</h3>
+<p>30 konten sebulan. Engagement naik 2,4 kali.</p>
+<span class="back-cta">Lihat gambar</span>
+</div>
+</div>
+<button aria-label="Lihat gambar: Feed Instagram brand skincare" class="work-open"></button>
+</article>
+<article class="work flip tulisan" data-kategori="copy" data-tipe="tulisan">
+<div class="flip-inner">
+<div class="face front front-text"><span class="excerpt">“Hujan pertama bulan ini. Payung boleh lupa, kopi jangan.”</span></div>
+<div class="face back">
+<span class="tag">Copy</span>
+<h3>Copy musim hujan kedai kopi</h3>
+<p>Seri 12 caption dan 3 headline iklan untuk bulan November.</p>
+<span class="back-cta">Baca tulisan</span>
+</div>
+</div>
+<button aria-label="Baca tulisan: Copy musim hujan kedai kopi" class="work-open"></button>
+<template>
+<p><strong>Caption 1:</strong> Hujan pertama bulan ini. Payung boleh lupa, kopi jangan.</p>
+<p><strong>Caption 2:</strong> Jalanan basah, kursi dekat jendela masih kosong. Kamu tahu harus ke mana.</p>
+<p><strong>Headline iklan:</strong> Es kopi susu tetap laku di musim hujan. Kami juga heran.</p>
+</template>
+</article>
+<article class="work flip vertikal" data-kategori="video" data-src="https://www.youtube.com/embed/ID_VIDEO" data-thumb="assets/img/karya-4.jpg" data-tipe="video">
+<div class="flip-inner">
+<div class="face front"><img alt="Reels resep 30 detik" loading="lazy" src="assets/img/karya-4.jpg"/><span aria-hidden="true" class="play"></span></div>
+<div class="face back">
+<span class="tag">Video</span>
+<h3>Reels resep 30 detik</h3>
+<p>Seri 12 video untuk brand bumbu. Rata-rata 85 ribu views.</p>
+<span class="back-cta">Putar video</span>
+</div>
+</div>
+<button aria-label="Putar video: Reels resep 30 detik" class="work-open"></button>
+</article>
 
-        <article class="work flip" data-kategori="video" data-tipe="video" data-src="https://www.youtube.com/embed/ID_VIDEO" data-thumb="assets/img/karya-1.jpg">
-          <div class="flip-inner">
-            <div class="face front"><img src="assets/img/karya-1.jpg" alt="Kampanye peluncuran sepatu lari" loading="lazy"><span class="play" aria-hidden="true"></span></div>
-            <div class="face back">
-              <span class="tag">Video</span>
-              <h3>Kampanye peluncuran sepatu lari</h3>
-              <p>Video utama 60 detik dan 6 potongan Reels. 1,2 juta views gabungan.</p>
-              <span class="back-cta">Putar video</span>
-            </div>
-          </div>
-          <button class="work-open" aria-label="Putar video: Kampanye peluncuran sepatu lari"></button>
-        </article>
-
-        <article class="work flip vertikal" data-kategori="desain" data-tipe="gambar" data-src="assets/img/karya-2.jpg" data-thumb="assets/img/karya-2.jpg">
-          <div class="flip-inner">
-            <div class="face front"><img src="assets/img/karya-2.jpg" alt="Feed Instagram brand skincare" loading="lazy"></div>
-            <div class="face back">
-              <span class="tag">Desain</span>
-              <h3>Feed Instagram brand skincare</h3>
-              <p>30 konten sebulan. Engagement naik 2,4 kali.</p>
-              <span class="back-cta">Lihat gambar</span>
-            </div>
-          </div>
-          <button class="work-open" aria-label="Lihat gambar: Feed Instagram brand skincare"></button>
-        </article>
-
-        <article class="work flip tulisan" data-kategori="copy" data-tipe="tulisan">
-          <div class="flip-inner">
-            <div class="face front front-text"><span class="excerpt">“Hujan pertama bulan ini. Payung boleh lupa, kopi jangan.”</span></div>
-            <div class="face back">
-              <span class="tag">Copy</span>
-              <h3>Copy musim hujan kedai kopi</h3>
-              <p>Seri 12 caption dan 3 headline iklan untuk bulan November.</p>
-              <span class="back-cta">Baca tulisan</span>
-            </div>
-          </div>
-          <button class="work-open" aria-label="Baca tulisan: Copy musim hujan kedai kopi"></button>
-          <template>
-            <p><strong>Caption 1:</strong> Hujan pertama bulan ini. Payung boleh lupa, kopi jangan.</p>
-            <p><strong>Caption 2:</strong> Jalanan basah, kursi dekat jendela masih kosong. Kamu tahu harus ke mana.</p>
-            <p><strong>Headline iklan:</strong> Es kopi susu tetap laku di musim hujan. Kami juga heran.</p>
-          </template>
-        </article>
-
-        <article class="work flip vertikal" data-kategori="video" data-tipe="video" data-src="https://www.youtube.com/embed/ID_VIDEO" data-thumb="assets/img/karya-4.jpg">
-          <div class="flip-inner">
-            <div class="face front"><img src="assets/img/karya-4.jpg" alt="Reels resep 30 detik" loading="lazy"><span class="play" aria-hidden="true"></span></div>
-            <div class="face back">
-              <span class="tag">Video</span>
-              <h3>Reels resep 30 detik</h3>
-              <p>Seri 12 video untuk brand bumbu. Rata-rata 85 ribu views.</p>
-              <span class="back-cta">Putar video</span>
-            </div>
-          </div>
-          <button class="work-open" aria-label="Putar video: Reels resep 30 detik"></button>
-        </article>
-
-        <article class="work flip" data-kategori="desain" data-tipe="gambar" data-src="assets/img/karya-5.jpg" data-thumb="assets/img/karya-5.jpg">
-          <div class="flip-inner">
-            <div class="face front"><img src="assets/img/karya-5.jpg" alt="Identitas visual Kopi Lereng" loading="lazy"></div>
-            <div class="face back">
-              <span class="tag">Desain</span>
-              <h3>Identitas visual Kopi Lereng</h3>
-              <p>Logo, palet warna, dan penerapan di kemasan serta papan nama.</p>
-              <span class="back-cta">Lihat gambar</span>
-            </div>
-          </div>
-          <button class="work-open" aria-label="Lihat gambar: Identitas visual Kopi Lereng"></button>
-        </article>
-
-        <article class="work flip vertikal" data-kategori="desain" data-tipe="gambar" data-src="assets/img/karya-6.jpg" data-thumb="assets/img/karya-6.jpg">
-          <div class="flip-inner">
-            <div class="face front"><img src="assets/img/karya-6.jpg" alt="Poster festival musik kampus" loading="lazy"></div>
-            <div class="face back">
-              <span class="tag">Desain</span>
-              <h3>Poster festival musik kampus</h3>
-              <p>Poster utama dan turunannya dalam 6 ukuran.</p>
-              <span class="back-cta">Lihat gambar</span>
-            </div>
-          </div>
-          <button class="work-open" aria-label="Lihat gambar: Poster festival musik kampus"></button>
-        </article>
-
-        <article class="work flip tulisan" data-kategori="copy" data-tipe="tulisan">
-          <div class="flip-inner">
-            <div class="face front front-text"><span class="excerpt">“Detik 0–3: ‘Kamu salah cuci sneakers selama ini.’ Tunjukkan sikat gigi bekas di tangan.”</span></div>
-            <div class="face back">
-              <span class="tag">Copy</span>
-              <h3>Script TikTok perawatan sneakers</h3>
-              <p>Script 45 detik. 410 ribu views.</p>
-              <span class="back-cta">Baca tulisan</span>
-            </div>
-          </div>
-          <button class="work-open" aria-label="Baca tulisan: Script TikTok perawatan sneakers"></button>
-          <template>
-            <p><strong>Hook (0–3 detik):</strong> “Kamu salah cuci sneakers selama ini.” Sikat gigi bekas di tangan.</p>
-            <p><strong>Isi (3–38 detik):</strong> Tiga kesalahan umum: pakai mesin cuci, jemur di bawah matahari langsung, dan pakai deterjen biasa.</p>
-            <p><strong>Penutup (38–45 detik):</strong> “Simpan video ini sebelum weekend.”</p>
-          </template>
-        </article>
-
-        <article class="work flip" data-kategori="video" data-tipe="video" data-src="https://www.youtube.com/embed/ID_VIDEO" data-thumb="assets/img/karya-8.jpg">
-          <div class="flip-inner">
-            <div class="face front"><img src="assets/img/karya-8.jpg" alt="Company profile toko roti" loading="lazy"><span class="play" aria-hidden="true"></span></div>
-            <div class="face back">
-              <span class="tag">Video</span>
-              <h3>Company profile toko roti</h3>
-              <p>2 menit. Wawancara pemilik dan proses produksi.</p>
-              <span class="back-cta">Putar video</span>
-            </div>
-          </div>
-          <button class="work-open" aria-label="Putar video: Company profile toko roti"></button>
-        </article>
-
-      </div>
-    </section>
-
-    <!-- ===================== CASE STUDY =====================
+</div>
+</section>
+<!-- ===================== CASE STUDY =====================
       Langkah-langkah menyala satu per satu saat di-scroll. -->
-    <section class="section wrap" id="case-study" aria-labelledby="judul-case">
-      <div class="section-head">
-        <h2 id="judul-case">Case study</h2>
-      </div>
+<section aria-labelledby="judul-case" class="section wrap" id="case-study">
+<div class="section-head">
+<h2 id="judul-case">Case study</h2>
+</div>
+<article class="story">
+<header class="story-head">
+<h3>Menaikkan engagement brand skincare lewat sistem konten bulanan</h3>
+<dl class="case-meta">
+<div><dt>Klien</dt><dd>Brand skincare lokal, 45 ribu pengikut</dd></div>
+<div><dt>Peran</dt><dd>Content designer (desain dan copy)</dd></div>
+<div><dt>Durasi</dt><dd>3 bulan</dd></div>
+</dl>
+</header>
+<div class="story-body">
+<div class="story-stage">
+<div aria-hidden="true" class="story-progress"><span class="story-dot"></span><span class="story-now">Konteks</span></div>
+<div class="ba" style="--pos:50%">
+<img alt="Feed sesudah" loading="lazy" src="assets/img/cs1-sesudah.jpg"/>
+<div class="ba-before"><img alt="Feed sebelum" loading="lazy" src="assets/img/cs1-sebelum.jpg"/></div>
+<span class="ba-label ba-label-a">Feed sebelum</span>
+<span class="ba-label ba-label-b">Feed sesudah</span>
+<input aria-label="Geser untuk membandingkan feed sebelum dan feed sesudah" class="ba-range" id="ba-0" max="100" min="0" type="range" value="50"/>
+</div>
+</div>
+<div class="story-steps">
 
-      <article class="story">
-        <header class="story-head">
-          <h3>Menaikkan engagement brand skincare lewat sistem konten bulanan</h3>
-          <dl class="case-meta">
-            <div><dt>Klien</dt><dd>Brand skincare lokal, 45 ribu pengikut</dd></div>
-            <div><dt>Peran</dt><dd>Content designer (desain dan copy)</dd></div>
-            <div><dt>Durasi</dt><dd>3 bulan</dd></div>
-          </dl>
-        </header>
-        <div class="story-body">
-          <div class="story-stage">
-            <div class="story-progress" aria-hidden="true"><span class="story-dot"></span><span class="story-dot"></span><span class="story-dot"></span><span class="story-dot"></span><span class="story-now">Konteks</span></div>
-            <div class="ba" style="--pos:50%">
-            <img src="assets/img/cs1-sesudah.jpg" alt="Feed sesudah" loading="lazy">
-            <div class="ba-before"><img src="assets/img/cs1-sebelum.jpg" alt="Feed sebelum" loading="lazy"></div>
-            <span class="ba-label ba-label-a">Feed sebelum</span>
-            <span class="ba-label ba-label-b">Feed sesudah</span>
-            <input class="ba-range" type="range" min="0" max="100" value="50" aria-label="Geser untuk membandingkan feed sebelum dan feed sesudah" id="ba-0">
-          </div>
-          </div>
-          <div class="story-steps">
-          <div class="story-step" data-label="Konteks">
-            <h4>Konteks</h4>
-            <p>Brand ini posting setiap hari, tapi tampilannya berbeda-beda karena dikerjakan bergantian oleh tiga orang.</p>
-          </div>
-          <div class="story-step" data-label="Tantangan">
-            <h4>Tantangan</h4>
-            <p>Tidak ada panduan visual, dan setiap konten dibuat dari nol sehingga produksinya lambat.</p>
-          </div>
-          <div class="story-step" data-label="Proses">
-            <h4>Proses</h4>
-            <p>Saya menyusun 6 template konten berdasarkan tujuan (edukasi, testimoni, promo), lalu membuat panduan warna dan tipografi sederhana. Alasannya, tim kecil butuh sistem yang bisa diulang, bukan desain yang selalu baru.</p>
-          </div>
-          <div class="story-step story-result" data-label="Hasil">
-            <h4>Hasil</h4>
-            <span class="big"><span class="count" data-to="2.4" data-dec="1" data-suffix="x">2,4x</span></span>
-            <p>engagement rate dalam 3 bulan. Waktu produksi per konten turun dari 3 jam menjadi 1 jam.</p>
-          </div>
-          </div>
-        </div>
-      </article>
+<div class="story-step story-result" data-label="Hasil">
+<h4>Hasil</h4>
+<span class="big"><span class="count" data-dec="1" data-suffix="x" data-to="2.4">2,4x</span></span>
+<p>engagement rate dalam 3 bulan. Waktu produksi per konten turun dari 3 jam menjadi 1 jam.</p>
+</div>
+</div>
+</div>
+</article>
 
-      <article class="story">
-        <header class="story-head">
-          <h3>Satu hari shooting untuk tujuh video peluncuran sepatu lari</h3>
-          <dl class="case-meta">
-            <div><dt>Klien</dt><dd>Brand sepatu lari lokal</dd></div>
-            <div><dt>Peran</dt><dd>Editor dan penulis naskah</dd></div>
-            <div><dt>Durasi</dt><dd>5 minggu</dd></div>
-          </dl>
-        </header>
-        <div class="story-body">
-          <div class="story-stage">
-            <div class="story-progress" aria-hidden="true"><span class="story-dot"></span><span class="story-dot"></span><span class="story-dot"></span><span class="story-dot"></span><span class="story-now">Konteks</span></div>
-            <div class="ba" style="--pos:50%">
-            <img src="assets/img/cs2-sesudah.jpg" alt="Setelah color grading" loading="lazy">
-            <div class="ba-before"><img src="assets/img/cs2-sebelum.jpg" alt="Footage mentah" loading="lazy"></div>
-            <span class="ba-label ba-label-a">Footage mentah</span>
-            <span class="ba-label ba-label-b">Setelah color grading</span>
-            <input class="ba-range" type="range" min="0" max="100" value="50" aria-label="Geser untuk membandingkan footage mentah dan setelah color grading" id="ba-1">
-          </div>
-          </div>
-          <div class="story-steps">
-          <div class="story-step" data-label="Konteks">
-            <h4>Konteks</h4>
-            <p>Brand meluncurkan seri sepatu baru dan butuh satu video utama plus potongan untuk Reels dan TikTok.</p>
-          </div>
-          <div class="story-step" data-label="Tantangan">
-            <h4>Tantangan</h4>
-            <p>Semua footage berasal dari satu hari shooting, tapi harus cukup untuk tujuh video dengan format berbeda.</p>
-          </div>
-          <div class="story-step" data-label="Proses">
-            <h4>Proses</h4>
-            <p>Saya menulis naskah dengan struktur modular, sehingga tiap adegan bisa berdiri sendiri sebagai Reels. Video utama diedit lebih dulu, lalu dipotong per adegan. Alasannya, satu kali shooting bisa menghasilkan banyak konten tanpa terasa diulang.</p>
-          </div>
-          <div class="story-step story-result" data-label="Hasil">
-            <h4>Hasil</h4>
-            <span class="big"><span class="count" data-to="1.2" data-dec="1" data-suffix=" jt">1,2 jt</span></span>
-            <p>views gabungan dalam dua minggu. Stok seri pertama habis dalam 10 hari.</p>
-          </div>
-          </div>
-        </div>
-      </article>
-    </section>
+</section>
+<!-- ===================== TENTANG ===================== -->
 
-    <!-- ===================== TENTANG ===================== -->
-    <section class="section wrap about" id="tentang" aria-labelledby="judul-tentang">
-      <figure class="about-photo">
-        <img src="assets/img/foto-profil.jpg" alt="Foto Sekar Ayu Lestari" loading="lazy">
-      </figure>
-      <div class="about-text">
-        <h2 id="judul-tentang">Tentang saya</h2>
-        <p>Saya mulai dari desain feed Instagram untuk usaha teman, lalu belajar mengedit video dan menulis copy karena klien butuh semuanya sekaligus. Tiga tahun terakhir saya bekerja freelance untuk lebih dari 40 brand lokal.</p>
-        <p>Sekarang saya ingin bergabung dengan tim kreatif di agency, supaya bisa mengerjakan kampanye yang lebih besar dan belajar dari strategist serta art director.</p>
-        <ul class="tools" aria-label="Tools dan keahlian">
-          <li>Figma</li>
-          <li>Photoshop</li>
-          <li>Illustrator</li>
-          <li>Premiere Pro</li>
-          <li>CapCut</li>
-          <li>Copywriting</li>
-          <li>Brand guideline</li>
-          <li>Riset konten</li>
-        </ul>
-      </div>
-    </section>
+<!-- ===================== KONTAK ===================== -->
 
-    <!-- ===================== KONTAK ===================== -->
-    <section class="contact wrap" id="kontak" aria-labelledby="judul-kontak">
-      <h2 id="judul-kontak">Siap untuk proyek berikutnya.</h2>
-      <a class="contact-email" href="mailto:sekar@email.com">sekar@email.com</a>
-      <ul class="contact-links">
-        <li><a href="https://wa.me/6281234567890">WhatsApp</a></li>
-          <li><a href="https://www.linkedin.com/in/username">LinkedIn</a></li>
-          <li><a href="https://www.instagram.com/username">Instagram</a></li>
-          <li><a href="assets/cv.pdf">Unduh CV</a></li>
-      </ul>
-    </section>
+<section aria-labelledby="jk-cut-title" class="jk-cut jk-cut-serius" id="cuplikan">
+<div class="jk-cut-card">
+<h2 id="jk-cut-title">Ini baru cuplikan template Sorot.</h2>
+<p>Sisa halaman sengaja kami sembunyikan. Mau lihat versi lengkapnya? Chat kami, demo penuh kami kirim lewat WhatsApp.</p>
+<ul aria-label="Bagian yang disembunyikan" class="jk-cut-list"><li>4 karya lainnya</li><li>uraian proses case study</li><li>case study kedua</li><li>bagian tentang</li><li>kontak</li></ul>
+<div class="jk-cut-actions">
+<a class="jk-cut-wa" href="https://wa.me/6285183027929?text=Halo%20Jejak%20Karya%2C%20saya%20mau%20lihat%20demo%20lengkap%20template%20Sorot." rel="noopener" target="_blank">Minta demo lengkap</a>
+<a class="jk-cut-back" href="../../#template">Kembali ke katalog</a>
+</div>
+</div>
+</section></main>
 
-  </main>
-
-  <footer class="foot wrap"><p>© 2026 Sekar Ayu Lestari</p></footer>
-
-  <!-- Jendela untuk menampilkan video, gambar, atau tulisan -->
-  <dialog class="viewer" aria-labelledby="viewer-title">
-    <div class="viewer-bar">
-      <h2 id="viewer-title"></h2>
-      <button class="viewer-close" aria-label="Tutup">Tutup</button>
-    </div>
-    <div class="viewer-body"></div>
-  </dialog>
-
-  <script src="assets/js/main.js"></script>
-  <script src="assets/js/serius.js"></script>
-
-  <!-- Badge demo Jejak Karya -->
-  <a class="jk-badge" href="../../" title="Template ini milik Jejak Karya">
-    <span class="jk-dot" aria-hidden="true"></span>Demo template oleh <b>Jejak Karya</b>
-  </a>
-  <style>
+<!-- Jendela untuk menampilkan video, gambar, atau tulisan -->
+<dialog aria-labelledby="viewer-title" class="viewer">
+<div class="viewer-bar">
+<h2 id="viewer-title"></h2>
+<button aria-label="Tutup" class="viewer-close">Tutup</button>
+</div>
+<div class="viewer-body"></div>
+</dialog>
+<script src="assets/js/main.js"></script>
+<script src="assets/js/serius.js"></script>
+<!-- Badge demo Jejak Karya -->
+<a class="jk-badge" href="../../" title="Template ini milik Jejak Karya"><span aria-hidden="true" class="jk-dot"></span>Cuplikan template oleh <b>Jejak Karya</b></a>
+<style>
     .jk-badge {
       position: fixed; z-index: 9999;
       left: calc(14px + env(safe-area-inset-left, 0px)); bottom: calc(14px + env(safe-area-inset-bottom, 0px));
