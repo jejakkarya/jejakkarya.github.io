@@ -5,7 +5,7 @@
 
   var KEY = 'jejakkarya-cv-v1';
   // URL aplikasi web Apps Script (berakhiran /exec). Kosongkan untuk mematikan pengiriman data.
-  var ENDPOINT = '';
+  var ENDPOINT = 'https://script.google.com/macros/s/AKfycbwKU_mik8J_XhqV1fOAodY9W1ote-q9sGpze7Pa7WXaRC2lcN_O5B8HhJlc9cEnRPqo/exec';
   var SENT_KEY = 'jejakkarya-cv-sent';
   var LISTS = ['experience', 'organization', 'education', 'certification'];
   var TPL = { experience: 'tpl-experience', organization: 'tpl-experience', education: 'tpl-education', certification: 'tpl-certification' };
