@@ -137,7 +137,7 @@
       ? 'Paket Serius Jejak Karya membuatkan website portofolio interaktif lengkap dengan 2 case study yang kami tulis dari jawabanmu. Ini menjawab kekurangan terbesar di hasil kuis kamu.'
       : 'Paket Basic Jejak Karya mengemas karyamu yang sudah kuat dalam satu website rapi yang nyaman dibuka di HP dan laptop.';
     var a = document.createElement('a'); a.className = 'btn btn-light'; a.target = '_blank'; a.rel = 'noopener';
-    a.href = 'https://wa.me/6285183027929?text=' + encodeURIComponent('Halo Jejak Karya, skor kesiapan portofolio saya ' + score + '/100. Saya mau tanya paket ' + pkg + '.');
+    a.href = 'https://wa.me/6285156342553?text=' + encodeURIComponent('Halo Jejak Karya, skor kesiapan portofolio saya ' + score + '/100. Saya mau tanya paket ' + pkg + '.');
     a.textContent = 'Konsultasi paket ' + pkg + ' gratis';
     var a2 = document.createElement('a'); a2.className = 'rec-link'; a2.href = '../#paket'; a2.textContent = 'Lihat semua paket';
     rec.appendChild(h2); rec.appendChild(p); var row = document.createElement('div'); row.className = 'row-actions'; row.appendChild(a); row.appendChild(a2); rec.appendChild(row);
