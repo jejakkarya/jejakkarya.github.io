@@ -423,3 +423,11 @@ details p { margin: 0 0 18px; color: var(--muted); }
 .final-ig { margin: 18px 0 0 !important; font-size: 0.95rem !important; opacity: 0.85; }
 .final-ig a { color: #fff; font-weight: 700; }
 .logo svg { width: 34px; height: 34px; margin: -4px -2px -4px -6px; }
+
+/* Template Serius ada 6: susun 3 + 3 di laptop, 2 + 2 + 2 di tablet */
+@media (min-width: 1041px) {
+  .tpl-group[data-paket="serius"] .tpl:nth-child(-n+2) { grid-column: span 2; }
+}
+@media (max-width: 1040px) {
+  .tpl-group[data-paket="serius"] .tpl:first-child { grid-column: auto; }
+}
