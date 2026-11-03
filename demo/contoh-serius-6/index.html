@@ -1,0 +1,238 @@
+<!doctype html>
+<!--
+  © 2026 Jejak Karya (jejakkarya.github.io). Hak cipta dilindungi.
+  Template demo ini tidak boleh disalin, dijual ulang, atau dipakai tanpa izin tertulis.
+-->
+<!--
+  TEMPLATE PORTOFOLIO – PAKET SERIUS – DESAIN 6 "LAYAR" (khusus UI/UX)
+  Paket Serius: maks. 12 karya dan 2 case study.
+  Prototype di case study 1 dibuat dengan HTML (assets/css/antre.css).
+  Kalau prototype-mu ada di Figma: ganti isi <div class="device"> dengan
+  <iframe src="https://www.figma.com/embed?embed_host=share&url=LINK_PROTOTYPE_FIGMA" allowfullscreen></iframe>
+-->
+<html lang="id">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Dinda Prameswari · UI/UX Designer</title>
+  <meta name="description" content="Portofolio Dinda Prameswari, UI/UX designer untuk aplikasi layanan publik dan e-commerce.">
+  <meta property="og:title" content="Dinda Prameswari · UI/UX Designer">
+  <meta property="og:description" content="Portofolio Dinda Prameswari, UI/UX designer untuk aplikasi layanan publik dan e-commerce.">
+  <meta property="og:image" content="assets/img/karya-1.jpg">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400..800&family=Figtree:wght@400..800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="assets/css/style.css">
+  <link rel="stylesheet" href="assets/css/antre.css">
+  <style>
+    .jk-cut { position: relative; z-index: 5; padding: 0 max(16px, 4vw) 72px; margin-top: 48px; }
+    .jk-cut-card {
+      position: relative; max-width: 640px; margin: 24px auto 0; padding: 32px 28px; text-align: center;
+      border-radius: 20px; background: var(--surface); color: var(--ink);
+      border: 1px solid var(--line); box-shadow: 0 24px 60px -32px rgba(0, 0, 0, 0.45);
+    }
+    .jk-cut-card h2 { margin: 0; font: 800 clamp(1.5rem, 4vw, 2rem)/1.15 system-ui, -apple-system, "Segoe UI", sans-serif; letter-spacing: -0.02em; }
+    .jk-cut-card p { margin: 12px auto 0; max-width: 46ch; color: var(--muted); font-size: 1rem; line-height: 1.55; }
+    .jk-cut-actions { display: flex; flex-wrap: wrap; justify-content: center; gap: 10px; margin-top: 22px; }
+    .jk-cut-actions a { display: inline-block; padding: 12px 22px; border-radius: 999px; text-decoration: none; font: 700 0.95rem/1.2 system-ui, -apple-system, "Segoe UI", sans-serif; }
+    .jk-cut-wa { background: #2846d8; color: #fff; }
+    .jk-cut-wa:hover { background: #141826; }
+    .jk-cut-back { border: 1.5px solid var(--line); color: var(--ink); }
+    .jk-cut-back:hover { border-color: var(--ink); }
+    .jk-cut-list { display: flex; flex-wrap: wrap; justify-content: center; gap: 6px; margin: 16px 0 0; padding: 0; list-style: none; }
+    .jk-cut-list li { padding: 4px 11px; border-radius: 999px; border: 1px dashed var(--line); color: var(--muted); font-size: 0.82rem; }
+  </style>
+</head>
+<body>
+  <a class="skip" href="#case-study">Langsung ke case study</a>
+
+  <header class="top wrap">
+    <a class="top-name" href="#">Dinda Prameswari</a>
+    <nav class="top-nav" aria-label="Navigasi">
+      <a href="#case-study">Case study</a><a href="#karya">Karya</a><a href="#tentang">Tentang</a>
+      <a class="btn btn-small" href="#kontak">Hubungi</a>
+    </nav>
+  </header>
+
+  <main>
+    <!-- ===================== HERO KANVAS =====================
+      Nama dibungkus "frame seleksi" ala Figma. Kursor berlabel ikut gerakan mouse (desktop). -->
+    <section class="hero" aria-label="Profil">
+      <div class="canvas wrap">
+        <p class="frame-tag enter"><span class="frame-ic" aria-hidden="true">#</span>UI/UX Designer · 2 tahun pengalaman</p>
+        <div class="sel enter" style="--d:.1s">
+          <h1>Dinda Prameswari</h1>
+          <i class="h tl"></i><i class="h tr"></i><i class="h bl"></i><i class="h br"></i>
+          <span class="size" aria-hidden="true">Hug × Hug</span>
+        </div>
+        <p class="statement enter" style="--d:.2s">Saya merancang aplikasi yang bikin urusan sehari-hari jadi lebih sederhana, mulai dari riset pengguna sampai prototype yang siap dibangun developer.</p>
+        <p class="status enter" style="--d:.3s"><span class="dot" aria-hidden="true"></span>Terbuka untuk posisi UI/UX Designer atau Product Designer, Jakarta atau remote</p>
+        <div class="hero-cta enter" style="--d:.35s">
+          <a class="btn btn-primary" href="#case-study">Lihat case study</a>
+          <a class="btn" href="#kontak">Hubungi saya</a>
+        </div>
+        <ul class="stats enter" style="--d:.45s" aria-label="Ringkasan">
+          <li><b><span class="count" data-to="3">3</span></b><span>aplikasi rilis ke pengguna</span></li>
+          <li><b><span class="count" data-to="46">46</span></b><span>partisipan riset diwawancara</span></li>
+          <li><b><span class="count" data-to="82">82</span></b><span>skor kegunaan (SUS) terbaik</span></li>
+        </ul>
+        <div class="sticky-note enter" style="--d:.55s" aria-hidden="true">Catatan: fokus ke masalah, baru ke tampilan ✍️</div>
+      </div>
+      <div class="cursor" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M4 2l15 9-7 1.6L8.6 20z"/></svg><span>Dinda</span></div>
+    </section>
+
+    <!-- ===================== CASE STUDY 1 (lengkap, ala UI/UX) ===================== -->
+    <section class="section wrap" id="case-study" aria-labelledby="judul-case">
+      <div class="section-head"><p class="kicker">Case study 01</p>
+        <h2 id="judul-case">Antre: datang ke klinik tanpa menunggu berjam-jam</h2>
+        <p class="lede">Redesign aplikasi antrean untuk klinik pratama, supaya pasien cukup datang di jam yang dipilih.</p>
+      </div>
+      <ul class="meta">
+        <li><span>Peran</span>UI/UX Designer (riset sampai prototype)</li>
+        <li><span>Tim</span>1 product manager, 2 developer</li>
+        <li><span>Durasi</span>6 minggu</li>
+        <li><span>Tools</span>Figma, Maze, Notion</li>
+      </ul>
+
+      <div class="cs">
+        <nav class="cs-nav" aria-label="Bagian case study"><ol><li><a href="#cs-masalah"><i>01</i>Masalah</a></li><li><a href="#cs-riset"><i>02</i>Riset</a></li><li><a href="#cs-alur"><i>03</i>Alur</a></li><li><a href="#cs-desain"><i>04</i>Desain</a></li><li><a href="#cs-prototype"><i>05</i>Prototype</a></li><li><a href="#cs-hasil"><i>06</i>Hasil</a></li></ol></nav>
+        <div class="cs-body">
+
+          <section class="cs-part" id="cs-masalah"><p class="part-num">01 · Masalah</p>
+            <h3>Pasien antre dari pagi, padahal dokternya baru datang jam sembilan.</h3>
+            <p>Klinik memakai nomor antrean kertas yang dibagikan sejak jam 6 pagi. Pasien datang lebih awal supaya dapat nomor kecil, lalu menunggu rata-rata 72 menit di ruang tunggu yang penuh.</p>
+            <div class="problem"><div><b>72 mnt</b><span>rata-rata menunggu di lokasi</span></div><div><b>1 dari 3</b><span>pasien pulang sebelum dipanggil</span></div></div>
+          </section>
+
+          <section class="cs-part" id="cs-riset"><p class="part-num">02 · Riset</p>
+            <h3>12 wawancara pasien dan 2 hari observasi di ruang tunggu.</h3>
+            <div class="insights">
+              <figure><blockquote>“Saya nggak tahu kapan dipanggil, jadi nggak berani ke mana-mana.”</blockquote><figcaption>Ibu pekerja, 34 tahun</figcaption><p><b>Temuan:</b> yang bikin capek bukan lamanya, tapi ketidakpastian.</p></figure>
+              <figure><blockquote>“Aplikasinya ada, tapi harus isi formulir panjang dulu.”</blockquote><figcaption>Mahasiswa, 21 tahun</figcaption><p><b>Temuan:</b> 7 kolom data bikin orang menyerah sebelum dapat nomor.</p></figure>
+              <figure><blockquote>“Pakai BPJS harus tanya ke loket lagi.”</blockquote><figcaption>Pensiunan, 61 tahun</figcaption><p><b>Temuan:</b> status BPJS harus kelihatan sejak awal.</p></figure>
+            </div>
+          </section>
+
+          <section class="cs-part" id="cs-alur"><p class="part-num">03 · Alur pengguna</p>
+            <h3>Dari 9 langkah menjadi 5, dengan pilihan jam datang.</h3>
+            <ol class="flow"><li class=""><span>Buka aplikasi</span></li><li class=""><span>Pilih poli</span></li><li class="baru"><span>Pilih jam datang</span><em>Baru</em></li><li class=""><span>Konfirmasi + BPJS</span></li><li class="baru"><span>Dapat nomor & notifikasi</span><em>Baru</em></li><li class=""><span>Datang 10 menit sebelum giliran</span></li></ol>
+          </section>
+
+          <section class="cs-part" id="cs-desain"><p class="part-num">04 · Wireframe ke desain akhir</p>
+            <h3>Geser untuk membandingkan wireframe dan desain akhir.</h3>
+            <div class="ba" data-ba>
+              <img src="assets/img/cs1-ui.jpg" alt="Desain akhir layar pilih jadwal">
+              <div class="ba-top"><img src="assets/img/cs1-wire.jpg" alt="Wireframe layar pilih jadwal"></div>
+              <span class="ba-line" aria-hidden="true"><span class="ba-knob">‹ ›</span></span>
+              <span class="ba-lab l">Wireframe</span><span class="ba-lab r">Desain akhir</span>
+              <input class="ba-range" type="range" min="0" max="100" value="50" aria-label="Geser untuk membandingkan wireframe dan desain akhir">
+            </div>
+            <ul class="decisions">
+              <li><b>Slot jam yang penuh dicoret</b>, bukan disembunyikan, supaya pasien paham kenapa pilihannya sedikit.</li>
+              <li><b>Sisa kuota per jam</b> ditampilkan agar pasien bisa memilih jam yang lebih sepi.</li>
+              <li><b>Satu tombol utama</b> di bawah, mudah dijangkau ibu jari.</li>
+            </ul>
+          </section>
+
+          <section class="cs-part" id="cs-prototype"><p class="part-num">05 · Prototype</p>
+            <h3>Coba sendiri: ambil nomor antrean dalam 4 ketukan.</h3>
+            <div class="proto">
+              <div class="device" aria-label="Prototype aplikasi Antre yang bisa diklik"><div class="app" data-proto><div class="statusbar"><span>09.12</span><i></i></div><section class="screen on" data-screen="home" aria-label="Beranda">
+  <p class="a-hi">Selamat pagi, Rani 👋</p>
+  <h4 class="a-h">Mau periksa ke poli mana hari ini?</h4>
+  <div class="a-search">🔍 Cari klinik atau dokter</div>
+  <div class="a-clinic"><b>Klinik Sehat Bersama</b><span>1,2 km · Jl. Merdeka No. 18</span><br><span class="open">Buka · 07.00–21.00</span></div>
+  <p class="a-label">Pilih poli</p>
+  <div class="a-polis"><button class="a-poli hint" data-go="jadwal"><span class="ic">🩺</span><b>Poli Umum</b><small>Antrean saat ini: 12</small></button><button class="a-poli"><span class="ic">🦷</span><b>Poli Gigi</b><small>Antrean saat ini: 5</small></button><button class="a-poli"><span class="ic">🧸</span><b>Poli Anak</b><small>Antrean saat ini: 8</small></button><button class="a-poli"><span class="ic">🤰</span><b>Kandungan</b><small>Antrean saat ini: 3</small></button></div>
+</section><section class="screen" data-screen="jadwal" aria-label="Pilih jadwal">
+  <div class="a-top"><button class="a-back" data-go="home" aria-label="Kembali">←</button><span class="a-title">Poli Umum</span></div>
+  <p class="a-label">Tanggal</p>
+  <div class="a-dates"><button class="a-date"><small>Sen</small><b>10</b></button><button class="a-date sel"><small>Sel</small><b>11</b></button><button class="a-date"><small>Rab</small><b>12</b></button><button class="a-date"><small>Kam</small><b>13</b></button><button class="a-date"><small>Jum</small><b>14</b></button></div>
+  <p class="a-label">Jam datang</p>
+  <div class="a-slots"><button class="a-slot full">08.00<small>Penuh</small></button><button class="a-slot full">08.30<small>Penuh</small></button><button class="a-slot">09.00<small>2 sisa</small></button><button class="a-slot sel">09.30<small>4 sisa</small></button><button class="a-slot">10.00<small>6 sisa</small></button><button class="a-slot">10.30<small>6 sisa</small></button><button class="a-slot">13.00<small>8 sisa</small></button><button class="a-slot">13.30<small>8 sisa</small></button><button class="a-slot">14.00<small>8 sisa</small></button></div>
+  <p class="a-note">💡 Datang sesuai jam yang dipilih. Kamu nggak perlu antre di ruang tunggu dari pagi.</p>
+  <button class="a-cta hint" data-go="konfirmasi">Lanjut</button>
+</section><section class="screen" data-screen="konfirmasi" aria-label="Konfirmasi">
+  <div class="a-top"><button class="a-back" data-go="jadwal" aria-label="Kembali">←</button><span class="a-title">Konfirmasi</span></div>
+  <div class="a-sum">
+    <div class="a-row"><span>Klinik</span><b>Klinik Sehat Bersama</b></div>
+    <div class="a-row"><span>Poli</span><b>Poli Umum · dr. Laras</b></div>
+    <div class="a-row"><span>Jadwal</span><b>Sel, 11 Nov · 09.30</b></div>
+    <div class="a-row"><span>Pasien</span><b>Rani Kusuma</b></div>
+  </div>
+  <div class="a-toggle"><span>Pakai BPJS Kesehatan</span><button class="a-switch" role="switch" aria-checked="true" aria-label="Pakai BPJS"></button></div>
+  <button class="a-cta hint" data-go="tiket" data-load="1">Ambil nomor antrean</button>
+</section><section class="screen" data-screen="tiket" aria-label="Tiket antrean">
+  <div class="a-toast" role="status">🔔 Kami kabari 3 nomor sebelum giliranmu.</div>
+  <div class="a-top"><button class="a-back" data-go="home" aria-label="Kembali ke beranda">←</button><span class="a-title">Antreanmu</span></div>
+  <div class="a-ticket"><small>Nomor antrean</small><span class="a-num">A-024</span><span class="poli">Poli Umum · Sel, 11 Nov · 09.30</span></div>
+  <div class="a-now"><span>Sedang dilayani</span><b class="a-serving">A-019</b></div>
+  <div class="a-bar"><span></span></div>
+  <div class="a-eta">⏱ <span class="a-eta-text">Giliranmu ± 25 menit lagi</span></div>
+  <button class="a-ghost">📍 Lihat lokasi klinik</button>
+  <button class="a-ghost" data-go="home">Batalkan antrean</button>
+</section></div></div>
+              <div class="proto-side">
+                <p class="proto-hint"><span class="pulse" aria-hidden="true"></span>Ketuk bagian yang berkedip oranye untuk lanjut.</p>
+                <ol class="proto-steps">
+                  <li data-step="home"><span>Pilih <b>Poli Umum</b></span></li>
+                  <li data-step="jadwal"><span>Pilih jam datang, lalu <b>Lanjut</b></span></li>
+                  <li data-step="konfirmasi"><span>Cek data, lalu <b>Ambil nomor antrean</b></span></li>
+                  <li data-step="tiket"><span>Lihat nomor dan perkiraan waktumu</span></li>
+                </ol>
+                <button class="btn btn-small proto-reset" type="button">Ulangi dari awal</button>
+              </div>
+            </div>
+          </section>
+
+          <section class="cs-part" id="cs-hasil"><p class="part-num">06 · Hasil</p>
+            <h3>Diuji ke 18 pasien, lalu dirilis bertahap di 3 klinik.</h3>
+            <div class="results">
+              <div><b><span class="count" data-to="18">18</span> mnt</b><span>rata-rata menunggu di lokasi, sebelumnya 72 menit</span></div>
+              <div><b><span class="count" data-to="93">93</span>%</b><span>peserta uji berhasil ambil nomor tanpa bantuan</span></div>
+              <div><b><span class="count" data-to="82">82</span></b><span>skor SUS, naik dari 58 di versi lama</span></div>
+            </div>
+            <p class="lesson"><b>Yang saya pelajari:</b> pasien lansia butuh teks lebih besar dan tombol kembali yang jelas. Dua hal ini saya perbaiki setelah uji pengguna kedua.</p>
+          </section>
+        </div>
+      </div>
+    </section>
+
+    <section aria-labelledby="jk-cut-title" class="jk-cut jk-cut-serius" id="cuplikan">
+      <div class="jk-cut-card">
+        <h2 id="jk-cut-title">Ini baru cuplikan template Layar.</h2>
+        <p>Sisa halaman sengaja kami sembunyikan. Mau lihat versi lengkapnya? Chat kami, demo penuh kami kirim lewat WhatsApp.</p>
+        <ul aria-label="Bagian yang disembunyikan" class="jk-cut-list"><li>case study kedua</li><li>4 karya lainnya</li><li>bagian tentang</li><li>kontak</li></ul>
+        <div class="jk-cut-actions">
+          <a class="jk-cut-wa" href="https://wa.me/6285156342553?text=Halo%20Jejak%20Karya%2C%20saya%20mau%20lihat%20demo%20lengkap%20template%20Layar." rel="noopener" target="_blank">Minta demo lengkap</a>
+          <a class="jk-cut-back" href="../../#template">Kembali ke katalog</a>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <script src="assets/js/layar.js"></script>
+
+  <!-- Badge demo Jejak Karya -->
+  <a class="jk-badge" href="../../" title="Template ini milik Jejak Karya">
+    <span class="jk-dot" aria-hidden="true"></span>Cuplikan template oleh <b>Jejak Karya</b>
+  </a>
+  <style>
+    .jk-badge {
+      position: fixed; z-index: 9999;
+      left: calc(14px + env(safe-area-inset-left, 0px)); bottom: calc(14px + env(safe-area-inset-bottom, 0px));
+      display: inline-flex; align-items: center; gap: 8px;
+      padding: 8px 14px; border-radius: 999px;
+      background: rgba(20, 24, 38, 0.92); color: #fff;
+      font: 500 12.5px/1.2 system-ui, -apple-system, "Segoe UI", sans-serif;
+      text-decoration: none; box-shadow: 0 8px 24px -10px rgba(0, 0, 0, 0.5);
+      backdrop-filter: blur(6px); -webkit-backdrop-filter: blur(6px);
+    }
+    .jk-badge b { font-weight: 700; }
+    .jk-badge:hover { background: #2846d8; }
+    .jk-badge:focus-visible { outline: 2px solid #ffcf4a; outline-offset: 2px; }
+    .jk-dot { width: 8px; height: 8px; border-radius: 50%; background: #ffcf4a; }
+    @media print { .jk-badge { display: none; } }
+  </style>
+</body>
+</html>

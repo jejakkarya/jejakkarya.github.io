@@ -17,7 +17,11 @@
     'creative concept', 'art direction', 'presentasi', 'presentation', 'riset', 'research', 'trend', 'tren', 'deadline', 'multitasking',
     'kerja tim', 'teamwork', 'komunikasi', 'communication', 'time management', 'manajemen waktu', 'kreatif', 'detail', 'portofolio', 'portfolio',
     'bahasa inggris', 'english', 'microsoft office', 'excel', 'google workspace', 'notion', 'trello', 'kol', 'influencer', 'live streaming',
-    'e-commerce', 'shopee', 'tokopedia', 'marketplace', 'affiliate', 'fmcg', 'agency', 'freelance', 'magang', 'internship', 'fresh graduate'
+    'e-commerce', 'shopee', 'tokopedia', 'marketplace', 'affiliate', 'fmcg', 'agency', 'freelance', 'magang', 'internship', 'fresh graduate',
+    'user research', 'riset pengguna', 'usability testing', 'uji kegunaan', 'user flow', 'user journey', 'persona', 'information architecture',
+    'interaction design', 'design thinking', 'product design', 'product designer', 'ux writing', 'ux research', 'figjam', 'maze', 'protopie', 'framer',
+    'adobe xd', 'sketch', 'mockup', 'hi-fi', 'low-fi', 'responsive', 'mobile app', 'aplikasi mobile', 'a/b testing', 'accessibility', 'aksesibilitas',
+    'html', 'css', 'design handoff', 'handoff'
   ];
 
   var STOP = ('yang dan di ke dari untuk dengan atau pada dalam akan ini itu adalah sebagai juga serta oleh bisa dapat kami kamu anda kita ' +
