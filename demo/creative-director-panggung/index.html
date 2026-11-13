@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+
+<!--
+  © 2026 Jejak Karya (jejakkarya.github.io). Hak cipta dilindungi.
+  Template demo ini tidak boleh disalin, dijual ulang, atau dipakai tanpa izin tertulis.
+-->
+<!--
+  TEMPLATE PORTOFOLIO – PAKET SERIUS – DESAIN 1
+  Mode tampilan: ganti data-theme di bawah menjadi "terang" atau "gelap".
+  Paket Serius: maks. 12 karya dan 2 case study.
+-->
+<html data-theme="gelap" lang="id">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1" name="viewport"/>
+<title>Rina Kartika · Creative Director</title>
+<meta content="Portofolio Rina Kartika, creative director untuk kampanye, brand, dan program konten." name="description"/>
+<meta content="Rina Kartika · Creative Director" property="og:title"/>
+<meta content="Portofolio Rina Kartika, creative director untuk kampanye, brand, dan program konten." property="og:description"/>
+<meta content="assets/img/w1.jpg" property="og:image"/>
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Big+Shoulders+Display:wght@500..900&amp;family=Manrope:wght@400..700&amp;display=swap" rel="stylesheet"/>
+<link href="assets/css/style.css" rel="stylesheet"/>
+<style>
+    .jk-cut { position: relative; z-index: 5; margin-top: -190px; padding: 0 max(16px, 4vw) 72px; }
+    .jk-cut::after { content: ""; position: absolute; inset: 0; z-index: -1; background: var(--bg); }
+    .jk-cut::before {
+      content: ""; position: absolute; left: 0; right: 0; bottom: 100%; height: 300px;
+      background: linear-gradient(to bottom, transparent, var(--bg) 70%);
+      pointer-events: none;
+    }
+    .jk-cut-serius { margin-top: 48px; }
+    .jk-cut-serius::before { height: 90px; }
+    .jk-cut-serius .jk-cut-card { margin-top: 24px; }
+    .jk-cut-card {
+      position: relative; margin-top: 60px; max-width: 640px; margin: 0 auto; padding: 32px 28px; text-align: center;
+      border-radius: 20px; background: var(--surface); color: var(--ink);
+      border: 1px solid var(--line); box-shadow: 0 24px 60px -32px rgba(0, 0, 0, 0.45);
+      font-family: system-ui, -apple-system, "Segoe UI", sans-serif;
+    }
+    .jk-cut-card h2 { margin: 0; font: 800 clamp(1.5rem, 4vw, 2rem)/1.15 system-ui, -apple-system, "Segoe UI", sans-serif; letter-spacing: -0.02em; text-transform: none; }
+    .jk-cut-card p { margin: 12px auto 0; max-width: 46ch; color: var(--muted); font-size: 1rem; line-height: 1.55; }
+    .jk-cut-actions { display: flex; flex-wrap: wrap; justify-content: center; gap: 10px; margin-top: 22px; }
+    .jk-cut-actions a {
+      display: inline-block; padding: 12px 22px; border-radius: 999px; text-decoration: none;
+      font: 700 0.95rem/1.2 system-ui, -apple-system, "Segoe UI", sans-serif;
+    }
+    .jk-cut-wa { background: #2846d8; color: #fff; }
+    .jk-cut-wa:hover { background: #141826; }
+    .jk-cut-back { border: 1.5px solid var(--line); color: var(--ink); }
+    .jk-cut-back:hover { border-color: var(--ink); }
+    .jk-cut-list { display: flex; flex-wrap: wrap; justify-content: center; gap: 6px; margin: 16px 0 0; padding: 0; list-style: none; }
+    .jk-cut-list li { padding: 4px 11px; border-radius: 999px; border: 1px dashed var(--line); color: var(--muted); font-size: 0.82rem; }
+  </style></head>
+<body>
+<a class="skip" href="#karya">Langsung ke karya</a>
+<header class="top">
+<a class="top-name" href="#">Rina Kartika</a>
+<nav aria-label="Navigasi utama">
+<a href="#karya">Karya</a>
+<a href="#case-study">Case study</a>
+<a href="#cuplikan">Kontak</a>
+</nav>
+</header>
+<main>
+<!-- ===================== HERO =====================
+      Slideshow: ganti 3 gambar karya unggulan di bawah (data-caption = judulnya). -->
+<section class="stage">
+<div aria-hidden="true" class="slides">
+<img alt="" class="slide on" data-caption="Kampanye peluncuran sepatu lari" src="assets/img/s1.jpg"/>
+<img alt="" class="slide" data-caption="Program konten Detektif Sepatu" src="assets/img/s5.jpg"/>
+<img alt="" class="slide" data-caption='Kampanye Ramadan "Pulang bawa cerita"' src="assets/img/s8.jpg"/>
+</div>
+<div aria-hidden="true" class="stage-shade"></div>
+<div class="stage-inner">
+<div class="stage-text">
+<h1 class="enter"><span>Rina</span> <span>Kartika</span></h1>
+<p class="stage-role enter" style="--d:.15s">Creative Director</p>
+<p class="stage-statement enter" style="--d:.3s">Creative director yang mengubah brief jadi kampanye yang diingat orang. Delapan tahun memimpin tim kreatif untuk brand lokal, dari konsep sampai tayang.</p>
+<div class="actions enter" style="--d:.45s">
+<a class="btn btn-primary" href="#karya">Lihat karya</a>
+<a class="btn" href="#cuplikan">Hubungi saya</a>
+</div>
+</div>
+<div class="stage-now">
+<p>Sedang tampil: <span class="slide-caption">Kampanye peluncuran sepatu lari</span></p>
+<div class="slide-dots">
+<button aria-label="Tampilkan Kampanye peluncuran sepatu lari" aria-pressed="true" class="slide-dot"></button>
+<button aria-label="Tampilkan Program konten Detektif Sepatu" aria-pressed="false" class="slide-dot"></button>
+<button aria-label='Tampilkan Kampanye Ramadan "Pulang bawa cerita"' aria-pressed="false" class="slide-dot"></button>
+</div>
+</div>
+</div>
+</section>
+<section aria-label="Ringkasan" class="facts wrap">
+<p class="status"><span aria-hidden="true" class="dot"></span>Terbuka untuk posisi Creative Director atau Head of Creative, Jakarta</p>
+<dl class="stats">
+<div><dt>tahun di industri kreatif</dt><dd>8</dd></div>
+<div><dt>orang dalam tim</dt><dd>12</dd></div>
+<div><dt>kampanye dipimpin</dt><dd>30+</dd></div>
+</dl>
+</section>
+<!-- ===================== KARYA =====================
+      Tiap karya = satu <article class="work row">. Paket Serius: maks. 12 karya.
+      data-thumb = gambar yang muncul saat kursor diarahkan ke baris. -->
+<section aria-labelledby="judul-karya" class="section wrap" id="karya">
+<div class="section-head">
+<h2 id="judul-karya">Karya pilihan</h2>
+<div aria-label="Filter karya" class="filters" role="group">
+<button aria-pressed="true" class="chip" data-filter="semua">Semua</button>
+<button aria-pressed="false" class="chip" data-filter="kampanye">Kampanye</button>
+<button aria-pressed="false" class="chip" data-filter="brand">Brand</button>
+<button aria-pressed="false" class="chip" data-filter="program">Program konten</button>
+</div>
+</div>
+<div class="works rows">
+<article class="work row" data-kategori="kampanye" data-src="assets/img/w1.jpg" data-thumb="assets/img/w1.jpg" data-tipe="gambar">
+<h3>Kampanye peluncuran sepatu lari</h3>
+<span class="row-kat">Kampanye</span>
+<p>Konsep, tim 8 orang, video dan billboard. 1,2 juta views gabungan.</p>
+<img alt="Kampanye peluncuran sepatu lari" class="row-thumb" loading="lazy" src="assets/img/w1.jpg"/>
+<button aria-label="Lihat gambar: Kampanye peluncuran sepatu lari" class="work-open"></button>
+</article>
+<article class="work row vertikal" data-kategori="kampanye" data-src="assets/img/w2.jpg" data-thumb="assets/img/w2.jpg" data-tipe="gambar">
+<h3>Key visual Ramadan brand minuman</h3>
+<span class="row-kat">Kampanye</span>
+<p>Konsep "Pulang bawa cerita" untuk 40 titik materi promosi.</p>
+<img alt="Key visual Ramadan brand minuman" class="row-thumb" loading="lazy" src="assets/img/w2.jpg"/>
+<button aria-label="Lihat gambar: Key visual Ramadan brand minuman" class="work-open"></button>
+</article>
+<article class="work row" data-kategori="brand" data-src="assets/img/w3.jpg" data-thumb="assets/img/w3.jpg" data-tipe="gambar">
+<h3>Rebranding jaringan kedai kopi</h3>
+<span class="row-kat">Brand</span>
+<p>Arah brand, identitas visual, dan panduan untuk 6 cabang.</p>
+<img alt="Rebranding jaringan kedai kopi" class="row-thumb" loading="lazy" src="assets/img/w3.jpg"/>
+<button aria-label="Lihat gambar: Rebranding jaringan kedai kopi" class="work-open"></button>
+</article>
+<article class="work row" data-kategori="program" data-src="assets/img/w4.jpg" data-thumb="assets/img/w4.jpg" data-tipe="gambar">
+<h3>Program konten YouTube mingguan</h3>
+<span class="row-kat">Program konten</span>
+<p>Format, naskah, dan tim produksi. 40 episode dalam setahun.</p>
+<img alt="Program konten YouTube mingguan" class="row-thumb" loading="lazy" src="assets/img/w4.jpg"/>
+<button aria-label="Lihat gambar: Program konten YouTube mingguan" class="work-open"></button>
+</article>
+</div>
+<div aria-hidden="true" class="peek"><img alt=""/><span class="peek-text excerpt" hidden=""></span></div>
+</section>
+<!-- ===================== CASE STUDY ===================== -->
+<section aria-labelledby="judul-case" class="section wrap" id="case-study">
+<div class="section-head">
+<h2 id="judul-case">Case study</h2>
+</div>
+<article class="case">
+<header class="case-head">
+<h3>Kampanye peluncuran sepatu lari lokal</h3>
+<dl class="case-meta">
+<div><dt>Klien</dt><dd>Brand sepatu lari lokal, peluncuran nasional</dd></div>
+<div><dt>Peran</dt><dd>Creative director (konsep dan tim 8 orang)</dd></div>
+<div><dt>Durasi</dt><dd>10 minggu</dd></div>
+</dl>
+</header>
+<div class="case-body">
+<div class="case-media">
+<div class="ba" style="--pos:50%">
+<img alt="Key visual akhir" loading="lazy" src="assets/img/cs-after.jpg"/>
+<div class="ba-before"><img alt="Moodboard awal" loading="lazy" src="assets/img/cs-before.jpg"/></div>
+<span class="ba-label ba-label-a">Moodboard awal</span>
+<span class="ba-label ba-label-b">Key visual akhir</span>
+<input aria-label="Geser untuk membandingkan moodboard awal dan key visual akhir" class="ba-range" id="ba-0" max="100" min="0" type="range" value="50"/>
+</div>
+<p class="ba-hint">Geser untuk membandingkan sebelum dan sesudah.</p>
+</div>
+<ol class="case-steps">
+<li class="case-result">
+<h4>Hasil</h4>
+<p><span class="big"><span class="count" data-dec="1" data-suffix=" jt" data-to="1.2">1,2 jt</span></span>views gabungan dalam 2 minggu. Stok seri baru habis dalam 9 hari.</p>
+</li>
+</ol>
+</div>
+</article>
+</section>
+<!-- ===================== TENTANG ===================== -->
+<!-- ===================== KONTAK ===================== -->
+<section aria-labelledby="jk-cut-title" class="jk-cut jk-cut-serius" id="cuplikan">
+<div class="jk-cut-card">
+<h2 id="jk-cut-title">Ini baru cuplikan template Panggung.</h2>
+<p>Sisa halaman sengaja kami sembunyikan. Mau lihat versi lengkapnya? Chat kami, demo penuh kami kirim lewat WhatsApp.</p>
+<ul aria-label="Bagian yang disembunyikan" class="jk-cut-list"><li>4 karya lainnya</li><li>uraian proses case study</li><li>case study kedua</li><li>bagian tentang</li><li>kontak</li></ul>
+<div class="jk-cut-actions">
+<a class="jk-cut-wa" href="https://wa.me/6285156342553?text=Halo%20Jejak%20Karya%2C%20saya%20mau%20lihat%20demo%20lengkap%20template%20Panggung." rel="noopener" target="_blank">Minta demo lengkap</a>
+<a class="jk-cut-back" href="../../#template">Kembali ke katalog</a>
+</div>
+</div>
+</section></main>
+<!-- Jendela untuk menampilkan video, gambar, atau tulisan -->
+<dialog aria-labelledby="viewer-title" class="viewer">
+<div class="viewer-bar">
+<h2 id="viewer-title"></h2>
+<button aria-label="Tutup" class="viewer-close">Tutup</button>
+</div>
+<div class="viewer-body"></div>
+</dialog>
+<script src="assets/js/main.js"></script>
+<script src="assets/js/serius.js"></script>
+<!-- Badge demo Jejak Karya -->
+<a class="jk-badge" href="../../" title="Template ini milik Jejak Karya"><span aria-hidden="true" class="jk-dot"></span>Cuplikan template oleh <b>Jejak Karya</b></a>
+<style>
+    .jk-badge {
+      position: fixed; z-index: 9999;
+      left: calc(14px + env(safe-area-inset-left, 0px)); bottom: calc(14px + env(safe-area-inset-bottom, 0px));
+      display: inline-flex; align-items: center; gap: 8px;
+      padding: 8px 14px; border-radius: 999px;
+      background: rgba(20, 24, 38, 0.92); color: #fff;
+      font: 500 12.5px/1.2 system-ui, -apple-system, "Segoe UI", sans-serif;
+      text-decoration: none; box-shadow: 0 8px 24px -10px rgba(0, 0, 0, 0.5);
+      backdrop-filter: blur(6px); -webkit-backdrop-filter: blur(6px);
+    }
+    .jk-badge b { font-weight: 700; }
+    .jk-badge:hover { background: #2846d8; }
+    .jk-badge:focus-visible { outline: 2px solid #ffcf4a; outline-offset: 2px; }
+    .jk-dot { width: 8px; height: 8px; border-radius: 50%; background: #ffcf4a; }
+    @media print { .jk-badge { display: none; } }
+  </style>
+<!-- Statistik pengunjung (GoatCounter, tanpa cookie) -->
+<script async="" data-goatcounter="https://jejakkarya.goatcounter.com/count" src="//gc.zgo.at/count.js"></script>
+<script>document.addEventListener('click',function(e){var a=e.target.closest&&e.target.closest('a[href*="wa.me"]');if(a&&window.goatcounter&&window.goatcounter.count)window.goatcounter.count({path:'klik-whatsapp'+location.pathname,title:'Klik WhatsApp',event:true});});</script>
+</body>
+</html>

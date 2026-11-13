@@ -1,0 +1,88 @@
+/* =========================================================
+   PROTOTYPE APLIKASI "ANTRE" (contoh case study)
+   Ganti seluruh bagian prototype dengan embed Figma milikmu
+   kalau prototype-mu dibuat di Figma (lihat petunjuk di index.html).
+   ========================================================= */
+.app {
+  --a-bg: #f4f7f6; --a-ink: #10201d; --a-muted: #5d6f6b; --a-line: #dde6e3;
+  --a-brand: #0f766e; --a-brand-soft: #d9f0ec; --a-accent: #ff8a3d; --a-card: #fff;
+  position: relative; width: 100%; height: 100%; overflow: hidden;
+  background: var(--a-bg); color: var(--a-ink);
+  font: 400 14px/1.4 "Figtree", system-ui, sans-serif;
+}
+.app * { box-sizing: border-box; }
+:where(.app button) { font: inherit; color: inherit; border: 0; background: none; cursor: pointer; padding: 0; }
+.screen {
+  position: absolute; inset: 0; display: flex; flex-direction: column;
+  padding: 44px 18px 18px; overflow: hidden;
+  opacity: 0; transform: translateX(24px); pointer-events: none;
+  transition: opacity .28s ease, transform .28s ease;
+}
+.screen.on { opacity: 1; transform: none; pointer-events: auto; }
+.screen.off-left { transform: translateX(-24px); }
+.statusbar { position: absolute; top: 0; left: 0; right: 0; height: 34px; display: flex; justify-content: space-between; align-items: center; padding: 0 22px; font-size: 12px; font-weight: 700; z-index: 3; }
+.statusbar i { display: inline-block; width: 18px; height: 9px; border: 1.5px solid currentColor; border-radius: 3px; position: relative; }
+.statusbar i::after { content: ""; position: absolute; inset: 1.5px; right: 5px; background: currentColor; border-radius: 1px; }
+
+.a-top { display: flex; align-items: center; gap: 10px; margin-bottom: 14px; }
+.a-back { width: 34px; height: 34px; border-radius: 50%; background: var(--a-card); border: 1px solid var(--a-line) !important; display: grid; place-items: center; font-size: 18px; }
+.a-title { font-weight: 800; font-size: 17px; }
+.a-hi { font-size: 13px; color: var(--a-muted); }
+.a-h { font-weight: 800; font-size: 22px; line-height: 1.15; letter-spacing: -.01em; margin: 2px 0 14px; }
+.a-search { display: flex; align-items: center; gap: 8px; padding: 11px 14px; border-radius: 14px; background: var(--a-card); border: 1px solid var(--a-line); color: var(--a-muted); font-size: 13px; margin-bottom: 14px; }
+.a-clinic { padding: 14px; border-radius: 18px; background: var(--a-brand); color: #fff; margin-bottom: 16px; }
+.a-clinic b { display: block; font-size: 15px; }
+.a-clinic span { font-size: 12px; opacity: .85; }
+.a-clinic .open { display: inline-block; margin-top: 8px; padding: 3px 9px; border-radius: 99px; background: rgba(255,255,255,.18); font-size: 11px; font-weight: 700; }
+.a-label { font-size: 12px; font-weight: 700; color: var(--a-muted); text-transform: uppercase; letter-spacing: .08em; margin-bottom: 8px; }
+.a-polis { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+.a-poli { text-align: left; padding: 12px; border-radius: 16px; background: var(--a-card); border: 1px solid var(--a-line) !important; }
+.a-poli .ic { width: 34px; height: 34px; border-radius: 10px; background: var(--a-brand-soft); display: grid; place-items: center; font-size: 17px; margin-bottom: 8px; }
+.a-poli b { display: block; font-size: 14px; }
+.a-poli small { color: var(--a-muted); font-size: 11.5px; }
+.a-dates { display: flex; gap: 8px; margin-bottom: 16px; }
+.a-date { flex: 1; padding: 9px 0; border-radius: 14px; background: var(--a-card); border: 1px solid var(--a-line) !important; text-align: center; }
+.a-date small { display: block; font-size: 11px; color: var(--a-muted); }
+.a-date b { font-size: 16px; }
+.a-date.sel { background: var(--a-ink); color: #fff; border-color: var(--a-ink) !important; }
+.a-date.sel small { color: rgba(255,255,255,.7); }
+.a-slots { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; margin-bottom: 12px; }
+.a-slot { padding: 11px 0; border-radius: 12px; background: var(--a-card); border: 1px solid var(--a-line) !important; font-weight: 700; font-size: 13px; text-align: center; }
+.a-slot small { display: block; font-weight: 500; font-size: 10.5px; color: var(--a-muted); }
+.a-slot.full { opacity: .4; text-decoration: line-through; pointer-events: none; }
+.a-slot.sel { background: var(--a-brand-soft); border-color: var(--a-brand) !important; color: var(--a-brand); }
+.a-note { padding: 10px 12px; border-radius: 12px; background: #fff5ec; color: #8a4a12; font-size: 12px; }
+.a-cta { margin-top: auto; width: 100%; padding: 15px; border-radius: 16px; background: var(--a-brand) !important; color: #fff !important; font-weight: 800 !important; font-size: 15px; }
+.a-cta.loading { opacity: .7; }
+.a-sum { padding: 16px; border-radius: 18px; background: var(--a-card); border: 1px solid var(--a-line); margin-bottom: 12px; }
+.a-row { display: flex; justify-content: space-between; gap: 10px; padding: 7px 0; border-bottom: 1px dashed var(--a-line); font-size: 13px; }
+.a-row:last-child { border: 0; }
+.a-row span { color: var(--a-muted); }
+.a-row b { text-align: right; }
+.a-toggle { display: flex; justify-content: space-between; align-items: center; padding: 14px 16px; border-radius: 16px; background: var(--a-card); border: 1px solid var(--a-line); font-size: 13px; }
+.a-switch { width: 42px; height: 24px; border-radius: 99px; background: var(--a-line); position: relative; transition: background .2s; }
+.a-switch::after { content: ""; position: absolute; top: 3px; left: 3px; width: 18px; height: 18px; border-radius: 50%; background: #fff; transition: transform .2s; box-shadow: 0 1px 3px rgba(0,0,0,.2); }
+.a-switch[aria-checked="true"] { background: var(--a-brand); }
+.a-switch[aria-checked="true"]::after { transform: translateX(18px); }
+.a-ticket { margin-top: 4px; padding: 20px 18px; border-radius: 22px; background: var(--a-ink); color: #fff; text-align: center; position: relative; }
+.a-ticket small { font-size: 12px; opacity: .7; }
+.a-num { display: block; font-weight: 800; font-size: 54px; line-height: 1; letter-spacing: -.02em; margin: 6px 0 4px; color: #7ff0dc; }
+.a-ticket .poli { font-size: 13px; opacity: .85; }
+.a-now { display: flex; justify-content: space-between; align-items: center; margin: 14px 0 8px; font-size: 13px; }
+.a-now b { font-size: 18px; }
+.a-bar { height: 10px; border-radius: 99px; background: var(--a-line); overflow: hidden; }
+.a-bar span { display: block; height: 100%; width: 0; background: linear-gradient(90deg, var(--a-brand), #2bb39f); border-radius: 99px; transition: width .6s ease; }
+.a-eta { margin: 12px 0; padding: 12px 14px; border-radius: 14px; background: var(--a-brand-soft); color: var(--a-brand); font-size: 13px; font-weight: 700; display: flex; align-items: center; gap: 8px; }
+.a-ghost { width: 100%; margin-top: 8px; padding: 12px; border-radius: 14px; border: 1px solid var(--a-line) !important; background: var(--a-card) !important; font-weight: 700; font-size: 13px; }
+.a-toast { position: absolute; left: 14px; right: 14px; top: 54px; padding: 12px 14px; border-radius: 14px; background: var(--a-ink); color: #fff; font-size: 12.5px; display: flex; gap: 8px; align-items: center; transform: translateY(-140%); transition: transform .35s ease; z-index: 4; }
+.a-toast.show { transform: none; }
+/* titik petunjuk "klik di sini" */
+.hint { position: relative; }
+.hint::after { content: ""; position: absolute; inset: -4px; border-radius: inherit; border: 2px solid var(--a-accent); animation: a-pulse 1.6s ease-out infinite; pointer-events: none; }
+@keyframes a-pulse { 0% { opacity: 1; transform: scale(.96); } 100% { opacity: 0; transform: scale(1.08); } }
+@media (prefers-reduced-motion: reduce) { .screen { transition: none; } .hint::after { animation: none; } }
+
+/* versi wireframe (dipakai untuk gambar sebelum/sesudah) */
+.app.wire { --a-bg: #fff; --a-ink: #222; --a-muted: #888; --a-line: #cfcfcf; --a-brand: #9a9a9a; --a-brand-soft: #eee; --a-card: #fff; font-family: ui-monospace, monospace; }
+.app.wire .a-date.sel, .app.wire .a-cta { background: #bdbdbd !important; color: #222 !important; border-color: #bdbdbd !important; }
+.app.wire .a-note { background: #f2f2f2; color: #666; }

@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+
+<!--
+  © 2026 Jejak Karya (jejakkarya.github.io). Hak cipta dilindungi.
+  Template demo ini tidak boleh disalin, dijual ulang, atau dipakai tanpa izin tertulis.
+-->
+<!--
+  TEMPLATE PORTOFOLIO – PAKET BASIC – DESAIN 4
+  Mode tampilan: ganti data-theme di bawah menjadi "terang" atau "gelap".
+  Paket Basic: maks. 8 karya, tanpa case study.
+-->
+<html data-theme="terang" lang="id">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1" name="viewport"/>
+<title>Salsa Maharani · Social Media Specialist</title>
+<meta content="Portofolio Salsa Maharani, social media specialist untuk konten, iklan, dan laporan performa akun brand." name="description"/>
+<meta content="Salsa Maharani · Social Media Specialist" property="og:title"/>
+<meta content="Portofolio Salsa Maharani, social media specialist untuk konten, iklan, dan laporan performa akun brand." property="og:description"/>
+<meta content="assets/img/w1.jpg" property="og:image"/>
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Young+Serif&amp;family=Onest:wght@400..700&amp;display=swap" rel="stylesheet"/>
+<link href="assets/css/style.css" rel="stylesheet"/>
+<style>
+    .jk-cut { position: relative; z-index: 5; margin-top: -190px; padding: 0 max(16px, 4vw) 72px; }
+    .jk-cut::after { content: ""; position: absolute; inset: 0; z-index: -1; background: var(--bg); }
+    .jk-cut::before {
+      content: ""; position: absolute; left: 0; right: 0; bottom: 100%; height: 300px;
+      background: linear-gradient(to bottom, transparent, var(--bg) 70%);
+      pointer-events: none;
+    }
+    .jk-cut-serius { margin-top: 48px; }
+    .jk-cut-serius::before { height: 90px; }
+    .jk-cut-serius .jk-cut-card { margin-top: 24px; }
+    .jk-cut-card {
+      position: relative; margin-top: 60px; max-width: 640px; margin: 0 auto; padding: 32px 28px; text-align: center;
+      border-radius: 20px; background: var(--surface); color: var(--ink);
+      border: 1px solid var(--line); box-shadow: 0 24px 60px -32px rgba(0, 0, 0, 0.45);
+      font-family: system-ui, -apple-system, "Segoe UI", sans-serif;
+    }
+    .jk-cut-card h2 { margin: 0; font: 800 clamp(1.5rem, 4vw, 2rem)/1.15 system-ui, -apple-system, "Segoe UI", sans-serif; letter-spacing: -0.02em; text-transform: none; }
+    .jk-cut-card p { margin: 12px auto 0; max-width: 46ch; color: var(--muted); font-size: 1rem; line-height: 1.55; }
+    .jk-cut-actions { display: flex; flex-wrap: wrap; justify-content: center; gap: 10px; margin-top: 22px; }
+    .jk-cut-actions a {
+      display: inline-block; padding: 12px 22px; border-radius: 999px; text-decoration: none;
+      font: 700 0.95rem/1.2 system-ui, -apple-system, "Segoe UI", sans-serif;
+    }
+    .jk-cut-wa { background: #2846d8; color: #fff; }
+    .jk-cut-wa:hover { background: #141826; }
+    .jk-cut-back { border: 1.5px solid var(--line); color: var(--ink); }
+    .jk-cut-back:hover { border-color: var(--ink); }
+    .jk-cut-list { display: flex; flex-wrap: wrap; justify-content: center; gap: 6px; margin: 16px 0 0; padding: 0; list-style: none; }
+    .jk-cut-list li { padding: 4px 11px; border-radius: 999px; border: 1px dashed var(--line); color: var(--muted); font-size: 0.82rem; }
+  </style></head>
+<body>
+<a class="skip" href="#karya">Langsung ke karya</a>
+<main class="column">
+<!-- ===================== PROFIL ===================== -->
+<header class="profile">
+<img alt="Foto Salsa Maharani" class="avatar enter" src="assets/img/foto-profil.jpg"/>
+<h1 class="enter" style="--d:.1s">Salsa Maharani</h1>
+<p class="role enter" style="--d:.15s">Social Media Specialist</p>
+<p class="statement enter" style="--d:.2s">Social media specialist yang bikin akun brand tumbuh dengan rencana, bukan tebak-tebakan. Tiga tahun pegang konten, iklan, dan laporan untuk 12 akun brand.</p>
+<p class="status enter" style="--d:.25s"><span aria-hidden="true" class="dot"></span>Terbuka untuk posisi Social Media Specialist di brand atau agency, Jakarta</p>
+<div class="links enter" style="--d:.3s">
+<a class="link link-main" href="mailto:raka@email.com">Kirim email</a>
+<a class="link" href="https://wa.me/6281234567890">Chat WhatsApp</a>
+<a class="link" href="#karya">Lihat karya</a>
+</div>
+</header>
+<!-- ===================== KARYA ===================== -->
+<section aria-labelledby="judul-karya" class="card-section" id="karya">
+<div class="section-head">
+<h2 id="judul-karya">Karya pilihan</h2>
+<div aria-label="Filter karya" class="filters" role="group">
+<button aria-pressed="true" class="chip" data-filter="semua">Semua</button>
+<button aria-pressed="false" class="chip" data-filter="konten">Konten</button>
+<button aria-pressed="false" class="chip" data-filter="iklan">Iklan</button>
+<button aria-pressed="false" class="chip" data-filter="laporan">Laporan</button>
+</div>
+</div>
+<!-- Tiap karya = satu <article class="work">. Paket Basic: maks. 8 karya.
+           data-kategori harus sama dengan salah satu tombol filter.
+           data-tipe: "video" | "gambar" | "tulisan". Kelas "vertikal" untuk karya tegak. -->
+<div class="works">
+<article class="work" data-kategori="konten" data-src="assets/img/w1.jpg" data-tipe="gambar">
+<button aria-label="Lihat gambar: Kalender konten brand skincare" class="work-open">
+<img alt="Kalender konten brand skincare" loading="lazy" src="assets/img/w1.jpg"/>
+</button>
+<h3>Kalender konten brand skincare</h3>
+<p>30 konten sebulan dengan 4 pilar. Engagement naik 2,4 kali.</p>
+</article>
+<article class="work vertikal" data-kategori="konten" data-src="https://www.youtube.com/embed/ID_VIDEO" data-tipe="video">
+<button aria-label="Putar video: Reels tren untuk kedai kopi" class="work-open">
+<img alt="Reels tren untuk kedai kopi" loading="lazy" src="assets/img/w2.jpg"/>
+<span aria-hidden="true" class="play"></span>
+</button>
+<h3>Reels tren untuk kedai kopi</h3>
+<p>Ide, brief, dan caption. 210 ribu views dalam 5 hari.</p>
+</article>
+<article class="work" data-kategori="iklan" data-src="assets/img/w3.jpg" data-tipe="gambar">
+<button aria-label="Lihat gambar: Iklan Instagram toko sepatu" class="work-open">
+<img alt="Iklan Instagram toko sepatu" loading="lazy" src="assets/img/w3.jpg"/>
+</button>
+<h3>Iklan Instagram toko sepatu</h3>
+<p>Uji 6 variasi materi. Biaya per pembelian turun 37%.</p>
+</article>
+<article class="work" data-kategori="laporan" data-src="assets/img/w4.jpg" data-tipe="gambar">
+<button aria-label="Lihat gambar: Laporan bulanan performa akun" class="work-open">
+<img alt="Laporan bulanan performa akun" loading="lazy" src="assets/img/w4.jpg"/>
+</button>
+<h3>Laporan bulanan performa akun</h3>
+<p>Insight, angka penting, dan rekomendasi bulan depan untuk klien.</p>
+</article>
+</div>
+</section>
+<!-- ===================== TENTANG ===================== -->
+<!-- ===================== KONTAK ===================== -->
+<section aria-labelledby="jk-cut-title" class="jk-cut" id="cuplikan">
+<div class="jk-cut-card">
+<h2 id="jk-cut-title">Ini baru cuplikan template Satu Kolom.</h2>
+<p>Sisa halaman sengaja kami sembunyikan. Mau lihat versi lengkapnya? Chat kami, demo penuh kami kirim lewat WhatsApp.</p>
+<ul aria-label="Bagian yang disembunyikan" class="jk-cut-list"><li>2 karya lainnya</li><li>bagian tentang</li><li>kontak</li></ul>
+<div class="jk-cut-actions">
+<a class="jk-cut-wa" href="https://wa.me/6285156342553?text=Halo%20Jejak%20Karya%2C%20saya%20mau%20lihat%20demo%20lengkap%20template%20Satu%20Kolom." rel="noopener" target="_blank">Minta demo lengkap</a>
+<a class="jk-cut-back" href="../../#template">Kembali ke katalog</a>
+</div>
+</div>
+</section></main>
+<!-- Jendela untuk menampilkan video, gambar, atau tulisan -->
+<dialog aria-labelledby="viewer-title" class="viewer">
+<div class="viewer-bar">
+<h2 id="viewer-title"></h2>
+<button aria-label="Tutup" class="viewer-close">Tutup</button>
+</div>
+<div class="viewer-body"></div>
+</dialog>
+<script src="assets/js/main.js"></script>
+<!-- Badge demo Jejak Karya -->
+<a class="jk-badge" href="../../" title="Template ini milik Jejak Karya"><span aria-hidden="true" class="jk-dot"></span>Cuplikan template oleh <b>Jejak Karya</b></a>
+<style>
+    .jk-badge {
+      position: fixed; z-index: 9999;
+      left: calc(14px + env(safe-area-inset-left, 0px)); bottom: calc(14px + env(safe-area-inset-bottom, 0px));
+      display: inline-flex; align-items: center; gap: 8px;
+      padding: 8px 14px; border-radius: 999px;
+      background: rgba(20, 24, 38, 0.92); color: #fff;
+      font: 500 12.5px/1.2 system-ui, -apple-system, "Segoe UI", sans-serif;
+      text-decoration: none; box-shadow: 0 8px 24px -10px rgba(0, 0, 0, 0.5);
+      backdrop-filter: blur(6px); -webkit-backdrop-filter: blur(6px);
+    }
+    .jk-badge b { font-weight: 700; }
+    .jk-badge:hover { background: #2846d8; }
+    .jk-badge:focus-visible { outline: 2px solid #ffcf4a; outline-offset: 2px; }
+    .jk-dot { width: 8px; height: 8px; border-radius: 50%; background: #ffcf4a; }
+    @media print { .jk-badge { display: none; } }
+  </style>
+<!-- Statistik pengunjung (GoatCounter, tanpa cookie) -->
+<script async="" data-goatcounter="https://jejakkarya.goatcounter.com/count" src="//gc.zgo.at/count.js"></script>
+<script>document.addEventListener('click',function(e){var a=e.target.closest&&e.target.closest('a[href*="wa.me"]');if(a&&window.goatcounter&&window.goatcounter.count)window.goatcounter.count({path:'klik-whatsapp'+location.pathname,title:'Klik WhatsApp',event:true});});</script>
+</body>
+</html>
