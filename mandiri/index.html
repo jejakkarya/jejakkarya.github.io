@@ -1,0 +1,220 @@
+<!doctype html>
+<html lang="id">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Isi Portofolio Sendiri · Jejak Karya Mandiri</title>
+  <meta name="description" content="Isi data dan karyamu lewat form, lihat hasilnya langsung, lalu terbitkan jadi website portofolio.">
+  <meta property="og:title" content="Isi Portofolio Sendiri · Jejak Karya Mandiri">
+  <meta property="og:description" content="Isi data dan karyamu lewat form, lihat hasilnya langsung, lalu terbitkan jadi website portofolio.">
+  <meta property="og:type" content="website">
+  <!-- Hapus baris noindex ini saat Mandiri resmi diluncurkan. -->
+  <meta name="robots" content="noindex">
+  <link rel="icon" href="../assets/img/favicon.svg" type="image/svg+xml">
+  <link rel="apple-touch-icon" href="../assets/img/apple-touch-icon.png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Gabarito:wght@500..900&family=Hanken+Grotesk:wght@400..700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../assets/css/tools.css">
+  <link rel="stylesheet" href="mandiri.css">
+</head>
+<body>
+
+  <header class="nav">
+    <div class="nav-inner">
+      <a class="logo" href="../" aria-label="Jejak Karya, kembali ke beranda">
+        <svg viewBox="0 0 100 100" aria-hidden="true"><g transform="translate(0 3)"><g transform="rotate(-14 37 63)" fill="#141826"><ellipse cx="37" cy="53" rx="10.5" ry="14.5"/><ellipse cx="37" cy="76" rx="7.2" ry="8.2"/></g><g transform="rotate(14 63 37)" fill="#2846d8"><ellipse cx="63" cy="27" rx="10.5" ry="14.5"/><ellipse cx="63" cy="50" rx="7.2" ry="8.2"/></g></g></svg>
+        Jejak Karya
+      </a>
+      <span class="nav-title">Mandiri</span>
+      <button class="nav-masuk link-btn" type="button" id="btn-masuk"><span class="lg">Sudah pernah terbit?</span> Masuk</button>
+    </div>
+  </header>
+
+  <main>
+    <section class="wrap intro intro-mandiri">
+      <h1>Isi portofoliomu sendiri, langsung jadi website.</h1>
+      <p>Pilih desain, isi data dan karyamu, lalu lihat hasilnya langsung. Mengisi dan melihat preview gratis. Kode akses baru dibutuhkan saat kamu mau menerbitkannya.</p>
+      <p class="privacy">Draf tersimpan di browser ini sampai kamu terbitkan.</p>
+    </section>
+
+    <div class="wrap studio">
+      <div class="form-col">
+        <ol class="steps" aria-label="Langkah">
+          <li><button type="button" data-ke="desain" aria-current="step"><b>1</b>Desain</button></li>
+          <li><button type="button" data-ke="profil"><b>2</b>Profil</button></li>
+          <li><button type="button" data-ke="karya"><b>3</b>Karya</button></li>
+          <li><button type="button" data-ke="kontak"><b>4</b>Kontak</button></li>
+          <li><button type="button" data-ke="terbit"><b>5</b>Terbitkan</button></li>
+        </ol>
+
+        <!-- 1. DESAIN -->
+        <section class="card step" id="langkah-desain" data-langkah="desain">
+          <h2>Pilih desain</h2>
+          <p class="sub">Bisa diganti kapan saja. Isianmu tidak hilang saat ganti desain.</p>
+          <div class="desain-grid" role="radiogroup" aria-label="Desain" id="desain-grid"></div>
+          <div class="field tema-field">
+            <span>Tampilan</span>
+            <div class="seg" role="group" aria-label="Tampilan">
+              <button type="button" data-tema="terang" aria-pressed="true">Terang</button>
+              <button type="button" data-tema="gelap" aria-pressed="false">Gelap</button>
+            </div>
+          </div>
+        </section>
+
+        <!-- 2. PROFIL -->
+        <section class="card step" id="langkah-profil" data-langkah="profil" hidden>
+          <h2>Profil</h2>
+          <p class="sub">Tulis seperti sedang memperkenalkan diri ke HRD: singkat dan jelas.</p>
+          <div class="foto-profil">
+            <div class="foto-bulat" id="foto-profil-pratinjau" aria-hidden="true"></div>
+            <div>
+              <label class="btn btn-line btn-kecil">
+                <input type="file" accept="image/*" class="sr-only" data-foto="foto"> Pilih foto profil
+              </label>
+              <p class="note">Foto wajah yang jelas, tegak. Otomatis dikecilkan.</p>
+            </div>
+          </div>
+          <div class="grid">
+            <label class="field"><span>Nama lengkap</span>
+              <input type="text" data-isi="nama" maxlength="80" placeholder="Nadia Putri" autocomplete="name"></label>
+            <label class="field"><span>Peran / posisi</span>
+              <input type="text" data-isi="peran" maxlength="80" placeholder="Graphic Designer"></label>
+            <label class="field span-2"><span>Kalimat pembuka <em>1–2 kalimat</em></span>
+              <textarea data-isi="pembuka" rows="3" maxlength="400" placeholder="Desainer grafis untuk brand F&amp;B lokal. Dua tahun mengerjakan logo, kemasan, dan konten feed."></textarea>
+              <small data-hitung="pembuka" data-maks="400"></small></label>
+            <label class="field span-2"><span>Posisi yang dicari <em>opsional</em></span>
+              <input type="text" data-isi="status" maxlength="160" placeholder="Terbuka untuk posisi Graphic Designer di agency, Bandung">
+              <small>Kosongkan kalau tidak mau ditampilkan.</small></label>
+            <label class="field span-2"><span>Tentang kamu <em>maks. 3 paragraf</em></span>
+              <textarea data-isi="tentang" rows="6" maxlength="3600" placeholder="Ceritakan perjalananmu, apa yang paling kamu suka kerjakan, dan kenapa kamu cocok untuk posisi yang kamu incar."></textarea>
+              <small>Pisahkan paragraf dengan baris kosong (tekan Enter dua kali).</small></label>
+            <label class="field span-2"><span>Tools dan keahlian</span>
+              <input type="text" data-isi="tools" maxlength="600" placeholder="Figma, Illustrator, Photoshop, Branding">
+              <small>Pisahkan dengan koma.</small></label>
+          </div>
+        </section>
+
+        <!-- 3. KARYA -->
+        <section class="card step" id="langkah-karya" data-langkah="karya" hidden>
+          <h2>Karya</h2>
+          <p class="sub">Maksimal 8 karya. Taruh yang terbaik paling atas, karena itu yang pertama dilihat HRD.</p>
+          <div id="daftar-karya" class="daftar-karya"></div>
+          <button type="button" class="btn btn-line tambah-karya" id="tambah-karya">+ Tambah karya</button>
+          <datalist id="daftar-kategori"></datalist>
+        </section>
+
+        <!-- 4. KONTAK -->
+        <section class="card step" id="langkah-kontak" data-langkah="kontak" hidden>
+          <h2>Kontak</h2>
+          <p class="sub">Yang dikosongkan tidak ditampilkan.</p>
+          <div class="grid">
+            <label class="field"><span>Email</span>
+              <input type="email" data-kontak="email" maxlength="120" placeholder="nama@email.com" autocomplete="email"></label>
+            <label class="field"><span>WhatsApp</span>
+              <input type="tel" data-kontak="whatsapp" maxlength="30" placeholder="081234567890" autocomplete="tel"></label>
+            <label class="field"><span>LinkedIn</span>
+              <input type="url" data-kontak="linkedin" maxlength="200" placeholder="linkedin.com/in/namakamu"></label>
+            <label class="field"><span>Instagram</span>
+              <input type="text" data-kontak="instagram" maxlength="200" placeholder="@namakamu"></label>
+          </div>
+          <details class="lainnya">
+            <summary>Tautan lain (TikTok, Behance, Dribbble, YouTube, website)</summary>
+            <div class="grid">
+              <label class="field"><span>TikTok</span><input type="text" data-kontak="tiktok" maxlength="200" placeholder="@namakamu"></label>
+              <label class="field"><span>Behance</span><input type="url" data-kontak="behance" maxlength="200" placeholder="behance.net/namakamu"></label>
+              <label class="field"><span>Dribbble</span><input type="url" data-kontak="dribbble" maxlength="200" placeholder="dribbble.com/namakamu"></label>
+              <label class="field"><span>YouTube</span><input type="text" data-kontak="youtube" maxlength="200" placeholder="@namakanal"></label>
+              <label class="field span-2"><span>Website</span><input type="url" data-kontak="website" maxlength="200" placeholder="namakamu.com"></label>
+            </div>
+          </details>
+        </section>
+
+        <!-- 5. TERBITKAN -->
+        <section class="card step" id="langkah-terbit" data-langkah="terbit" hidden>
+          <h2>Terbitkan</h2>
+          <div id="cek-isian" class="cek-isian" aria-live="polite"></div>
+
+          <div id="form-terbit">
+            <label class="field" id="field-slug"><span>Alamat portofolio</span>
+              <div class="slug-input"><span class="slug-awal" id="slug-awal">jejakkarya.github.io/p/</span><input type="text" id="slug" maxlength="40" placeholder="nadia-putri" autocapitalize="none" spellcheck="false"></div>
+              <small id="slug-info">Huruf kecil, angka, dan tanda strip. Tidak bisa diganti setelah terbit.</small></label>
+            <p class="slug-tetap" id="slug-tetap" hidden></p>
+            <label class="field"><span>Kode akses</span>
+              <input type="text" id="kode" maxlength="20" placeholder="JK-XXXX-XXXX" autocapitalize="characters" spellcheck="false"></label>
+            <button type="button" class="btn btn-primary btn-terbit" id="btn-terbit">Terbitkan portofolio</button>
+            <p class="note" id="pesan-terbit" aria-live="polite"></p>
+          </div>
+
+          <div class="hasil-terbit" id="hasil-terbit" hidden aria-live="polite">
+            <h3 id="hasil-judul">Portofoliomu sudah terbit!</h3>
+            <p>Alamatnya:</p>
+            <p class="hasil-url"><a id="hasil-url" href="#" target="_blank" rel="noopener"></a></p>
+            <div class="row-actions">
+              <button type="button" class="btn btn-primary btn-kecil" id="salin-url">Salin alamat</button>
+              <a class="btn btn-line btn-kecil" id="buka-url" href="#" target="_blank" rel="noopener">Buka</a>
+            </div>
+            <p class="note">Biasanya tayang dalam 1–2 menit. Kalau masih muncul "belum ada", tunggu sebentar lalu muat ulang.</p>
+            <p class="note" id="hasil-batas"></p>
+          </div>
+
+          <div class="info-kode" id="info-kode">
+            <h3>Belum punya kode akses?</h3>
+            <p>Isi dan lihat preview sepuasnya, gratis. Kalau sudah cocok, chat kami untuk mendapatkan kode akses. Setelah terbit pertama, kamu bisa mengubah isinya selama 2 bulan pakai kode yang sama.</p>
+            <a class="btn btn-line btn-kecil" href="https://wa.me/6285156342553?text=Halo%20Jejak%20Karya%2C%20saya%20mau%20kode%20akses%20Mandiri." target="_blank" rel="noopener">Chat WhatsApp</a>
+          </div>
+        </section>
+
+        <div class="step-nav">
+          <button type="button" class="btn btn-line" id="btn-kembali">Kembali</button>
+          <button type="button" class="btn btn-primary" id="btn-lanjut">Lanjut</button>
+        </div>
+      </div>
+
+      <aside class="preview-col" id="preview-col" aria-label="Preview portofolio">
+        <div class="preview-bar">
+          <div class="seg" role="group" aria-label="Ukuran preview">
+            <button type="button" data-layar="hp" aria-pressed="true">HP</button>
+            <button type="button" data-layar="laptop" aria-pressed="false">Laptop</button>
+          </div>
+          <span class="simpan-info" id="simpan-info" aria-live="polite"></span>
+          <button type="button" class="btn btn-primary btn-kecil tutup-preview" id="tutup-preview">Kembali mengisi</button>
+        </div>
+        <div class="frame-wrap" id="frame-wrap">
+          <iframe id="pratinjau" title="Preview portofolio" loading="eager"></iframe>
+        </div>
+      </aside>
+    </div>
+
+    <div class="bar-hp">
+      <button type="button" class="btn btn-line" id="buka-preview">Lihat preview</button>
+      <button type="button" class="btn btn-primary" id="btn-lanjut-hp">Lanjut</button>
+    </div>
+  </main>
+
+  <dialog class="dlg" id="dlg-masuk" aria-labelledby="judul-masuk">
+    <form method="dialog" id="form-masuk">
+      <h2 id="judul-masuk">Masuk untuk mengubah portofolio</h2>
+      <p class="note">Masukkan kode akses yang kamu pakai saat menerbitkan. Isian portofoliomu akan dimuat ke form ini.</p>
+      <label class="field"><span>Kode akses</span>
+        <input type="text" id="kode-masuk" maxlength="20" placeholder="JK-XXXX-XXXX" autocapitalize="characters" spellcheck="false" required></label>
+      <p class="note pesan-masuk" id="pesan-masuk" aria-live="polite"></p>
+      <div class="row-actions">
+        <button type="submit" class="btn btn-primary btn-kecil" id="btn-muat" value="muat">Muat portofolio</button>
+        <button type="button" class="link-btn" id="batal-masuk">Batal</button>
+      </div>
+    </form>
+  </dialog>
+
+  <footer class="wrap foot">
+    <p>© 2026 Jejak Karya · Mandiri</p>
+    <p><a href="../">Beranda</a> · <a href="https://www.instagram.com/jejakkarya.kreatif/" target="_blank" rel="noopener">Instagram</a> · <a href="https://wa.me/6285156342553?text=Halo%20Jejak%20Karya" target="_blank" rel="noopener">WhatsApp 0851-5634-2553</a></p>
+  </footer>
+
+  <script src="config.js"></script>
+  <script src="mandiri.js"></script>
+  <!-- Statistik pengunjung (GoatCounter, tanpa cookie) -->
+  <script data-goatcounter="https://jejakkarya.goatcounter.com/count" async src="//gc.zgo.at/count.js"></script>
+  <script>document.addEventListener('click',function(e){var a=e.target.closest&&e.target.closest('a[href*="wa.me"]');if(a&&window.goatcounter&&window.goatcounter.count)window.goatcounter.count({path:'klik-whatsapp'+location.pathname,title:'Klik WhatsApp',event:true});});</script>
+</body>
+</html>
