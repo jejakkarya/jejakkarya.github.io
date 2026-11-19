@@ -323,7 +323,8 @@ function errText(e,server){
 function unwrap(p){if(typeof p==="string"){try{p=JSON.parse(p);}catch{return p;}}if(p&&typeof p==="object"&&p.content&&!Array.isArray(p.content)&&typeof p.content==="object")return p.content;return p;}
 const CLAUDE_URL="https://claude.ai/artifact/XxoisbLBtWN6ttSnQmBL3A";
 const CFG_KEY="jk-kontrol-cfg";
-function getCfg(){try{return JSON.parse(localStorage.getItem(CFG_KEY)||"null");}catch{return null;}}
+const DEFAULT_URL="https://script.google.com/macros/s/AKfycbwDVSLoU4CFZ9Vlnl_FlR6zRB67dsBgq20UohBXybC162gi6cfTdGy1IDEWYkN8bVvfGg/exec";
+function getCfg(){let c=null;try{c=JSON.parse(localStorage.getItem(CFG_KEY)||"null");}catch{}c=c||{};if(!c.url)c.url=DEFAULT_URL;return c;}
 function setCfg(c){try{localStorage.setItem(CFG_KEY,JSON.stringify(c));}catch{}}
 async function api(body){
   const c=getCfg();if(!c||!c.url||!c.key)throw{code:"no_config"};
@@ -339,7 +340,7 @@ async function call(server,tool,input){
   if(tool==="get_values")return{payload:await api({action:"get",range:input.range})};
   if(tool==="update_values")return{payload:await api({action:"set",range:input.range,values:input.values})};
   if(tool==="append_values")return{payload:await api({action:"append",range:"Konten!A1",values:input.values})};
-  if(tool==="search_files"){const m=String(input.query).match(/parentId = '([^']+)'/);return{payload:await api({action:"files",folderId:m&&m[1]})};}
+  if(tool==="search_files"){const m=String(input.query).match(/parentId = '([^']+)'/);return{payload:await api({action:"files",folderId:m&&m[1],type:"image/"})};}
   if(tool==="download_file_content")return{payload:await api({action:"file",fileId:input.fileId})};
   throw{code:"bad_request"};
 }
@@ -650,7 +651,7 @@ $("#refresh").onclick=()=>{imgCache={};loadAll();};
 function openSettings(first){
   const c=getCfg()||{};
   openModal(`<h3>${first?"Sambungin ke backend":"Koneksi backend"}</h3>
-    <p>Isi URL Web app Apps Script (berakhiran /exec) dan kunci yang lo simpan di Script Properties. Disimpan cuma di browser ini.</p>
+    <p>Isi kunci (KEY) yang lo simpan di Script Properties project "jejak karya dashboard". URL udah keisi otomatis. Disimpan cuma di browser ini.</p>
     <div class="field"><label for="cUrl">URL Web app</label><input id="cUrl" type="url" placeholder="https://script.google.com/macros/s/.../exec" value="${esc(c.url||"")}" style="width:100%;border:1px solid var(--line);border-radius:12px;padding:10px 12px"></div>
     <div class="field"><label for="cKey">Kunci</label><input id="cKey" type="password" value="${esc(c.key||"")}" style="width:100%;border:1px solid var(--line);border-radius:12px;padding:10px 12px"></div>
     <p class="meta" id="cMsg" style="margin-top:8px"></p>
@@ -667,7 +668,7 @@ function openSettings(first){
 }
 $("#settings").onclick=()=>openSettings(false);
 mcp=true;
-if(!getCfg()?.url){openSettings(true);["#ideList","#prodStages","#panduanList"].forEach(s=>$(s).innerHTML="");renderAgents();renderCal();}
+if(!getCfg().key){openSettings(true);["#ideList","#prodStages","#panduanList"].forEach(s=>$(s).innerHTML="");renderAgents();renderCal();}
 else loadAll();
 </script>
 </body>
