@@ -1,0 +1,674 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<link rel="icon" href="../assets/img/favicon.svg">
+<title>Kontrol Agent Jejak Karya</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Gabarito:wght@600;700;800&family=Hanken+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#f6f7fb;--surface:#fff;--ink:#141826;--muted:#5b6175;--line:#e1e4ee;
+  --primary:#2846d8;--primary-soft:#e7ecff;--mark:#ffcf4a;--mark-soft:#fff6d9;
+  --ok:#16834a;--ok-soft:#e9f7ef;--warn:#b26a00;--warn-soft:#fff4e0;--bad:#c0392b;--bad-soft:#fdeeec;
+  --r:16px;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{background:var(--bg);color:var(--ink);font-family:'Hanken Grotesk',system-ui,sans-serif;font-size:16px;line-height:1.45}
+button,input,textarea,select{font:inherit;color:inherit}
+h1,h2,h3{font-family:'Gabarito',system-ui,sans-serif;letter-spacing:-.01em;line-height:1.15}
+.wrap{max-width:760px;margin:0 auto;padding:16px 16px 110px}
+header.top{display:flex;align-items:center;gap:12px;padding:6px 0 14px}
+.logo{width:40px;height:40px;border-radius:11px;background:var(--primary);display:grid;place-items:center;flex:none}
+.logo span{width:12px;height:12px;border-radius:50%;background:var(--mark);box-shadow:-8px 9px 0 -2px #fff}
+.top h1{font-size:21px}
+.top .sub{font-size:13px;color:var(--muted)}
+.top .spacer{flex:1}
+.iconbtn{border:1px solid var(--line);background:var(--surface);border-radius:12px;height:40px;padding:0 12px;display:inline-flex;align-items:center;gap:6px;cursor:pointer;font-weight:600;font-size:14px;white-space:nowrap}
+.hero{background:var(--ink);color:#fff;border-radius:var(--r);padding:14px 16px;display:flex;gap:12px;align-items:center;margin-bottom:14px}
+.hero b{font-family:'Gabarito';font-size:17px}
+.hero p{font-size:13px;color:#c9cde0}
+.hero .grow{flex:1}
+.section-title{display:flex;align-items:center;justify-content:space-between;gap:8px;margin:22px 2px 10px}
+.section-title h2{font-size:19px}
+.section-title small{color:var(--muted);font-size:13px}
+.card{background:var(--surface);border:1px solid var(--line);border-radius:var(--r);padding:16px;margin-bottom:12px}
+.chips{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:8px}
+.chip{font-size:12px;font-weight:700;padding:3px 9px;border-radius:999px;background:var(--primary-soft);color:var(--primary);white-space:nowrap}
+.chip.mark{background:var(--mark-soft);color:#7a5800}
+.chip.ok{background:var(--ok-soft);color:var(--ok)}
+.chip.warn{background:var(--warn-soft);color:var(--warn)}
+.chip.bad{background:var(--bad-soft);color:var(--bad)}
+.chip.grey{background:#eef0f5;color:var(--muted)}
+.chip.ink{background:var(--ink);color:#fff}
+.card h3{font-size:19px;margin-bottom:6px}
+.hook{background:var(--bg);border-left:4px solid var(--mark);padding:8px 12px;border-radius:8px;font-weight:600;margin:10px 0}
+.meta{font-size:13px;color:var(--muted)}
+.row{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+.field{display:flex;flex-direction:column;gap:4px;margin-top:12px}
+.field label{font-size:13px;font-weight:700;color:var(--muted)}
+textarea,input[type=date],input[type=time]{width:100%;border:1px solid var(--line);border-radius:12px;padding:10px 12px;background:#fff}
+textarea{min-height:110px;resize:vertical}
+textarea:focus,input:focus{outline:2px solid var(--primary);outline-offset:1px;border-color:transparent}
+.btn{border:0;text-decoration:none;border-radius:12px;padding:11px 16px;font-weight:700;cursor:pointer;display:inline-flex;align-items:center;justify-content:center;gap:6px;min-height:44px}
+.btn:disabled{opacity:.5;cursor:not-allowed}
+.btn:active:not(:disabled){transform:scale(.98)}
+.btn.primary{background:var(--primary);color:#fff}
+.btn.ok{background:var(--ok);color:#fff}
+.btn.warn{background:var(--mark);color:var(--ink)}
+.btn.ghost{background:var(--surface);border:1px solid var(--line)}
+.btn.danger{background:var(--bad-soft);color:var(--bad)}
+.btn.sm{min-height:36px;padding:7px 12px;font-size:14px}
+.btn.block{width:100%}
+.actions{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin-top:14px}
+.actions.two{grid-template-columns:1fr 1fr}
+details{margin-top:10px;border-top:1px dashed var(--line);padding-top:10px}
+summary{cursor:pointer;font-weight:700;font-size:14px;color:var(--primary);list-style:none}
+summary::-webkit-details-marker{display:none}
+summary::before{content:"▸ "}
+details[open] summary::before{content:"▾ "}
+.prewrap{white-space:pre-wrap;font-size:14px;margin-top:8px;color:#2a2f40;word-break:break-word}
+.mk{background:linear-gradient(transparent 55%,var(--mark) 55%);padding:0 2px}
+.slidelist{margin-top:10px;display:flex;flex-direction:column;gap:8px}
+.slidelist .s{border:1px solid var(--line);border-radius:12px;padding:10px 12px;font-size:14px}
+.slidelist .s b{font-family:'Gabarito';font-size:13px;color:var(--primary);display:block;margin-bottom:2px}
+.slides{display:flex;gap:10px;overflow-x:auto;scroll-snap-type:x mandatory;padding:10px 2px 6px;margin-top:6px}
+.slides img,.slides .ph{width:72%;max-width:300px;aspect-ratio:4/5;border-radius:12px;border:1px solid var(--line);scroll-snap-align:start;flex:none;background:#eef0f5;object-fit:cover}
+.slides .ph{display:grid;place-items:center;color:var(--muted);font-size:13px}
+.empty{text-align:center;padding:26px 16px;color:var(--muted)}
+.empty b{display:block;font-family:'Gabarito';font-size:18px;color:var(--ink);margin-bottom:4px}
+.notice{border-radius:12px;padding:12px 14px;font-size:14px;margin-bottom:12px}
+.notice.warn{background:var(--warn-soft);color:#6b4100}
+.notice.bad{background:var(--bad-soft);color:#7d2219}
+.notice.info{background:var(--primary-soft);color:#1b2f99}
+.seg{display:inline-flex;background:#eceef4;border-radius:12px;padding:3px;gap:2px}
+.seg button{border:0;background:transparent;padding:7px 12px;border-radius:9px;font-weight:700;font-size:14px;cursor:pointer;color:var(--muted)}
+.seg button.on{background:#fff;color:var(--ink);box-shadow:0 1px 2px rgba(0,0,0,.08)}
+.stage{display:flex;align-items:center;gap:12px;background:var(--surface);border:1px solid var(--line);border-radius:var(--r);padding:12px 14px;margin-bottom:10px}
+.stage .num{font-family:'Gabarito';font-size:26px;min-width:34px;text-align:center}
+.stage .grow{flex:1}
+.stage .grow b{display:block}
+.mini{display:flex;flex-direction:column;gap:4px;margin-top:6px}
+.mini span{font-size:13px;color:var(--muted)}
+.agent-head{display:flex;align-items:center;gap:12px}
+.agent-head .grow{flex:1}
+.switch{position:relative;width:56px;height:32px;flex:none}
+.switch input{opacity:0;width:0;height:0}
+.switch span{position:absolute;inset:0;background:#cfd3e0;border-radius:999px;cursor:pointer;transition:.2s}
+.switch span::after{content:"";position:absolute;top:4px;left:4px;width:24px;height:24px;border-radius:50%;background:#fff;transition:.2s;box-shadow:0 1px 3px rgba(0,0,0,.2)}
+.switch input:checked+span{background:var(--ok)}
+.switch input:checked+span::after{transform:translateX(24px)}
+.switch input:disabled+span{opacity:.5;cursor:wait}
+.kv{display:grid;grid-template-columns:auto 1fr;gap:4px 12px;font-size:14px;margin-top:12px}
+.kv dt{color:var(--muted)}
+.panduan-row.focus{border-color:var(--mark);box-shadow:0 0 0 3px var(--mark-soft)}
+.panduan-row textarea{min-height:70px}
+.saveline{display:flex;justify-content:space-between;align-items:center;margin-top:8px;gap:8px}
+.saveline .meta{flex:1}
+a{color:var(--primary);font-weight:600}
+/* Calendar */
+.calbar{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-bottom:10px}
+.calbar .title{font-family:'Gabarito';font-size:18px;flex:1;min-width:140px;text-align:center}
+.navbtn{width:40px;height:40px;border-radius:12px;border:1px solid var(--line);background:#fff;cursor:pointer;font-size:18px;font-weight:700}
+.tray{background:var(--surface);border:1px dashed #b9c0d6;border-radius:var(--r);padding:10px;margin-bottom:12px;min-height:56px}
+.tray .lbl{font-size:12px;font-weight:700;color:var(--muted);margin-bottom:6px}
+.tray .items{display:flex;flex-wrap:wrap;gap:6px}
+.month{display:grid;grid-template-columns:repeat(7,1fr);gap:3px}
+.month .dow{font-size:11px;font-weight:700;color:var(--muted);text-align:center;padding:4px 0}
+.month .cell{background:var(--surface);border:1px solid var(--line);border-radius:10px;min-height:86px;padding:4px;display:flex;flex-direction:column;gap:3px;overflow:hidden}
+.month .cell.out{background:transparent;border-color:transparent;opacity:.45}
+.month .cell.today{border-color:var(--primary);box-shadow:inset 0 0 0 1px var(--primary)}
+.month .cell .d{font-size:12px;font-weight:700;color:var(--muted)}
+.month .cell.today .d{color:var(--primary)}
+.weeklist .day,.dayview .hour{display:flex;gap:10px;background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:8px 10px;margin-bottom:6px;min-height:52px}
+.weeklist .day .lab{width:62px;flex:none;font-size:13px;font-weight:700;color:var(--muted)}
+.weeklist .day .lab b{display:block;font-family:'Gabarito';font-size:20px;color:var(--ink)}
+.weeklist .day.today{border-color:var(--primary)}
+.weeklist .day.today .lab b{color:var(--primary)}
+.weeklist .day .items,.dayview .hour .items{flex:1;display:flex;flex-direction:column;gap:5px}
+.dayview .hour{min-height:44px;padding:6px 10px;margin-bottom:4px}
+.dayview .hour .lab{width:48px;flex:none;font-size:13px;font-weight:700;color:var(--muted);padding-top:4px}
+.ev{display:flex;align-items:center;gap:6px;border-radius:8px;padding:5px 8px;font-size:13px;font-weight:600;cursor:grab;touch-action:none;user-select:none;-webkit-user-select:none;background:var(--primary-soft);color:#1b2f99;border-left:4px solid var(--primary);min-width:0}
+.ev .t{font-size:11px;opacity:.75;flex:none}
+.ev .n{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;min-width:0}
+.month .ev{padding:3px 5px;font-size:11px;border-left-width:3px}
+.month .ev .t{display:none}
+.ev.st-brief{background:#eef0f5;color:var(--muted);border-left-color:#9aa1b5}
+.ev.st-cek{background:var(--mark-soft);color:#6b4d00;border-left-color:var(--mark)}
+.ev.st-desain{background:var(--primary-soft);color:#1b2f99;border-left-color:var(--primary)}
+.ev.st-approve{background:var(--ok-soft);color:#0f5c33;border-left-color:var(--ok)}
+.ev.st-up{background:var(--ink);color:#fff;border-left-color:var(--mark);cursor:pointer}
+.ev.dragging{opacity:.35}
+.dragghost{position:fixed;z-index:50;pointer-events:none;transform:translate(-50%,-120%) rotate(-2deg);box-shadow:0 8px 20px rgba(20,24,38,.25);max-width:240px}
+.drop-hi{outline:2px dashed var(--primary);outline-offset:-2px;background:var(--primary-soft)!important}
+.legend{display:flex;flex-wrap:wrap;gap:6px;margin:10px 0}
+.legend .ev{cursor:default;touch-action:auto;font-size:11px;padding:3px 7px}
+/* Nav & overlays */
+nav.tabs{position:fixed;left:0;right:0;bottom:0;background:var(--surface);border-top:1px solid var(--line);display:flex;justify-content:center;padding:6px 6px calc(6px + env(safe-area-inset-bottom));z-index:5}
+nav.tabs .in{display:grid;grid-template-columns:repeat(5,1fr);max-width:760px;width:100%}
+nav.tabs a{text-decoration:none;color:var(--muted);display:flex;flex-direction:column;align-items:center;gap:2px;padding:6px 2px;border-radius:12px;font-size:11.5px;font-weight:700;position:relative}
+nav.tabs a svg{width:22px;height:22px}
+nav.tabs a.on{color:var(--primary);background:var(--primary-soft)}
+.badge{position:absolute;top:1px;right:calc(50% - 22px);background:var(--bad);color:#fff;font-size:11px;min-width:18px;height:18px;border-radius:9px;display:grid;place-items:center;padding:0 5px}
+.view{display:none}
+.view.on{display:block}
+.toast{position:fixed;left:50%;bottom:86px;transform:translateX(-50%) translateY(20px);background:var(--ink);color:#fff;padding:10px 16px;border-radius:12px;font-size:14px;font-weight:600;opacity:0;transition:.25s;z-index:60;max-width:90vw;text-align:center;pointer-events:none}
+.toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+.modal{position:fixed;inset:0;background:rgba(20,24,38,.5);display:none;align-items:flex-end;justify-content:center;z-index:40;padding:12px}
+.modal.show{display:flex}
+.modal .box{background:#fff;border-radius:20px;padding:20px;max-width:480px;width:100%;max-height:88vh;overflow:auto}
+.modal h3{font-size:20px;margin-bottom:6px}
+.modal p{color:var(--muted);font-size:15px}
+.modal .row.end{margin-top:16px;justify-content:flex-end}
+.skel{height:110px;border-radius:var(--r);background:linear-gradient(90deg,#eceef4,#f6f7fb,#eceef4);background-size:200% 100%;animation:sk 1.2s infinite;margin-bottom:12px}
+@keyframes sk{to{background-position:-200% 0}}
+@media (min-width:700px){.modal{align-items:center}.month .cell{min-height:110px}.month .ev{font-size:12px}}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header class="top">
+    <div class="logo" aria-hidden="true"><span></span></div>
+    <div>
+      <h1>Kontrol Agent</h1>
+      <div class="sub">Sosmed Jejak Karya · <span id="updated">belum dimuat</span></div>
+    </div>
+    <div class="spacer"></div>
+    <button class="iconbtn" id="settings" aria-label="Pengaturan koneksi">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.7 1.7 0 0 0 .3 1.8l.1.1a2 2 0 1 1-2.8 2.8l-.1-.1a1.7 1.7 0 0 0-1.8-.3 1.7 1.7 0 0 0-1 1.5V21a2 2 0 1 1-4 0v-.1a1.7 1.7 0 0 0-1.1-1.5 1.7 1.7 0 0 0-1.8.3l-.1.1a2 2 0 1 1-2.8-2.8l.1-.1a1.7 1.7 0 0 0 .3-1.8 1.7 1.7 0 0 0-1.5-1H3a2 2 0 1 1 0-4h.1a1.7 1.7 0 0 0 1.5-1.1 1.7 1.7 0 0 0-.3-1.8l-.1-.1a2 2 0 1 1 2.8-2.8l.1.1a1.7 1.7 0 0 0 1.8.3H9a1.7 1.7 0 0 0 1-1.5V3a2 2 0 1 1 4 0v.1a1.7 1.7 0 0 0 1 1.5 1.7 1.7 0 0 0 1.8-.3l.1-.1a2 2 0 1 1 2.8 2.8l-.1.1a1.7 1.7 0 0 0-.3 1.8V9a1.7 1.7 0 0 0 1.5 1H21a2 2 0 1 1 0 4h-.1a1.7 1.7 0 0 0-1.5 1z"/></svg>
+    </button>
+    <button class="iconbtn" id="refresh" aria-label="Muat ulang">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M21 12a9 9 0 1 1-2.6-6.4"/><path d="M21 4v5h-5"/></svg>
+      Muat
+    </button>
+  </header>
+  <div id="pageNotice"></div>
+
+  <!-- IDE -->
+  <section class="view" id="v-ide">
+    <div class="hero">
+      <div class="grow"><b>Bank Ide</b><p>Agent setor ide, lo yang milih. Ide yang lo pilih masuk Produksi.</p></div>
+      <button class="btn warn sm" id="askIdeas">Minta 10 ide</button>
+    </div>
+    <div class="row" style="margin-bottom:12px"><div class="seg" id="ideFilter"><button data-f="baru" class="on">Baru</button><button data-f="pilih">Dipilih</button><button data-f="skip">Di-skip</button></div></div>
+    <div id="ideList"><div class="skel"></div><div class="skel"></div></div>
+  </section>
+
+  <!-- PRODUKSI -->
+  <section class="view" id="v-produksi">
+    <div class="hero"><div class="grow"><b>Produksi</b><p>Brief dan desain cuma jalan kalau lo suruh. Semua hasil nunggu keputusan lo.</p></div></div>
+    <div id="prodStages"><div class="skel"></div></div>
+    <div class="section-title"><h2>Cek brief</h2><small id="cntBrief"></small></div>
+    <div id="briefList"></div>
+    <div class="section-title"><h2>Cek desain</h2><small id="cntDesain"></small></div>
+    <div id="desainList"></div>
+  </section>
+
+  <!-- KALENDER -->
+  <section class="view" id="v-kalender">
+    <div class="calbar">
+      <div class="seg" id="calMode"><button data-m="bulan" class="on">Bulan</button><button data-m="minggu">Minggu</button><button data-m="hari">Hari</button></div>
+      <button class="btn ghost sm" id="calToday">Hari ini</button>
+    </div>
+    <div class="calbar">
+      <button class="navbtn" id="calPrev" aria-label="Sebelumnya">‹</button>
+      <div class="title" id="calTitle"></div>
+      <button class="navbtn" id="calNext" aria-label="Berikutnya">›</button>
+    </div>
+    <div class="tray" data-drop="tray"><div class="lbl">Belum dijadwal · seret ke tanggal</div><div class="items" id="trayItems"></div></div>
+    <div id="calBody"></div>
+    <div class="legend">
+      <span class="ev st-brief"><span class="n">Brief</span></span><span class="ev st-cek"><span class="n">Nunggu dicek</span></span><span class="ev st-desain"><span class="n">Desain</span></span><span class="ev st-approve"><span class="n">Approve</span></span><span class="ev st-up"><span class="n">Tayang</span></span>
+    </div>
+    <p class="meta">Tahan dan seret kartu buat mindahin jadwal. Di tampilan Hari, seret ke jam lain buat ganti jamnya. Tap kartu buat detail.</p>
+  </section>
+
+  <!-- AGENT -->
+  <section class="view" id="v-agent">
+    <div class="hero">
+      <div class="grow"><b>Agent</b><p>Saklar, jam, dan tombol suruh kerja cuma bisa dari Claude.</p></div>
+      <a class="btn warn sm" id="openClaude" href="https://claude.ai/artifact/XxoisbLBtWN6ttSnQmBL3A" target="_blank" rel="noopener">Buka di Claude</a>
+    </div>
+    <div id="agentList"><div class="skel"></div><div class="skel"></div></div>
+  </section>
+
+  <!-- LAINNYA -->
+  <section class="view" id="v-lainnya">
+    <div class="row" style="margin-bottom:12px"><div class="seg" id="moreSeg"><button data-s="panduan" class="on">Panduan</button><button data-s="arsip">Arsip</button></div></div>
+    <div id="morePanduan">
+      <div class="notice info">Aturan yang dibaca semua agent tiap kali jalan. Ubah di sini, run berikutnya langsung ngikutin.</div>
+      <div id="panduanList"><div class="skel"></div></div>
+    </div>
+    <div id="moreArsip" hidden>
+      <div class="section-title"><h2>Nunggu upload</h2><small id="cntApprove"></small></div><div id="approveList"></div>
+      <div class="section-title"><h2>Sudah tayang</h2><small id="cntUploaded"></small></div><div id="uploadedList"></div>
+      <div class="section-title"><h2>Di-skip</h2><small id="cntSkip"></small></div><div id="skipList"></div>
+    </div>
+  </section>
+</div>
+
+<nav class="tabs" aria-label="Menu"><div class="in">
+  <a href="#ide" data-v="ide"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18h6M10 21h4"/><path d="M12 3a6 6 0 0 0-3.5 10.9c.6.5 1 1.2 1 2V16h5v-.1c0-.8.4-1.5 1-2A6 6 0 0 0 12 3z"/></svg>Ide<span class="badge" id="bIde" hidden></span></a>
+  <a href="#produksi" data-v="produksi"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="16" rx="3"/><path d="m8 12 3 3 5-6"/></svg>Produksi<span class="badge" id="bProd" hidden></span></a>
+  <a href="#kalender" data-v="kalender"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="16" rx="3"/><path d="M3 10h18M8 3v4M16 3v4"/></svg>Kalender</a>
+  <a href="#agent" data-v="agent"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M12 3v9"/><path d="M6.4 6.4a8 8 0 1 0 11.2 0"/></svg>Agent</a>
+  <a href="#lainnya" data-v="lainnya"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="5" cy="12" r="1.5"/><circle cx="12" cy="12" r="1.5"/><circle cx="19" cy="12" r="1.5"/></svg>Lainnya</a>
+</div></nav>
+
+<div class="toast" id="toast"></div>
+<div class="modal" id="modal" role="dialog" aria-modal="true"><div class="box" id="mBox"></div></div>
+
+<script>
+const SHEET_ID="1Gh2-4uNna1qWwk2evuxrz49iBL-bljN9IMrhndAMLWA";
+const AG={
+  riset:{id:"trig_01Sjoqc4Q7TawWXwi2PH9GwN",label:"Agent Riset & Ide",desc:"Riset tren tiap hari, setor 10 ide ke Bank Ide.",sched:true},
+  brief:{id:"trig_01VHH9KKCGCgodCrtTndeEKG",label:"Agent Brief",desc:"Nulis hook, naskah per slide, dan caption untuk ide yang lo pilih.",sched:false},
+  desain:{id:"trig_014RTon7n5PGofotiiXNdzri",label:"Agent Desain",desc:"Bikin carousel PNG dari brief yang udah lo OK-in.",sched:false},
+  upload:{id:"trig_011P4b6eaYcvZ3r8VBUroSnr",label:"Agent Upload IG",desc:"Posting ke @jejakkarya.kreatif lewat Chrome, cuma konten berstatus Approve.",sched:true}
+};
+const S_SHEETS="Google Sheets",S_DRIVE="Google Drive",S_CLAUDE="Claude Code Remote";
+const K={id:0,ide:1,judul:2,pilar:3,format:4,tgl:5,jam:6,st:7,hook:8,naskah:9,caption:10,catatan:11,folder:12,slide:13,link:14,sumber:15,ubah:16};
+const I={id:0,tgl:1,judul:2,angle:3,pilar:4,format:5,hook:6,pemicu:7,sumber:8,st:9};
+
+let mcp=null, konten=[], ide=[], panduan=[], agents={}, imgCache={};
+let ideFilter="baru", calMode="bulan", calRef=todayStr();
+const $=s=>document.querySelector(s);
+const esc=s=>String(s??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+
+/* ---------- dates ---------- */
+function todayStr(){return new Intl.DateTimeFormat("en-CA",{timeZone:"Asia/Jakarta"}).format(new Date());}
+function nowStamp(){const d=new Date();const p=new Intl.DateTimeFormat("en-CA",{timeZone:"Asia/Jakarta",year:"numeric",month:"2-digit",day:"2-digit",hour:"2-digit",minute:"2-digit",hour12:false}).formatToParts(d);const g=t=>p.find(x=>x.type===t).value;return `${g("year")}-${g("month")}-${g("day")} ${g("hour")}:${g("minute")}`;}
+const D=s=>{const[y,m,d]=s.split("-").map(Number);return new Date(Date.UTC(y,m-1,d));};
+const S=dt=>dt.toISOString().slice(0,10);
+const addDays=(s,n)=>{const d=D(s);d.setUTCDate(d.getUTCDate()+n);return S(d);};
+const dow=s=>(D(s).getUTCDay()+6)%7; // Mon=0
+const BULAN=["Januari","Februari","Maret","April","Mei","Juni","Juli","Agustus","September","Oktober","November","Desember"];
+const HARI=["Sen","Sel","Rab","Kam","Jum","Sab","Min"];
+function fmtDate(s){if(!s)return"belum dijadwal";const d=D(s);return `${HARI[dow(s)]}, ${d.getUTCDate()} ${BULAN[d.getUTCMonth()].slice(0,3)}`;}
+const cleanDate=s=>(String(s||"").match(/\d{4}-\d{2}-\d{2}/)||[""])[0];
+const cleanTime=s=>{const m=String(s||"").match(/(\d{1,2})[:.](\d{2})/);return m?m[1].padStart(2,"0")+":"+m[2]:"";};
+
+/* ---------- UI helpers ---------- */
+function toast(msg){const t=$("#toast");t.textContent=msg;t.classList.add("show");clearTimeout(t._h);t._h=setTimeout(()=>t.classList.remove("show"),2800);}
+function openModal(html){$("#mBox").innerHTML=html;$("#modal").classList.add("show");}
+function closeModal(){$("#modal").classList.remove("show");}
+$("#modal").addEventListener("click",e=>{if(e.target.id==="modal")closeModal();});
+function confirmBox(title,text,yes="Ya",cls="primary"){
+  return new Promise(res=>{
+    openModal(`<h3>${esc(title)}</h3><p>${esc(text)}</p><div class="row end"><button class="btn ghost" id="mNo">Batal</button><button class="btn ${cls}" id="mYes">${esc(yes)}</button></div>`);
+    $("#mNo").onclick=()=>{closeModal();res(false);};$("#mYes").onclick=()=>{closeModal();res(true);};
+  });
+}
+function errText(e,server){
+  const s=e?.server||server||"connector";
+  switch(e?.code){
+    case"no_config":return"Backend belum diatur. Tekan ikon gerigi di atas buat isi URL dan kunci.";
+    case"unauthorized":return"Kunci backend salah. Tekan ikon gerigi buat cek ulang.";
+    case"network":return`Nggak bisa nyambung ke backend${e.message?": "+e.message:""}.`;
+    case"standalone":return"Fitur ini cuma bisa dari Claude.";
+    case"needs_reauth":return`Sambungan ${s} kedaluwarsa. Sambungin ulang di claude.ai → Settings → Connectors, lalu muat ulang.`;
+    case"server_not_connected":return`Connector ${s} belum tersambung. Tambahin di claude.ai → Settings → Connectors.`;
+    case"selection_required":return`Ada lebih dari satu connector ${s}. Pilih salah satu di prompt claude.ai, lalu muat ulang.`;
+    case"not_in_manifest":return`Akses ${s} buat halaman ini lagi dimatiin atau ditolak.`;
+    case"blocked_by_policy":return`Akses ${s} diblokir kebijakan akun.`;
+    case"approval_required":return`Butuh izin lo buat pakai ${s}. Tekan tombolnya lagi lalu pilih Allow.`;
+    case"server_unavailable":return`${s} lagi nggak bisa dihubungi. Coba lagi sebentar.`;
+    case"tool_error":return`${s} nolak permintaan: ${e.message||"error"}`;
+    case"not_granted":case"capability_disabled":case"capability_removed":return"Halaman ini nggak bisa pakai connector di tampilan ini. Buka lewat claude.ai.";
+    default:return`Gagal ngobrol sama ${s}${e?.message?": "+e.message:"."}`;
+  }
+}
+function unwrap(p){if(typeof p==="string"){try{p=JSON.parse(p);}catch{return p;}}if(p&&typeof p==="object"&&p.content&&!Array.isArray(p.content)&&typeof p.content==="object")return p.content;return p;}
+const CLAUDE_URL="https://claude.ai/artifact/XxoisbLBtWN6ttSnQmBL3A";
+const CFG_KEY="jk-kontrol-cfg";
+function getCfg(){try{return JSON.parse(localStorage.getItem(CFG_KEY)||"null");}catch{return null;}}
+function setCfg(c){try{localStorage.setItem(CFG_KEY,JSON.stringify(c));}catch{}}
+async function api(body){
+  const c=getCfg();if(!c||!c.url||!c.key)throw{code:"no_config"};
+  let res;
+  try{res=await fetch(c.url,{method:"POST",headers:{"Content-Type":"text/plain;charset=utf-8"},body:JSON.stringify({...body,key:c.key})});}
+  catch(e){throw{code:"network",message:String(e.message||e)};}
+  let j;try{j=await res.json();}catch{throw{code:"network",message:"Balasan backend bukan JSON. Cek URL Web app-nya."};}
+  if(!j.ok)throw{code:j.code||"tool_error",message:j.message};
+  return j;
+}
+async function call(server,tool,input){
+  if(server===S_CLAUDE)throw{code:"standalone"};
+  if(tool==="get_values")return{payload:await api({action:"get",range:input.range})};
+  if(tool==="update_values")return{payload:await api({action:"set",range:input.range,values:input.values})};
+  if(tool==="append_values")return{payload:await api({action:"append",range:"Konten!A1",values:input.values})};
+  if(tool==="search_files"){const m=String(input.query).match(/parentId = '([^']+)'/);return{payload:await api({action:"files",folderId:m&&m[1]})};}
+  if(tool==="download_file_content")return{payload:await api({action:"file",fileId:input.fileId})};
+  throw{code:"bad_request"};
+}
+const payload=r=>unwrap(r?.payload??r);
+async function getRange(range){const p=payload(await call(S_SHEETS,"get_values",{spreadsheetId:SHEET_ID,range}));return(p&&p.values)||[];}
+const setRange=(range,values)=>call(S_SHEETS,"update_values",{spreadsheetId:SHEET_ID,range,values});
+const txt=s=>{s=String(s??"");return/^[=+\-@]/.test(s)?"'"+s:s;};
+const linkify=s=>esc(s).replace(/(https?:\/\/[^\s;|,]+)/g,'<a href="$1" target="_blank" rel="noopener">$1</a>');
+const hl=s=>esc(s).replace(/==(.+?)==/g,'<span class="mk">$1</span>');
+const folderId=s=>(String(s||"").match(/folders\/([\w-]+)/)||[])[1]||null;
+
+/* ---------- status helpers ---------- */
+const ST={
+  "Perlu brief":{c:"grey",ev:"st-brief"},"Revisi brief":{c:"warn",ev:"st-brief"},"Brief siap":{c:"mark",ev:"st-cek"},
+  "Brief OK":{c:"",ev:"st-desain"},"Revisi desain":{c:"warn",ev:"st-desain"},"Desain siap":{c:"mark",ev:"st-cek"},
+  "Approve":{c:"ok",ev:"st-approve"},"Uploaded":{c:"ink",ev:"st-up"},"Skip":{c:"grey",ev:""}
+};
+const chip=st=>`<span class="chip ${ST[st]?.c??"grey"}">${esc(st||"—")}</span>`;
+const byJadwal=(a,b)=>((a.v[K.tgl]||"9999")+(a.v[K.jam]||"")).localeCompare((b.v[K.tgl]||"9999")+(b.v[K.jam]||""));
+function defaultJam(){const r=panduan.find(v=>/jam upload/i.test(v[0]||""));return cleanTime(r?.[1])||"19:00";}
+function nextFreeDate(){const used=new Set(konten.filter(x=>x.v[K.st]!=="Skip").map(x=>cleanDate(x.v[K.tgl])));let d=addDays(todayStr(),1);for(let i=0;i<120&&used.has(d);i++)d=addDays(d,1);return d;}
+async function writeKonten(x,cols){ // cols: {colIndex: value} — only these cells are written
+  cols={...cols,[K.ubah]:nowStamp()};
+  const idx=Object.keys(cols).map(Number).sort((a,b)=>a-b);
+  const L=n=>String.fromCharCode(65+n);
+  const fmt=c=>{const v=String(cols[c]??"");if(c===K.tgl||c===K.jam||c===K.ubah)return v?"'"+v:"";return txt(v);};
+  const groups=[];for(const c of idx){const g=groups[groups.length-1];if(g&&c===g[g.length-1]+1)g.push(c);else groups.push([c]);}
+  await Promise.all(groups.map(g=>setRange(`Konten!${L(g[0])}${x.r}:${L(g[g.length-1])}${x.r}`,[g.map(fmt)])));
+  for(const c of idx)x.v[c]=String(cols[c]??"");
+}
+
+/* ---------- load ---------- */
+async function loadKonten(){
+  try{
+    const vals=await getRange("Konten!A2:Q1000");
+    konten=vals.map((v,i)=>({r:i+2,v:Array.from({length:17},(_,k)=>String(v[k]??""))})).filter(x=>x.v[K.judul]);
+    konten.forEach(x=>{x.v[K.tgl]=cleanDate(x.v[K.tgl]);x.v[K.jam]=cleanTime(x.v[K.jam]);});
+    renderProduksi();renderCal();renderArsip();
+  }catch(e){const m=`<div class="notice bad">${esc(errText(e,S_SHEETS))}</div>`;$("#prodStages").innerHTML=m;$("#calBody").innerHTML=m;}
+}
+async function loadIde(){
+  try{const vals=await getRange("'Bank Ide'!A2:J2000");ide=vals.map((v,i)=>({r:i+2,v:Array.from({length:10},(_,k)=>String(v[k]??""))})).filter(x=>x.v[I.judul]);renderIde();}
+  catch(e){$("#ideList").innerHTML=`<div class="notice bad">${esc(errText(e,S_SHEETS))}</div>`;}
+}
+async function loadPanduan(){
+  try{panduan=await getRange("Panduan!A2:B60");renderPanduan();}
+  catch(e){$("#panduanList").innerHTML=`<div class="notice bad">${esc(errText(e,S_SHEETS))}</div>`;}
+}
+async function loadAgents(){renderAgents();}
+async function loadAll(){
+  $("#updated").textContent="memuat…";
+  await loadPanduan();
+  await Promise.allSettled([loadKonten(),loadIde(),loadAgents()]);
+  $("#updated").textContent="diperbarui "+new Date().toLocaleTimeString("id-ID",{hour:"2-digit",minute:"2-digit"});
+}
+
+/* ---------- fire agent ---------- */
+function runAgent(key){
+  const a=AG[key];
+  openModal(`<h3>Suruh ${esc(a.label)} dari Claude</h3><p>Versi web ini cuma bisa baca dan ngubah sheet. Buat nyuruh agent kerja, nyalain, atau matiin agent, buka dashboard di Claude.</p><div class="row end"><button class="btn ghost" id="mNo">Tutup</button><a class="btn primary" href="${CLAUDE_URL}" target="_blank" rel="noopener" id="mGo">Buka di Claude</a></div>`);
+  $("#mNo").onclick=closeModal;$("#mGo").onclick=closeModal;
+}
+$("#askIdeas").onclick=e=>runAgent("riset",e.currentTarget);
+
+/* ---------- IDE ---------- */
+$("#ideFilter").onclick=e=>{const b=e.target.closest("button");if(!b)return;ideFilter=b.dataset.f;[...e.currentTarget.children].forEach(x=>x.classList.toggle("on",x===b));renderIde();};
+function renderIde(){
+  const baru=ide.filter(x=>(x.v[I.st]||"baru")==="baru");
+  const b=$("#bIde");b.hidden=!baru.length;b.textContent=baru.length;
+  const list=ide.filter(x=>(x.v[I.st]||"baru")===ideFilter).sort((a,b)=>b.r-a.r);
+  if(!list.length){$("#ideList").innerHTML=`<div class="card empty"><b>${ideFilter==="baru"?"Belum ada ide baru":"Kosong"}</b>${ideFilter==="baru"?"Tekan \"Minta 10 ide\" atau tunggu run harian Agent Riset.":""}</div>`;return;}
+  $("#ideList").innerHTML=list.map(x=>{const v=x.v;return`<article class="card" id="i${x.r}">
+    <div class="chips"><span class="chip">${esc(v[I.pilar]||"Tanpa pilar")}</span><span class="chip grey">${esc(fmtDate(cleanDate(v[I.tgl])))}</span></div>
+    <h3>${esc(v[I.judul])}</h3>
+    ${v[I.angle]?`<p style="font-size:15px">${esc(v[I.angle])}</p>`:""}
+    ${v[I.hook]?`<div class="hook">${esc(v[I.hook])}</div>`:""}
+    ${(v[I.pemicu]||v[I.sumber])?`<details><summary>Pemicu & sumber</summary><div class="prewrap">${esc(v[I.pemicu])}\n${linkify(v[I.sumber])}</div></details>`:""}
+    ${ideFilter==="baru"?`<div class="actions two"><button class="btn ok" data-a="pilih">Pilih</button><button class="btn ghost" data-a="skip">Skip</button></div>`:
+      ideFilter==="skip"?`<div class="row" style="margin-top:12px"><button class="btn ghost sm" data-a="balik">Balikin ke Baru</button></div>`:
+      `<p class="meta" style="margin-top:8px">${(()=>{const k=konten.find(y=>y.v[K.ide]===v[I.id]);return k?`Di Produksi: ${esc(k.v[K.st])} · ${esc(fmtDate(k.v[K.tgl]))}`:"Di Produksi";})()}</p>`}
+  </article>`;}).join("");
+  list.forEach(x=>{const el=$("#i"+x.r);el.querySelectorAll("[data-a]").forEach(b=>b.onclick=()=>ideAction(x,b.dataset.a,b));});
+}
+async function ideAction(x,a,btn){
+  if(a==="skip"||a==="balik"){
+    btn.disabled=true;
+    try{await setRange(`'Bank Ide'!J${x.r}`,[[a==="skip"?"skip":"baru"]]);x.v[I.st]=a==="skip"?"skip":"baru";toast(a==="skip"?"Ide di-skip":"Balik ke Baru");renderIde();}
+    catch(e){toast(errText(e,S_SHEETS));btn.disabled=false;}
+    return;
+  }
+  const d=nextFreeDate(),t=defaultJam();
+  openModal(`<h3>Pilih ide ini</h3><p>${esc(x.v[I.judul])}</p>
+    <div class="row" style="margin-top:4px"><div class="field" style="flex:1"><label for="pD">Rencana tayang</label><input type="date" id="pD" value="${d}"></div><div class="field" style="flex:1"><label for="pT">Jam</label><input type="time" id="pT" value="${t}"></div></div>
+    <p class="meta" style="margin-top:8px">Bisa digeser nanti di Kalender. Kosongin tanggal kalau belum mau dijadwal.</p>
+    <div class="row end"><button class="btn ghost" id="mNo">Batal</button><button class="btn ok" id="mYes">Masukin Produksi</button></div>`);
+  $("#mNo").onclick=closeModal;
+  $("#mYes").onclick=async()=>{
+    const date=$("#pD").value,time=$("#pT").value||t;$("#mYes").disabled=true;
+    const id="K-"+x.v[I.id].replace(/^I-/,"");
+    const row=[id,x.v[I.id],txt(x.v[I.judul]),x.v[I.pilar],x.v[I.format]||"Carousel",date?"'"+date:"",time?"'"+time:"","Perlu brief",txt(x.v[I.hook]),"","","","","","",txt([x.v[I.pemicu],x.v[I.sumber]].filter(Boolean).join(" | ")),"'"+nowStamp()];
+    try{
+      await call(S_SHEETS,"append_values",{spreadsheetId:SHEET_ID,range:"Konten!A1",values:[row]});
+      await setRange(`'Bank Ide'!J${x.r}`,[["pilih"]]);x.v[I.st]="pilih";closeModal();
+      toast("Masuk Produksi. Suruh Agent Brief kalau udah siap.");
+      await loadKonten();renderIde();
+    }catch(e){toast(errText(e,S_SHEETS));$("#mYes").disabled=false;}
+  };
+}
+
+/* ---------- PRODUKSI ---------- */
+function renderProduksi(){
+  const by=(...s)=>konten.filter(x=>s.includes(x.v[K.st])).sort(byJadwal);
+  const perlu=by("Perlu brief","Revisi brief"),siap=by("Brief siap"),ok=by("Brief OK","Revisi desain"),dsn=by("Desain siap");
+  const pend=siap.length+dsn.length;const b=$("#bProd");b.hidden=!pend;b.textContent=pend;
+  const mini=arr=>arr.length?`<div class="mini">${arr.slice(0,4).map(x=>`<span>• ${esc(x.v[K.judul])}${x.v[K.st].startsWith("Revisi")?" (revisi)":""}</span>`).join("")}${arr.length>4?`<span>+${arr.length-4} lagi</span>`:""}</div>`:"";
+  $("#prodStages").innerHTML=`
+    <div class="stage"><div class="num">${perlu.length}</div><div class="grow"><b>Nunggu dibikinin brief</b>${mini(perlu)}</div><button class="btn primary sm" data-run="brief" ${perlu.length?"":"disabled"}>Suruh bikin brief</button></div>
+    <div class="stage"><div class="num">${ok.length}</div><div class="grow"><b>Nunggu didesain</b>${mini(ok)}</div><button class="btn primary sm" data-run="desain" ${ok.length?"":"disabled"}>Suruh bikin desain</button></div>`;
+  $("#prodStages").querySelectorAll("[data-run]").forEach(b=>b.onclick=()=>runAgent(b.dataset.run,b));
+  $("#cntBrief").textContent=siap.length?siap.length+" nunggu lo":"";
+  $("#cntDesain").textContent=dsn.length?dsn.length+" nunggu lo":"";
+  $("#briefList").innerHTML=siap.length?siap.map(briefCard).join(""):`<div class="card empty">Belum ada brief yang nunggu dicek.</div>`;
+  $("#desainList").innerHTML=dsn.length?dsn.map(desainCard).join(""):`<div class="card empty">Belum ada desain yang nunggu dicek.</div>`;
+  siap.forEach(bindBrief);dsn.forEach(bindDesain);
+}
+function slideList(naskah){
+  const lines=String(naskah||"").split(/\n+/).filter(l=>l.trim());
+  if(!lines.length)return`<p class="meta">Naskah kosong.</p>`;
+  return`<div class="slidelist">${lines.map(l=>{const m=l.match(/^(Slide\s*\d+\s*(\([^)]*\))?)\s*:\s*(.*)$/i);return`<div class="s">${m?`<b>${esc(m[1])}</b>${hl(m[3]).replace(/ \| /g,"<br>")}`:hl(l)}</div>`;}).join("")}</div>`;
+}
+function headHTML(x){const v=x.v;return`<div class="chips">${chip(v[K.st])}<span class="chip">${esc(v[K.pilar]||"")}</span><span class="chip grey">${esc(fmtDate(v[K.tgl]))}${v[K.jam]?" · "+esc(v[K.jam]):""}</span>${v[K.slide]?`<span class="chip grey">${esc(v[K.slide])} slide</span>`:""}</div><h3>${esc(v[K.judul])}</h3>${v[K.hook]?`<div class="hook">${esc(v[K.hook])}</div>`:""}`;}
+function briefCard(x){const v=x.v;return`<article class="card" id="b${x.r}">${headHTML(x)}
+  ${slideList(v[K.naskah])}
+  <details><summary>Edit naskah sendiri</summary><textarea data-f="naskah" style="min-height:180px;margin-top:8px">${esc(v[K.naskah])}</textarea></details>
+  <div class="field"><label>Caption (bisa lo edit)</label><textarea data-f="caption">${esc(v[K.caption])}</textarea></div>
+  ${v[K.sumber]?`<details><summary>Sumber</summary><div class="prewrap">${linkify(v[K.sumber])}</div></details>`:""}
+  <div class="field"><label>Catatan buat agent (wajib kalau Revisi)</label><textarea data-f="note" style="min-height:64px" placeholder="Misal: hook kurang nyelekit, slide 3 kepanjangan"></textarea></div>
+  <div class="actions"><button class="btn ok" data-a="ok">Brief OK</button><button class="btn warn" data-a="rev">Revisi</button><button class="btn ghost" data-a="skip">Skip</button></div></article>`;}
+function desainCard(x){const v=x.v;const fid=folderId(v[K.folder]);return`<article class="card" id="d${x.r}">${headHTML(x)}
+  ${fid?`<div class="slides" data-slides><div class="ph">Tap "Muat desain"</div></div><button class="btn ghost sm" data-a="load">Muat desain</button> <a href="${esc(v[K.folder])}" target="_blank" rel="noopener" class="meta">Buka di Drive</a>`:`<div class="notice bad">Folder desain belum ada.</div>`}
+  <details><summary>Naskah</summary>${slideList(v[K.naskah])}</details>
+  <div class="field"><label>Caption (bisa lo edit)</label><textarea data-f="caption">${esc(v[K.caption])}</textarea></div>
+  <div class="field"><label>Catatan buat agent (wajib kalau Revisi)</label><textarea data-f="note" style="min-height:64px" placeholder="Misal: slide 2 teksnya kepanjangan, ganti jadi kutipan"></textarea></div>
+  <div class="actions"><button class="btn ok" data-a="approve">Approve</button><button class="btn warn" data-a="rev">Revisi</button><button class="btn ghost" data-a="skip">Skip</button></div></article>`;}
+function busyAll(el,on){el.querySelectorAll("button,textarea").forEach(b=>b.disabled=on);}
+function bindBrief(x){
+  const el=$("#b"+x.r);const f=n=>el.querySelector(`[data-f=${n}]`);
+  const edits=()=>{const c={};if(f("caption").value!==x.v[K.caption])c[K.caption]=f("caption").value;if(f("naskah").value!==x.v[K.naskah])c[K.naskah]=f("naskah").value;return c;};
+  el.querySelector("[data-a=ok]").onclick=async()=>{busyAll(el,true);try{await writeKonten(x,{...edits(),[K.st]:"Brief OK",[K.catatan]:f("note").value});toast("Brief OK. Suruh Agent Desain kalau mau langsung dibikin.");renderProduksi();renderCal();}catch(e){toast(errText(e,S_SHEETS));busyAll(el,false);}};
+  el.querySelector("[data-a=rev]").onclick=async()=>{const n=f("note").value.trim();if(!n){f("note").focus();toast("Isi catatan dulu biar agent tau apa yang dibenerin");return;}busyAll(el,true);try{await writeKonten(x,{...edits(),[K.st]:"Revisi brief",[K.catatan]:n});toast("Masuk antrian revisi. Suruh Agent Brief buat ngerjain.");renderProduksi();}catch(e){toast(errText(e,S_SHEETS));busyAll(el,false);}};
+  el.querySelector("[data-a=skip]").onclick=()=>skipKonten(x,el);
+}
+function bindDesain(x){
+  const el=$("#d"+x.r);const f=n=>el.querySelector(`[data-f=${n}]`);
+  const lb=el.querySelector("[data-a=load]");if(lb)lb.onclick=()=>loadSlides(x,el,lb);
+  const edits=()=>f("caption").value!==x.v[K.caption]?{[K.caption]:f("caption").value}:{};
+  el.querySelector("[data-a=approve]").onclick=async()=>{
+    if(!x.v[K.tgl]){toast("Jadwalin dulu di Kalender sebelum Approve");return;}
+    const up=agents[AG.upload.id];const warn=up&&!up.enabled?" Agent Upload lagi mati, jadi baru tayang setelah lo nyalain.":"";
+    if(!await confirmBox("Approve konten ini?",`"${x.v[K.judul]}" bakal diposting ${fmtDate(x.v[K.tgl])} oleh Agent Upload.`+warn,"Approve","ok"))return;
+    busyAll(el,true);try{await writeKonten(x,{...edits(),[K.st]:"Approve",[K.catatan]:f("note").value});toast("Approved. Masuk antrian upload.");renderProduksi();renderCal();renderArsip();}catch(e){toast(errText(e,S_SHEETS));busyAll(el,false);}
+  };
+  el.querySelector("[data-a=rev]").onclick=async()=>{const n=f("note").value.trim();if(!n){f("note").focus();toast("Isi catatan dulu biar agent tau apa yang dibenerin");return;}busyAll(el,true);try{await writeKonten(x,{...edits(),[K.st]:"Revisi desain",[K.catatan]:n});toast("Masuk antrian revisi. Suruh Agent Desain buat ngerjain.");renderProduksi();}catch(e){toast(errText(e,S_SHEETS));busyAll(el,false);}};
+  el.querySelector("[data-a=skip]").onclick=()=>skipKonten(x,el);
+}
+async function skipKonten(x,el){
+  if(!await confirmBox("Skip konten ini?","Nggak akan diproduksi atau diposting. Bisa dibalikin dari Lainnya → Arsip.","Skip","danger"))return;
+  busyAll(el,true);try{await writeKonten(x,{[K.st]:"Skip"});toast("Di-skip");renderProduksi();renderCal();renderArsip();}catch(e){toast(errText(e,S_SHEETS));busyAll(el,false);}
+}
+function imgFromResult(r){
+  for(const b of(r?.content||[])){if(b.type==="image"&&b.data)return`data:${b.mimeType||"image/png"};base64,${b.data}`;if(b.type==="resource"&&b.resource?.blob)return`data:${b.resource.mimeType||"image/png"};base64,${b.resource.blob}`;}
+  const p=unwrap(r?.payload);if(p&&typeof p==="object"){const d=p.content||p.data||p.base64Content;if(typeof d==="string"&&d.length>100)return`data:${p.mimeType||"image/png"};base64,${d}`;}
+  return null;
+}
+async function loadSlides(x,el,btn){
+  const box=el.querySelector("[data-slides]"),fid=folderId(x.v[K.folder]);btn.disabled=true;
+  if(imgCache[fid]){box.innerHTML=imgCache[fid].map((u,i)=>u?`<img src="${u}" alt="Slide ${i+1}">`:`<div class="ph">Slide ${i+1} gagal</div>`).join("");btn.remove();return;}
+  box.innerHTML=`<div class="ph">Nyari file…</div>`;
+  try{
+    const p=payload(await call(S_DRIVE,"search_files",{query:`parentId = '${fid}' and mimeType contains 'image/'`,excludeContentSnippets:true,pageSize:20}));
+    const files=(p?.files||[]).map(f=>({id:f.id,n:+((f.title||"").match(/(\d+)\.\w+$/)||[0,0])[1]})).sort((a,b)=>a.n-b.n);
+    if(!files.length){box.innerHTML=`<div class="ph">Folder kosong</div>`;btn.disabled=false;return;}
+    box.innerHTML=files.map((f,i)=>`<div class="ph" data-i="${i}">Slide ${i+1}…</div>`).join("");btn.remove();
+    const urls=[];
+    for(let i=0;i<files.length;i++){let u=null;try{u=imgFromResult(await call(S_DRIVE,"download_file_content",{fileId:files[i].id}));}catch(e){if(i===0){box.innerHTML=`<div class="notice bad">${esc(errText(e,S_DRIVE))}</div>`;return;}}
+      urls[i]=u;const ph=box.querySelector(`[data-i="${i}"]`);if(ph)ph.outerHTML=u?`<img src="${u}" alt="Slide ${i+1}">`:`<div class="ph">Slide ${i+1} gagal</div>`;}
+    imgCache[fid]=urls;
+  }catch(e){box.innerHTML=`<div class="notice bad">${esc(errText(e,S_DRIVE))}</div>`;btn.disabled=false;}
+}
+
+/* ---------- KALENDER ---------- */
+$("#calMode").onclick=e=>{const b=e.target.closest("button");if(!b)return;calMode=b.dataset.m;[...e.currentTarget.children].forEach(x=>x.classList.toggle("on",x===b));renderCal();};
+$("#calPrev").onclick=()=>{calRef=calMode==="bulan"?shiftMonth(calRef,-1):addDays(calRef,calMode==="minggu"?-7:-1);renderCal();};
+$("#calNext").onclick=()=>{calRef=calMode==="bulan"?shiftMonth(calRef,1):addDays(calRef,calMode==="minggu"?7:1);renderCal();};
+$("#calToday").onclick=()=>{calRef=todayStr();renderCal();};
+function shiftMonth(s,n){const d=D(s);d.setUTCDate(1);d.setUTCMonth(d.getUTCMonth()+n);return S(d);}
+const calItems=()=>konten.filter(x=>x.v[K.st]!=="Skip");
+function evHTML(x){const st=x.v[K.st];const lock=st==="Uploaded";return`<div class="ev ${ST[st]?.ev||""}" data-r="${x.r}" ${lock?'data-lock="1"':""} title="${esc(x.v[K.judul])} · ${esc(st)}"><span class="t">${esc(x.v[K.jam]||"")}</span><span class="n">${esc(x.v[K.judul])}</span></div>`;}
+function renderCal(){
+  const items=calItems(),today=todayStr();
+  const un=items.filter(x=>!x.v[K.tgl]);
+  $("#trayItems").innerHTML=un.length?un.map(evHTML).join(""):`<span class="meta">Semua udah dijadwal.</span>`;
+  const on=d=>items.filter(x=>x.v[K.tgl]===d).sort(byJadwal);
+  let html="";
+  if(calMode==="bulan"){
+    const d0=D(calRef);d0.setUTCDate(1);const first=S(d0);const m=d0.getUTCMonth();
+    $("#calTitle").textContent=`${BULAN[m]} ${d0.getUTCFullYear()}`;
+    const start=addDays(first,-dow(first));const dim=new Date(Date.UTC(d0.getUTCFullYear(),m+1,0)).getUTCDate();const cells=Math.ceil((dow(first)+dim)/7)*7;
+    html=`<div class="month">${HARI.map(h=>`<div class="dow">${h}</div>`).join("")}`;
+    for(let i=0;i<cells;i++){const d=addDays(start,i);const out=D(d).getUTCMonth()!==m;
+      html+=`<div class="cell ${out?"out":""} ${d===today?"today":""}" data-drop="day" data-date="${d}"><div class="d">${D(d).getUTCDate()}</div>${on(d).map(evHTML).join("")}</div>`;}
+    html+="</div>";
+  }else if(calMode==="minggu"){
+    const s=addDays(calRef,-dow(calRef)),e=addDays(s,6);
+    $("#calTitle").textContent=`${D(s).getUTCDate()} ${BULAN[D(s).getUTCMonth()].slice(0,3)} – ${D(e).getUTCDate()} ${BULAN[D(e).getUTCMonth()].slice(0,3)} ${D(e).getUTCFullYear()}`;
+    html=`<div class="weeklist">`;for(let i=0;i<7;i++){const d=addDays(s,i);html+=`<div class="day ${d===today?"today":""}" data-drop="day" data-date="${d}"><div class="lab">${HARI[i]}<b>${D(d).getUTCDate()}</b></div><div class="items">${on(d).map(evHTML).join("")||'<span class="meta">—</span>'}</div></div>`;}html+="</div>";
+  }else{
+    $("#calTitle").textContent=`${HARI[dow(calRef)]}, ${D(calRef).getUTCDate()} ${BULAN[D(calRef).getUTCMonth()]} ${D(calRef).getUTCFullYear()}`;
+    const list=on(calRef);html=`<div class="dayview">`;
+    const noTime=list.filter(x=>!x.v[K.jam]);if(noTime.length)html+=`<div class="hour" data-drop="day" data-date="${calRef}"><div class="lab">—</div><div class="items">${noTime.map(evHTML).join("")}</div></div>`;
+    for(let h=6;h<=23;h++){const hh=String(h).padStart(2,"0");html+=`<div class="hour" data-drop="hour" data-date="${calRef}" data-hour="${hh}"><div class="lab">${hh}:00</div><div class="items">${list.filter(x=>x.v[K.jam]&&x.v[K.jam].slice(0,2)===hh).map(evHTML).join("")}</div></div>`;}
+    html+="</div>";
+  }
+  $("#calBody").innerHTML=html;
+}
+/* drag & drop (mouse + touch) */
+let drag=null;
+document.addEventListener("pointerdown",e=>{
+  const ev=e.target.closest("#v-kalender .ev[data-r]");if(!ev)return;
+  drag={el:ev,r:+ev.dataset.r,x:e.clientX,y:e.clientY,moved:false,lock:!!ev.dataset.lock,ghost:null,over:null,id:e.pointerId};
+  ev.setPointerCapture?.(e.pointerId);
+});
+document.addEventListener("pointermove",e=>{
+  if(!drag||e.pointerId!==drag.id)return;
+  if(!drag.moved){if(Math.hypot(e.clientX-drag.x,e.clientY-drag.y)<6)return;if(drag.lock){drag=null;return;}drag.moved=true;
+    drag.ghost=drag.el.cloneNode(true);drag.ghost.classList.add("dragghost");document.body.appendChild(drag.ghost);drag.el.classList.add("dragging");}
+  e.preventDefault();drag.ghost.style.left=e.clientX+"px";drag.ghost.style.top=e.clientY+"px";
+  const t=document.elementFromPoint(e.clientX,e.clientY)?.closest("[data-drop]");
+  if(t!==drag.over){drag.over?.classList.remove("drop-hi");t?.classList.add("drop-hi");drag.over=t;}
+  const vh=innerHeight;if(e.clientY<70)scrollBy(0,-12);else if(e.clientY>vh-110)scrollBy(0,12);
+},{passive:false});
+document.addEventListener("pointerup",async e=>{
+  if(!drag||e.pointerId!==drag.id)return;const d=drag;drag=null;
+  d.ghost?.remove();d.el.classList.remove("dragging");d.over?.classList.remove("drop-hi");
+  const x=konten.find(k=>k.r===d.r);if(!x)return;
+  if(!d.moved){openDetail(x);return;}
+  const t=d.over;if(!t)return;
+  let date=x.v[K.tgl],time=x.v[K.jam];
+  if(t.dataset.drop==="tray"){date="";}
+  else{date=t.dataset.date;if(t.dataset.drop==="hour")time=t.dataset.hour+":"+((time||"00:00").slice(3,5)||"00");}
+  if(date===x.v[K.tgl]&&time===x.v[K.jam])return;
+  await moveKonten(x,date,time||defaultJam());
+});
+document.addEventListener("pointercancel",()=>{if(!drag)return;drag.ghost?.remove();drag.el.classList.remove("dragging");drag.over?.classList.remove("drop-hi");drag=null;});
+async function moveKonten(x,date,time){
+  const old=[x.v[K.tgl],x.v[K.jam]];
+  if(x.v[K.st]==="Approve"&&date&&date<todayStr()&&!await confirmBox("Jadwal udah lewat","Konten Approve dengan tanggal yang udah lewat bakal langsung diposting di run Agent Upload berikutnya. Lanjut?","Lanjut","primary"))return;
+  x.v[K.tgl]=date;x.v[K.jam]=time;renderCal();
+  try{await writeKonten(x,{[K.tgl]:date,[K.jam]:time});toast(date?`Dipindah ke ${fmtDate(date)} · ${time}`:"Dilepas dari jadwal");renderProduksi();}
+  catch(e){x.v[K.tgl]=old[0];x.v[K.jam]=old[1];renderCal();toast(errText(e,S_SHEETS));}
+}
+function openDetail(x){
+  const v=x.v,lock=v[K.st]==="Uploaded";
+  const where={"Brief siap":"Cek di Produksi → Cek brief","Desain siap":"Cek di Produksi → Cek desain","Perlu brief":"Nunggu Agent Brief","Revisi brief":"Nunggu Agent Brief revisi","Brief OK":"Nunggu Agent Desain","Revisi desain":"Nunggu Agent Desain revisi","Approve":"Nunggu Agent Upload","Uploaded":"Udah tayang"}[v[K.st]]||"";
+  openModal(`${headHTML(x)}<p class="meta">${esc(where)}</p>
+    ${v[K.link]?`<p style="margin-top:8px"><a href="${esc(v[K.link])}" target="_blank" rel="noopener">Buka post di Instagram</a></p>`:""}
+    ${lock?"":`<div class="row"><div class="field" style="flex:1"><label for="eD">Tanggal</label><input type="date" id="eD" value="${esc(v[K.tgl])}"></div><div class="field" style="flex:1"><label for="eT">Jam</label><input type="time" id="eT" value="${esc(v[K.jam]||defaultJam())}"></div></div>`}
+    <div class="row end"><button class="btn ghost" id="mNo">Tutup</button>${lock?"":`<button class="btn primary" id="mYes">Simpan jadwal</button>`}${["Brief siap","Desain siap"].includes(v[K.st])?`<a class="btn ok" href="#produksi" id="mGo">Cek sekarang</a>`:""}</div>`);
+  $("#mNo").onclick=closeModal;const g=$("#mGo");if(g)g.onclick=closeModal;
+  const y=$("#mYes");if(y)y.onclick=async()=>{closeModal();await moveKonten(x,$("#eD")?.value||"",$("#eT")?.value||defaultJam());};
+}
+
+/* ---------- AGENT ---------- */
+const cronTime=c=>{const m=String(c||"").match(/(?:CRON_TZ=\S+\s+)?(\d+)\s+(\d+)\s/);return m?m[2].padStart(2,"0")+":"+m[1].padStart(2,"0"):"";};
+const fmtDT=s=>{if(!s)return"—";const d=new Date(s);return isNaN(d)?s:d.toLocaleString("id-ID",{weekday:"short",day:"numeric",month:"short",hour:"2-digit",minute:"2-digit",timeZone:"Asia/Jakarta"})+" WIB";};
+function runStatus(t){const s=t?.last_run?.status||"";if(!s&&!t?.last_fired_at)return`<span class="chip grey">Belum pernah jalan</span>`;if(/SUCCEEDED/.test(s))return`<span class="chip ok">Berhasil</span>`;if(/FAILED|ERROR/.test(s))return`<span class="chip bad">Gagal</span>`;if(/RUNNING|PENDING/.test(s))return`<span class="chip">Lagi jalan</span>`;return`<span class="chip grey">Tercatat</span>`;}
+function renderAgents(){
+  $("#agentList").innerHTML=`<div class="notice info">Versi web ini nggak bisa ngakses scheduled task Claude. Status, saklar, jam, dan tombol suruh kerja ada di <a href="${CLAUDE_URL}" target="_blank" rel="noopener">dashboard Claude</a>.</div>`+
+    Object.values(AG).map(a=>`<article class="card"><h3>${esc(a.label)}</h3><div class="meta">${a.sched?"Terjadwal tiap hari":"Jalan kalau lo suruh"}</div><p class="meta" style="margin-top:8px">${esc(a.desc)}</p></article>`).join("");
+}
+/* ---------- LAINNYA ---------- */
+$("#moreSeg").onclick=e=>{const b=e.target.closest("button");if(!b)return;[...e.currentTarget.children].forEach(x=>x.classList.toggle("on",x===b));$("#morePanduan").hidden=b.dataset.s!=="panduan";$("#moreArsip").hidden=b.dataset.s!=="arsip";};
+function renderPanduan(){
+  if(!panduan.length){$("#panduanList").innerHTML=`<div class="card empty"><b>Panduan kosong</b></div>`;return;}
+  $("#panduanList").innerHTML=panduan.map((v,i)=>{const r=i+2,key=v[0]||"";if(!key)return"";const focus=/fokus/i.test(key);
+    return`<div class="card panduan-row ${focus?"focus":""}" data-r="${r}"><label for="p${r}"><h3 style="font-size:16px">${esc(key)}</h3></label><textarea id="p${r}" placeholder="${focus?"Kosongin kalau agent bebas milih topik":""}">${esc(v[1]||"")}</textarea><div class="saveline"><span class="meta" data-dirty></span><button class="btn ghost sm">Simpan</button></div></div>`;}).join("");
+  document.querySelectorAll(".panduan-row").forEach(el=>{const r=el.dataset.r,ta=el.querySelector("textarea"),btn=el.querySelector("button"),d=el.querySelector("[data-dirty]");let orig=ta.value;
+    ta.oninput=()=>d.textContent=ta.value!==orig?"Belum disimpan":"";
+    btn.onclick=async()=>{if(ta.value===orig){toast("Nggak ada yang berubah");return;}btn.disabled=true;try{await setRange(`Panduan!B${r}`,[[txt(ta.value)]]);orig=ta.value;panduan[r-2][1]=ta.value;d.textContent="Tersimpan";toast("Panduan diperbarui");}catch(e){toast(errText(e,S_SHEETS));}btn.disabled=false;};});
+}
+function renderArsip(){
+  const by=s=>konten.filter(x=>x.v[K.st]===s).sort(byJadwal);
+  const ap=by("Approve"),up=by("Uploaded").reverse(),sk=by("Skip");
+  $("#cntApprove").textContent=ap.length;$("#cntUploaded").textContent=up.length;$("#cntSkip").textContent=sk.length;
+  const mini=(x,extra)=>`<div class="card">${headHTML(x)}${extra}</div>`;
+  $("#approveList").innerHTML=ap.length?ap.map(x=>mini(x,`<button class="btn ghost sm" data-back="${x.r}" data-to="Desain siap">Tarik balik ke cek desain</button>`)).join(""):`<div class="card empty">Nggak ada yang nunggu upload.</div>`;
+  $("#uploadedList").innerHTML=up.length?up.map(x=>mini(x,x.v[K.link]?`<a href="${esc(x.v[K.link])}" target="_blank" rel="noopener">Buka post di Instagram</a>`:"")).join(""):`<div class="card empty">Belum ada yang tayang.</div>`;
+  $("#skipList").innerHTML=sk.length?sk.map(x=>mini(x,`<button class="btn ghost sm" data-back="${x.r}" data-to="${x.v[K.folder]?"Desain siap":x.v[K.naskah]?"Brief siap":"Perlu brief"}">Balikin ke Produksi</button>`)).join(""):`<div class="card empty">Kosong.</div>`;
+  document.querySelectorAll("[data-back]").forEach(b=>b.onclick=async()=>{const x=konten.find(y=>y.r==b.dataset.back);if(!x)return;b.disabled=true;
+    try{await writeKonten(x,{[K.st]:b.dataset.to});toast("Balik ke Produksi");renderProduksi();renderCal();renderArsip();}catch(e){toast(errText(e,S_SHEETS));b.disabled=false;}});
+}
+
+/* ---------- routing & boot ---------- */
+const VIEWS=["ide","produksi","kalender","agent","lainnya"];
+function route(){const h=(location.hash||"#ide").slice(1),v=VIEWS.includes(h)?h:"ide";VIEWS.forEach(n=>$("#v-"+n).classList.toggle("on",n===v));document.querySelectorAll("nav.tabs a").forEach(a=>a.classList.toggle("on",a.dataset.v===v));scrollTo(0,0);}
+addEventListener("hashchange",route);route();
+$("#refresh").onclick=()=>{imgCache={};loadAll();};
+function openSettings(first){
+  const c=getCfg()||{};
+  openModal(`<h3>${first?"Sambungin ke backend":"Koneksi backend"}</h3>
+    <p>Isi URL Web app Apps Script (berakhiran /exec) dan kunci yang lo simpan di Script Properties. Disimpan cuma di browser ini.</p>
+    <div class="field"><label for="cUrl">URL Web app</label><input id="cUrl" type="url" placeholder="https://script.google.com/macros/s/.../exec" value="${esc(c.url||"")}" style="width:100%;border:1px solid var(--line);border-radius:12px;padding:10px 12px"></div>
+    <div class="field"><label for="cKey">Kunci</label><input id="cKey" type="password" value="${esc(c.key||"")}" style="width:100%;border:1px solid var(--line);border-radius:12px;padding:10px 12px"></div>
+    <p class="meta" id="cMsg" style="margin-top:8px"></p>
+    <div class="row end">${first?"":`<button class="btn ghost" id="mNo">Batal</button>`}<button class="btn primary" id="mYes">Simpan & tes</button></div>`);
+  const no=$("#mNo");if(no)no.onclick=closeModal;
+  $("#mYes").onclick=async()=>{
+    const url=$("#cUrl").value.trim(),key=$("#cKey").value;
+    if(!/^https:\/\/script\.google\.com\/.+\/exec$/.test(url)){$("#cMsg").textContent="URL harus dari script.google.com dan berakhiran /exec.";return;}
+    if(!key){$("#cMsg").textContent="Kunci wajib diisi.";return;}
+    const prev=getCfg();setCfg({url,key});$("#mYes").disabled=true;$("#cMsg").textContent="Ngetes koneksi…";
+    try{await api({action:"get",range:"Panduan!A1:A1"});closeModal();toast("Tersambung");$("#pageNotice").innerHTML="";loadAll();}
+    catch(e){setCfg(prev||{});$("#cMsg").textContent=errText(e,"Backend");$("#mYes").disabled=false;}
+  };
+}
+$("#settings").onclick=()=>openSettings(false);
+mcp=true;
+if(!getCfg()?.url){openSettings(true);["#ideList","#prodStages","#panduanList"].forEach(s=>$(s).innerHTML="");renderAgents();renderCal();}
+else loadAll();
+</script>
+</body>
+</html>
