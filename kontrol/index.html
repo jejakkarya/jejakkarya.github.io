@@ -108,6 +108,20 @@ details[open] summary::before{content:"▾ "}
 .saveline{display:flex;justify-content:space-between;align-items:center;margin-top:8px;gap:8px}
 .saveline .meta{flex:1}
 a{color:var(--primary);font-weight:600}
+.asetrow{display:flex;flex-wrap:wrap;gap:8px;margin-top:8px;align-items:flex-end}
+.aset{display:flex;flex-direction:column;gap:4px;width:96px}
+.thumb{width:96px;height:120px;border-radius:10px;background:#eef0f5;overflow:hidden;display:grid;place-items:center;font-size:11px;color:var(--muted)}
+.thumb img{width:100%;height:100%;object-fit:cover;display:block}
+.ainfo{display:flex;flex-direction:column;gap:2px}
+.ainfo .chip{font-size:10px;padding:2px 6px;white-space:normal}
+.linkbtn{border:0;background:none;color:var(--bad);font-weight:700;font-size:12px;cursor:pointer;text-align:left;padding:0}
+.addimg{min-height:32px;padding:5px 10px;font-size:13px}
+.gayas{display:flex;flex-direction:column;gap:8px}
+.gopt{display:flex;gap:10px;align-items:flex-start;border:1px solid var(--line);border-radius:12px;padding:10px 12px;cursor:pointer}
+.gopt input{margin-top:4px}
+.gopt span{display:flex;flex-direction:column}
+.gopt small{color:var(--muted);font-size:13px}
+.gopt:has(input:checked){border-color:var(--primary);background:var(--primary-soft)}
 /* Calendar */
 .calbar{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-bottom:10px}
 .calbar .title{font-family:'Gabarito';font-size:18px;flex:1;min-width:140px;text-align:center}
@@ -339,7 +353,7 @@ async function call(server,tool,input){
   if(server===S_CLAUDE)throw{code:"standalone"};
   if(tool==="get_values")return{payload:await api({action:"get",range:input.range})};
   if(tool==="update_values")return{payload:await api({action:"set",range:input.range,values:input.values})};
-  if(tool==="append_values")return{payload:await api({action:"append",range:"Konten!A1",values:input.values})};
+  if(tool==="append_values")return{payload:await api({action:"append",range:input.range||"Konten!A1",values:input.values})};
   if(tool==="search_files"){const m=String(input.query).match(/parentId = '([^']+)'/);return{payload:await api({action:"files",folderId:m&&m[1],type:"image/"})};}
   if(tool==="download_file_content")return{payload:await api({action:"file",fileId:input.fileId})};
   throw{code:"bad_request"};
@@ -378,6 +392,7 @@ async function loadKonten(){
     const vals=await getRange("Konten!A2:Q1000");
     konten=vals.map((v,i)=>({r:i+2,v:Array.from({length:17},(_,k)=>String(v[k]??""))})).filter(x=>x.v[K.judul]);
     konten.forEach(x=>{x.v[K.tgl]=cleanDate(x.v[K.tgl]);x.v[K.jam]=cleanTime(x.v[K.jam]);});
+    await loadAset();
     renderProduksi();renderCal();renderArsip();
   }catch(e){const m=`<div class="notice bad">${esc(errText(e,S_SHEETS))}</div>`;$("#prodStages").innerHTML=m;$("#calBody").innerHTML=m;}
 }
@@ -466,14 +481,14 @@ function renderProduksi(){
   $("#desainList").innerHTML=dsn.length?dsn.map(desainCard).join(""):`<div class="card empty">Belum ada desain yang nunggu dicek.</div>`;
   siap.forEach(bindBrief);dsn.forEach(bindDesain);
 }
-function slideList(naskah){
+function slideList(naskah,x,editable){
   const lines=String(naskah||"").split(/\n+/).filter(l=>l.trim());
   if(!lines.length)return`<p class="meta">Naskah kosong.</p>`;
-  return`<div class="slidelist">${lines.map(l=>{const m=l.match(/^(Slide\s*\d+\s*(\([^)]*\))?)\s*:\s*(.*)$/i);return`<div class="s">${m?`<b>${esc(m[1])}</b>${hl(m[3]).replace(/ \| /g,"<br>")}`:hl(l)}</div>`;}).join("")}</div>`;
+  return`<div class="slidelist">${lines.map((l,i)=>{const m=l.match(/^(Slide\s*\d+\s*(\([^)]*\))?)\s*:\s*(.*)$/i);return`<div class="s">${m?`<b>${esc(m[1])}</b>${hl(m[3]).replace(/ \| /g,"<br>")}`:hl(l)}${x?asetHTML(x,i+1,editable):""}</div>`;}).join("")}</div>`;
 }
-function headHTML(x){const v=x.v;return`<div class="chips">${chip(v[K.st])}<span class="chip">${esc(v[K.pilar]||"")}</span><span class="chip grey">${esc(fmtDate(v[K.tgl]))}${v[K.jam]?" · "+esc(v[K.jam]):""}</span>${v[K.slide]?`<span class="chip grey">${esc(v[K.slide])} slide</span>`:""}</div><h3>${esc(v[K.judul])}</h3>${v[K.hook]?`<div class="hook">${esc(v[K.hook])}</div>`:""}`;}
+function headHTML(x){const v=x.v;return`<div class="chips">${chip(v[K.st])}<span class="chip">${esc(v[K.pilar]||"")}</span><span class="chip grey">${esc(fmtDate(v[K.tgl]))}${v[K.jam]?" · "+esc(v[K.jam]):""}</span>${v[K.slide]?`<span class="chip grey">${esc(v[K.slide])} slide</span>`:""}${(aset[v[K.id]]||[]).length?`<span class="chip mark">${(aset[v[K.id]]||[]).length} gambar</span>`:""}</div><h3>${esc(v[K.judul])}</h3>${v[K.hook]?`<div class="hook">${esc(v[K.hook])}</div>`:""}`;}
 function briefCard(x){const v=x.v;return`<article class="card" id="b${x.r}">${headHTML(x)}
-  ${slideList(v[K.naskah])}
+  ${slideList(v[K.naskah],x,true)}
   <details><summary>Edit naskah sendiri</summary><textarea data-f="naskah" style="min-height:180px;margin-top:8px">${esc(v[K.naskah])}</textarea></details>
   <div class="field"><label>Caption (bisa lo edit)</label><textarea data-f="caption">${esc(v[K.caption])}</textarea></div>
   ${v[K.sumber]?`<details><summary>Sumber</summary><div class="prewrap">${linkify(v[K.sumber])}</div></details>`:""}
@@ -481,20 +496,20 @@ function briefCard(x){const v=x.v;return`<article class="card" id="b${x.r}">${he
   <div class="actions"><button class="btn ok" data-a="ok">Brief OK</button><button class="btn warn" data-a="rev">Revisi</button><button class="btn ghost" data-a="skip">Skip</button></div></article>`;}
 function desainCard(x){const v=x.v;const fid=folderId(v[K.folder]);return`<article class="card" id="d${x.r}">${headHTML(x)}
   ${fid?`<div class="slides" data-slides><div class="ph">Tap "Muat desain"</div></div><button class="btn ghost sm" data-a="load">Muat desain</button> <a href="${esc(v[K.folder])}" target="_blank" rel="noopener" class="meta">Buka di Drive</a>`:`<div class="notice bad">Folder desain belum ada.</div>`}
-  <details><summary>Naskah</summary>${slideList(v[K.naskah])}</details>
+  <details ${(aset[v[K.id]]||[]).length?"open":""}><summary>Naskah & gambar</summary>${slideList(v[K.naskah],x,true)}</details>
   <div class="field"><label>Caption (bisa lo edit)</label><textarea data-f="caption">${esc(v[K.caption])}</textarea></div>
   <div class="field"><label>Catatan buat agent (wajib kalau Revisi)</label><textarea data-f="note" style="min-height:64px" placeholder="Misal: slide 2 teksnya kepanjangan, ganti jadi kutipan"></textarea></div>
   <div class="actions"><button class="btn ok" data-a="approve">Approve</button><button class="btn warn" data-a="rev">Revisi</button><button class="btn ghost" data-a="skip">Skip</button></div></article>`;}
 function busyAll(el,on){el.querySelectorAll("button,textarea").forEach(b=>b.disabled=on);}
 function bindBrief(x){
-  const el=$("#b"+x.r);const f=n=>el.querySelector(`[data-f=${n}]`);
+  const el=$("#b"+x.r);bindAset(el,x);const f=n=>el.querySelector(`[data-f=${n}]`);
   const edits=()=>{const c={};if(f("caption").value!==x.v[K.caption])c[K.caption]=f("caption").value;if(f("naskah").value!==x.v[K.naskah])c[K.naskah]=f("naskah").value;return c;};
   el.querySelector("[data-a=ok]").onclick=async()=>{busyAll(el,true);try{await writeKonten(x,{...edits(),[K.st]:"Brief OK",[K.catatan]:f("note").value});toast("Brief OK. Suruh Agent Desain kalau mau langsung dibikin.");renderProduksi();renderCal();}catch(e){toast(errText(e,S_SHEETS));busyAll(el,false);}};
   el.querySelector("[data-a=rev]").onclick=async()=>{const n=f("note").value.trim();if(!n){f("note").focus();toast("Isi catatan dulu biar agent tau apa yang dibenerin");return;}busyAll(el,true);try{await writeKonten(x,{...edits(),[K.st]:"Revisi brief",[K.catatan]:n});toast("Masuk antrian revisi. Suruh Agent Brief buat ngerjain.");renderProduksi();}catch(e){toast(errText(e,S_SHEETS));busyAll(el,false);}};
   el.querySelector("[data-a=skip]").onclick=()=>skipKonten(x,el);
 }
 function bindDesain(x){
-  const el=$("#d"+x.r);const f=n=>el.querySelector(`[data-f=${n}]`);
+  const el=$("#d"+x.r);bindAset(el,x);const f=n=>el.querySelector(`[data-f=${n}]`);
   const lb=el.querySelector("[data-a=load]");if(lb)lb.onclick=()=>loadSlides(x,el,lb);
   const edits=()=>f("caption").value!==x.v[K.caption]?{[K.caption]:f("caption").value}:{};
   el.querySelector("[data-a=approve]").onclick=async()=>{
@@ -529,6 +544,97 @@ async function loadSlides(x,el,btn){
       urls[i]=u;const ph=box.querySelector(`[data-i="${i}"]`);if(ph)ph.outerHTML=u?`<img src="${u}" alt="Slide ${i+1}">`:`<div class="ph">Slide ${i+1} gagal</div>`;}
     imgCache[fid]=urls;
   }catch(e){box.innerHTML=`<div class="notice bad">${esc(errText(e,S_DRIVE))}</div>`;btn.disabled=false;}
+}
+
+/* ---------- ASET GAMBAR ---------- */
+const A={id:0,konten:1,slide:2,gaya:3,nama:4,bag:5,tot:6,st:7,tgl:8};
+const GAYA={atas:"Gambar di atas teks",latar:"Background penuh",bingkai:"Screenshot berbingkai"};
+let aset={}, asetData={};
+async function loadAset(){
+  try{
+    const vals=await getRange("'Aset Gambar'!A2:I3000");
+    const g={};
+    vals.forEach((v,i)=>{if(!v[A.id])return;const id=v[A.id];
+      if(!g[id])g[id]={id,konten:v[A.konten],slide:+v[A.slide]||0,gaya:v[A.gaya]||"atas",nama:v[A.nama],tot:+v[A.tot]||1,st:v[A.st],tgl:v[A.tgl],parts:[]};
+      g[id].parts.push({r:i+2,bag:+v[A.bag]||1});});
+    aset={};Object.values(g).forEach(a=>{if(a.st!=="aktif"||a.parts.length<a.tot)return;a.parts.sort((x,y)=>x.bag-y.bag);(aset[a.konten]=aset[a.konten]||[]).push(a);});
+  }catch(e){aset={};}
+}
+const asetFor=(kid,slide)=>(aset[kid]||[]).filter(a=>a.slide===slide);
+async function asetUrl(a){
+  if(asetData[a.id])return asetData[a.id];
+  const rs=a.parts.map(p=>p.r),lo=Math.min(...rs),hi=Math.max(...rs);
+  let chunks;
+  if(hi-lo+1===rs.length){const v=await getRange(`'Aset Gambar'!J${lo}:J${hi}`);const byRow={};v.forEach((x,i)=>byRow[lo+i]=x[0]||"");chunks=a.parts.map(p=>byRow[p.r]||"");}
+  else{chunks=[];for(const p of a.parts){const v=await getRange(`'Aset Gambar'!J${p.r}:J${p.r}`);chunks.push((v[0]||[])[0]||"");}}
+  const b64=chunks.join("").replace(/^'/,"");
+  const ext=(a.nama.split(".").pop()||"jpg").toLowerCase();
+  return asetData[a.id]=`data:image/${ext==="png"?"png":"jpeg"};base64,${b64}`;
+}
+function asetHTML(x,slide,editable){
+  const list=asetFor(x.v[K.id],slide);
+  return`<div class="asetrow">${list.map(a=>`<div class="aset" data-aset="${esc(a.id)}"><div class="thumb" data-thumb="${esc(a.id)}"></div><div class="ainfo"><span class="chip grey">${esc(GAYA[a.gaya]||a.gaya)}</span>${editable?`<button class="linkbtn" data-del="${esc(a.id)}">Hapus</button>`:""}</div></div>`).join("")}
+    ${editable?`<button class="btn ghost sm addimg" data-add="${slide}">${list.length?"Ganti":"+ Gambar"}</button>`:""}</div>`;
+}
+function bindAset(el,x){
+  el.querySelectorAll("[data-thumb]").forEach(async t=>{const a=(aset[x.v[K.id]]||[]).find(z=>z.id===t.dataset.thumb);if(!a)return;
+    try{t.innerHTML=`<img src="${await asetUrl(a)}" alt="">`;}catch(e){t.textContent="gagal";}});
+  el.querySelectorAll("[data-del]").forEach(b=>b.onclick=async()=>{
+    const a=(aset[x.v[K.id]]||[]).find(z=>z.id===b.dataset.del);if(!a)return;
+    if(!await confirmBox("Hapus gambar ini?","Gambar nggak akan dipasang di desain berikutnya.","Hapus","danger"))return;
+    b.disabled=true;
+    try{for(const p of a.parts)await setRange(`'Aset Gambar'!H${p.r}`,[["hapus"]]);
+      aset[x.v[K.id]]=(aset[x.v[K.id]]||[]).filter(z=>z.id!==a.id);toast("Gambar dihapus");renderProduksi();}
+    catch(e){toast(errText(e,S_SHEETS));b.disabled=false;}});
+  el.querySelectorAll("[data-add]").forEach(b=>b.onclick=()=>pickImage(x,+b.dataset.add,el));
+}
+function slideTipe(x,slide){const l=String(x.v[K.naskah]||"").split(/\n+/).filter(s=>s.trim())[slide-1]||"";const m=l.match(/\((cover|isi|kutipan|cta)\)/i);return m?m[1].toLowerCase():"isi";}
+function pickImage(x,slide,el){
+  const inp=document.createElement("input");inp.type="file";inp.accept="image/*";
+  inp.onchange=()=>{const f=inp.files&&inp.files[0];if(!f)return;
+    if(f.size>15*1024*1024){toast("Gambar kegedean (maks 15 MB)");return;}
+    const tipe=slideTipe(x,slide);const def=(tipe==="cover"||tipe==="cta"||tipe==="kutipan")?"latar":"atas";
+    const prev=URL.createObjectURL(f);
+    const ada=asetFor(x.v[K.id],slide).length;
+    openModal(`<h3>${ada?"Ganti gambar":"Gambar buat"} slide ${slide}</h3>${ada?`<p class="meta">Gambar lama di slide ini bakal diganti.</p>`:""}<img src="${prev}" alt="" style="width:100%;max-height:240px;object-fit:contain;border-radius:12px;background:#eef0f5;margin:6px 0 10px">
+      <div class="gayas">${Object.entries(GAYA).map(([k,v])=>`<label class="gopt"><input type="radio" name="gaya" value="${k}" ${k===def?"checked":""}><span><b>${v}</b><small>${{atas:"Gambar di setengah atas, teks di bawah.",latar:"Gambar jadi latar, teks putih di atas lapisan gelap.",bingkai:"Gambar utuh dalam bingkai putih. Cocok buat screenshot."}[k]}</small></span></label>`).join("")}</div>
+      <p class="meta" id="upMsg" style="margin-top:8px"></p>
+      <div class="row end"><button class="btn ghost" id="mNo">Batal</button><button class="btn primary" id="mYes">Upload</button></div>`);
+    $("#mNo").onclick=()=>{URL.revokeObjectURL(prev);closeModal();};
+    $("#mYes").onclick=async()=>{
+      const gaya=(document.querySelector('input[name=gaya]:checked')||{}).value||def;
+      $("#mYes").disabled=true;$("#mNo").disabled=true;$("#upMsg").textContent="Ngompres gambar…";
+      try{
+        const {b64,ext}=await compressImage(f,gaya);
+        const CH=45000,parts=[];for(let i=0;i<b64.length;i+=CH)parts.push(b64.slice(i,i+CH));
+        const id="A-"+Date.now().toString(36)+Math.random().toString(36).slice(2,5);
+        const nama=(f.name.replace(/\.[^.]+$/,"")||"gambar").slice(0,40)+"."+ext,stamp=nowStamp();
+        const rows=parts.map((p,i)=>[id,x.v[K.id],slide,gaya,nama,i+1,parts.length,"aktif","'"+stamp,"'"+p]);
+        for(let i=0;i<rows.length;i+=4){$("#upMsg").textContent=`Upload ${Math.min(i+4,rows.length)}/${rows.length}…`;
+          await call(S_SHEETS,"append_values",{spreadsheetId:SHEET_ID,range:"'Aset Gambar'!A1",values:rows.slice(i,i+4)});}
+        for(const o of asetFor(x.v[K.id],slide)){for(const pp of o.parts)await setRange(`'Aset Gambar'!H${pp.r}`,[["hapus"]]);}
+        asetData[id]=`data:image/${ext==="png"?"png":"jpeg"};base64,${b64}`;
+        URL.revokeObjectURL(prev);closeModal();
+        await loadAset();renderProduksi();
+        toast(x.v[K.st]==="Desain siap"?"Gambar masuk. Tekan Revisi biar Agent Desain masang gambarnya.":"Gambar masuk. Bakal dipasang pas Agent Desain kerja.");
+      }catch(e){$("#upMsg").textContent=errText(e,S_SHEETS);$("#mYes").disabled=false;$("#mNo").disabled=false;}
+    };
+  };
+  inp.click();
+}
+function compressImage(file,gaya){
+  return new Promise((res,rej)=>{
+    const img=new Image(),u=URL.createObjectURL(file);
+    img.onload=()=>{
+      const max=gaya==="bingkai"?1400:1600;let w=img.naturalWidth,h=img.naturalHeight;const k=Math.min(1,max/Math.max(w,h));w=Math.round(w*k);h=Math.round(h*k);
+      const c=document.createElement("canvas");c.width=w;c.height=h;const g=c.getContext("2d");g.fillStyle="#fff";g.fillRect(0,0,w,h);g.drawImage(img,0,0,w,h);URL.revokeObjectURL(u);
+      let ext="jpg",data=c.toDataURL("image/jpeg",0.85);
+      if(gaya==="bingkai"){const png=c.toDataURL("image/png");if(png.length<data.length*1.6&&png.length<900000){data=png;ext="png";}}
+      res({b64:data.split(",")[1],ext});
+    };
+    img.onerror=()=>{URL.revokeObjectURL(u);rej({code:"bad_image",message:"File bukan gambar yang bisa dibaca."});};
+    img.src=u;
+  });
 }
 
 /* ---------- KALENDER ---------- */
