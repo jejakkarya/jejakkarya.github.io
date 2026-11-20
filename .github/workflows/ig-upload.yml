@@ -13,6 +13,10 @@ on:
         description: "Uji coba tanpa posting (true/false)"
         required: false
         default: "true"
+      konten_id:
+        description: "ID konten yang mau langsung diposting (kosongin = ambil yang jatuh tempo)"
+        required: false
+        default: ""
 
 permissions:
   contents: write
@@ -31,7 +35,7 @@ jobs:
           sparse-checkout: tools/ig-upload
       - uses: actions/setup-node@v4
         with:
-          node-version: 20
+          node-version: 22
       - name: Pasang sharp
         working-directory: tools/ig-upload
         run: npm install --no-audit --no-fund
@@ -43,4 +47,5 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           GITHUB_REPOSITORY: ${{ github.repository }}
           DRY_RUN: ${{ github.event_name == 'workflow_dispatch' && inputs.dry_run || 'false' }}
+          KONTEN_ID: ${{ github.event_name == 'workflow_dispatch' && inputs.konten_id || '' }}
         run: node upload.mjs
