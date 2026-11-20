@@ -122,6 +122,20 @@ a{color:var(--primary);font-weight:600}
 .gopt span{display:flex;flex-direction:column}
 .gopt small{color:var(--muted);font-size:13px}
 .gopt:has(input:checked){border-color:var(--primary);background:var(--primary-soft)}
+.stage.col{flex-direction:column;align-items:stretch}
+.stagehead{display:flex;align-items:center;gap:12px}
+.stagehead .grow span{display:block;font-size:12px}
+.qlist{display:flex;flex-direction:column;gap:6px;margin-top:10px}
+.qitem{display:flex;align-items:center;gap:10px;text-align:left;border:1px solid var(--line);background:#fff;border-radius:12px;padding:9px 10px;cursor:pointer;font-size:14px;flex-wrap:wrap}
+.qitem .qn{width:26px;height:26px;border-radius:50%;border:2px solid var(--line);display:grid;place-items:center;font-weight:800;font-size:13px;flex:none}
+.qitem .qt{flex:1;min-width:150px}
+.qitem em{color:var(--warn);font-style:normal;font-weight:700}
+.qitem .qs{font-size:12px;font-weight:700;color:var(--primary);width:100%;padding-left:36px}
+.qitem .qs.warn{color:var(--warn)}
+.qitem.on{border-color:var(--primary);background:var(--primary-soft)}
+.qitem.on .qn{background:var(--primary);border-color:var(--primary);color:#fff}
+.qitem.lock{opacity:.7;cursor:default;background:#f2f4f9}
+.qitem.lock .qn{border-color:transparent}
 /* Calendar */
 .calbar{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-bottom:10px}
 .calbar .title{font-family:'Gabarito';font-size:18px;flex:1;min-width:140px;text-align:center}
@@ -283,7 +297,7 @@ const AG={
   upload:{id:"trig_011P4b6eaYcvZ3r8VBUroSnr",label:"Agent Upload IG",desc:"Posting ke @jejakkarya.kreatif lewat Chrome, cuma konten berstatus Approve.",sched:true}
 };
 const S_SHEETS="Google Sheets",S_DRIVE="Google Drive",S_CLAUDE="Claude Code Remote";
-const K={id:0,ide:1,judul:2,pilar:3,format:4,tgl:5,jam:6,st:7,hook:8,naskah:9,caption:10,catatan:11,folder:12,slide:13,link:14,sumber:15,ubah:16};
+const K={id:0,ide:1,judul:2,pilar:3,format:4,tgl:5,jam:6,st:7,hook:8,naskah:9,caption:10,catatan:11,folder:12,slide:13,link:14,sumber:15,ubah:16,antri:17};
 const I={id:0,tgl:1,judul:2,angle:3,pilar:4,format:5,hook:6,pemicu:7,sumber:8,st:9};
 
 let mcp=null, konten=[], ide=[], panduan=[], agents={}, imgCache={};
@@ -389,8 +403,8 @@ async function writeKonten(x,cols){ // cols: {colIndex: value} — only these ce
 /* ---------- load ---------- */
 async function loadKonten(){
   try{
-    const vals=await getRange("Konten!A2:Q1000");
-    konten=vals.map((v,i)=>({r:i+2,v:Array.from({length:17},(_,k)=>String(v[k]??""))})).filter(x=>x.v[K.judul]);
+    const vals=await getRange("Konten!A2:R1000");
+    konten=vals.map((v,i)=>({r:i+2,v:Array.from({length:18},(_,k)=>String(v[k]??""))})).filter(x=>x.v[K.judul]);
     konten.forEach(x=>{x.v[K.tgl]=cleanDate(x.v[K.tgl]);x.v[K.jam]=cleanTime(x.v[K.jam]);});
     await loadAset();
     renderProduksi();renderCal();renderArsip();
@@ -466,15 +480,43 @@ async function ideAction(x,a,btn){
 }
 
 /* ---------- PRODUKSI ---------- */
+let pick={brief:[],desain:[]};
+const QMAX={brief:5,desain:3},QLABEL={brief:"brief",desain:"desain"};
+function queued(x,kind){const m=String(x.v[K.antri]||"").match(/^(brief|desain)\|(\d{4}-\d{2}-\d{2} \d{2}:\d{2})/);if(!m||m[1]!==kind)return null;
+  const mins=(Date.parse(nowStamp().replace(" ","T")+":00Z")-Date.parse(m[2].replace(" ","T")+":00Z"))/60000;return{at:m[2].slice(11),stale:mins>45};}
+function stageHTML(kind,arr,title){
+  const sel=pick[kind]=pick[kind].filter(id=>arr.some(x=>x.v[K.id]===id&&!(queued(x,kind)&&!queued(x,kind).stale)));
+  const items=arr.map(x=>{const id=x.v[K.id],q=queued(x,kind),lock=q&&!q.stale,i=sel.indexOf(id);
+    return`<button class="qitem ${i>=0?"on":""} ${lock?"lock":""}" data-k="${kind}" data-id="${esc(id)}" ${lock?"disabled":""}>
+      <span class="qn">${lock?"⏳":i>=0?i+1:""}</span><span class="qt">${esc(x.v[K.judul])}${x.v[K.st].startsWith("Revisi")?' <em>(revisi)</em>':""}</span>
+      ${lock?`<span class="qs">Lagi dikerjain · ${esc(q.at)}</span>`:q&&q.stale?`<span class="qs warn">Belum kelar, bisa kirim ulang</span>`:""}</button>`;}).join("");
+  return`<div class="stage col"><div class="stagehead"><div class="num">${arr.length}</div><div class="grow"><b>${title}</b><span class="meta">${arr.length?`Tap buat pilih & atur urutan (maks ${QMAX[kind]})`:"Kosong"}</span></div>
+    <button class="btn primary sm" data-run="${kind}" ${sel.length?"":"disabled"}>Kerjain${sel.length?` (${sel.length})`:""}</button></div>
+    ${arr.length?`<div class="qlist">${items}</div>`:""}</div>`;
+}
+function bindStages(){
+  $("#prodStages").querySelectorAll(".qitem").forEach(b=>b.onclick=()=>{const k=b.dataset.k,id=b.dataset.id,s=pick[k],i=s.indexOf(id);
+    if(i>=0)s.splice(i,1);else{if(s.length>=QMAX[k]){toast(`Maksimal ${QMAX[k]} sekali kirim`);return;}s.push(id);}renderProduksi();});
+  $("#prodStages").querySelectorAll("[data-run]").forEach(b=>b.onclick=()=>runQueue(b.dataset.run,b));
+}
+async function runQueue(kind,btn){
+  const ids=pick[kind];if(!ids.length)return;
+  const list=ids.map(id=>konten.find(x=>x.v[K.id]===id)).filter(Boolean);
+  if(!await confirmBox(`Suruh Agent ${kind==="brief"?"Brief":"Desain"} kerja?`,`Dikerjain sesuai urutan: ${list.map((x,i)=>`${i+1}. ${x.v[K.judul]}`).join("  ")}`,"Kerjain","primary"))return;
+  btn.disabled=true;btn.textContent="Ngirim…";
+  const text="ANTRIAN DARI OKY (kerjakan hanya ID ini, persis sesuai urutan):\n"+list.map((x,i)=>`${i+1}. ${x.v[K.id]} — ${x.v[K.judul]}`).join("\n");
+  try{await call(S_CLAUDE,"fire_trigger",{trigger_id:AG[kind].id,text});}
+  catch(e){btn.disabled=false;btn.textContent="Kerjain";if(e?.code==="standalone"){runAgent(kind);return;}toast(errText(e,S_CLAUDE));return;}
+  const stamp=nowStamp();
+  for(const x of list){x.v[K.antri]=`${kind}|${stamp}`;try{await setRange(`Konten!R${x.r}`,[[`${kind}|${stamp}`]]);}catch(e){}}
+  pick[kind]=[];renderProduksi();toast(`Agent ${kind==="brief"?"Brief":"Desain"} lagi kerja (${list.length} konten). Lo dapet notif kalau udah beres.`);
+}
 function renderProduksi(){
   const by=(...s)=>konten.filter(x=>s.includes(x.v[K.st])).sort(byJadwal);
   const perlu=by("Perlu brief","Revisi brief"),siap=by("Brief siap"),ok=by("Brief OK","Revisi desain"),dsn=by("Desain siap");
   const pend=siap.length+dsn.length;const b=$("#bProd");b.hidden=!pend;b.textContent=pend;
-  const mini=arr=>arr.length?`<div class="mini">${arr.slice(0,4).map(x=>`<span>• ${esc(x.v[K.judul])}${x.v[K.st].startsWith("Revisi")?" (revisi)":""}</span>`).join("")}${arr.length>4?`<span>+${arr.length-4} lagi</span>`:""}</div>`:"";
-  $("#prodStages").innerHTML=`
-    <div class="stage"><div class="num">${perlu.length}</div><div class="grow"><b>Nunggu dibikinin brief</b>${mini(perlu)}</div><button class="btn primary sm" data-run="brief" ${perlu.length?"":"disabled"}>Suruh bikin brief</button></div>
-    <div class="stage"><div class="num">${ok.length}</div><div class="grow"><b>Nunggu didesain</b>${mini(ok)}</div><button class="btn primary sm" data-run="desain" ${ok.length?"":"disabled"}>Suruh bikin desain</button></div>`;
-  $("#prodStages").querySelectorAll("[data-run]").forEach(b=>b.onclick=()=>runAgent(b.dataset.run,b));
+  $("#prodStages").innerHTML=stageHTML("brief",perlu,"Nunggu dibikinin brief")+stageHTML("desain",ok,"Nunggu didesain");
+  bindStages();
   $("#cntBrief").textContent=siap.length?siap.length+" nunggu lo":"";
   $("#cntDesain").textContent=dsn.length?dsn.length+" nunggu lo":"";
   $("#briefList").innerHTML=siap.length?siap.map(briefCard).join(""):`<div class="card empty">Belum ada brief yang nunggu dicek.</div>`;
