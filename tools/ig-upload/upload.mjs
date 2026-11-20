@@ -12,10 +12,11 @@ const EXPECT_USERNAME = "jejakkarya.kreatif";
 const IG_API = "https://graph.instagram.com/v22.0";
 const MEDIA_BRANCH = "ig-media";
 const DEFAULT_JAM = "19:00";
-const K = { id: 0, ide: 1, judul: 2, tgl: 5, jam: 6, st: 7, caption: 10, folder: 12, slide: 13, link: 14, ubah: 16 };
+const K = { id: 0, ide: 1, judul: 2, tgl: 5, jam: 6, st: 7, caption: 10, folder: 12, slide: 13, link: 14, ubah: 16, antri: 17 };
 
 const { IG_TOKEN, KONTROL_KEY, GITHUB_TOKEN, GITHUB_REPOSITORY } = process.env;
 const DRY = String(process.env.DRY_RUN || "").toLowerCase() === "true";
+const KONTEN_ID = String(process.env.KONTEN_ID || "").trim();
 const sleep = ms => new Promise(r => setTimeout(r, ms));
 const log = (...a) => console.log(new Date().toISOString(), ...a);
 
@@ -112,7 +113,7 @@ async function main() {
   if (me.username !== EXPECT_USERNAME) throw new Error(`Token ini buat akun @${me.username}, bukan @${EXPECT_USERNAME}.`);
   log(`Token OK: @${me.username}`);
 
-  const vals = (await backend({ action: "get", range: "Konten!A2:Q1000" })).values || [];
+  const vals = (await backend({ action: "get", range: "Konten!A2:R1000" })).values || [];
   const rows = vals.map((v, i) => ({ r: i + 2, v })).filter(x => x.v[K.judul]);
   const now = wib();
   const approved = rows.filter(x => x.v[K.st] === "Approve" && cleanDate(x.v[K.tgl]));
@@ -123,6 +124,13 @@ async function main() {
   log(`Sekarang ${now.stamp} WIB. Approve: ${approved.length}, jatuh tempo: ${due.length}`);
 
   let x = due[0];
+  if (KONTEN_ID) {
+    x = rows.find(r => r.v[K.id] === KONTEN_ID);
+    if (!x) throw new Error(`Konten ${KONTEN_ID} nggak ketemu di sheet.`);
+    if (x.v[K.st] === "Uploaded") { log(`Konten ${KONTEN_ID} udah Uploaded, nggak diposting ulang.`); return; }
+    if (x.v[K.st] !== "Approve") throw new Error(`Konten ${KONTEN_ID} statusnya "${x.v[K.st]}", bukan Approve. Nggak diposting.`);
+    log(`Diminta Upload sekarang dari dashboard: ${KONTEN_ID}`);
+  }
   if (!x) {
     if (!DRY || !approved.length) { log("Nggak ada yang perlu diposting."); return; }
     x = approved[0];
@@ -137,7 +145,7 @@ async function main() {
   if (sameCap) {
     log(`Udah tayang sebelumnya: ${sameCap.permalink}`);
     if (!DRY) {
-      await setCell(`Konten!H${x.r}`, "Uploaded"); await setCell(`Konten!O${x.r}`, sameCap.permalink); await setCell(`Konten!Q${x.r}`, "'" + now.stamp);
+      await setCell(`Konten!H${x.r}`, "Uploaded"); await setCell(`Konten!O${x.r}`, sameCap.permalink); await setCell(`Konten!Q${x.r}`, "'" + now.stamp); await setCell(`Konten!R${x.r}`, "");
       await logRow(kid, judul, "Uploaded", `Udah tayang, ditandai: ${sameCap.permalink}`);
     }
     return;
@@ -187,6 +195,7 @@ async function main() {
     await setCell(`Konten!H${x.r}`, "Uploaded");
     await setCell(`Konten!O${x.r}`, info.permalink || "");
     await setCell(`Konten!Q${x.r}`, "'" + wib().stamp);
+    await setCell(`Konten!R${x.r}`, "");
     await logRow(kid, judul, "Uploaded", info.permalink);
   } finally {
     for (const h of hosted) await delMedia(h.path, h.sha);
@@ -195,6 +204,6 @@ async function main() {
 
 main().catch(async e => {
   console.error("GAGAL:", e.message);
-  if (KONTROL_KEY && !DRY) await logRow("", "", "Gagal", e.message);
+  if (KONTROL_KEY && !DRY) await logRow(KONTEN_ID, "", "Gagal", e.message);
   process.exit(1);
 });
