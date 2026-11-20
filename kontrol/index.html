@@ -128,7 +128,7 @@ a{color:var(--primary);font-weight:600}
 .qlist{display:flex;flex-direction:column;gap:6px;margin-top:10px}
 .qitem{display:flex;align-items:center;gap:10px;text-align:left;border:1px solid var(--line);background:#fff;border-radius:12px;padding:9px 10px;cursor:pointer;font-size:14px;flex-wrap:wrap}
 .qitem .qn{width:26px;height:26px;border-radius:50%;border:2px solid var(--line);display:grid;place-items:center;font-weight:800;font-size:13px;flex:none}
-.qitem .qt{flex:1;min-width:150px}
+.qitem .qt{flex:1;min-width:120px}
 .qitem em{color:var(--warn);font-style:normal;font-weight:700}
 .qitem .qs{font-size:12px;font-weight:700;color:var(--primary);width:100%;padding-left:36px}
 .qitem .qs.warn{color:var(--warn)}
@@ -175,11 +175,12 @@ a{color:var(--primary);font-weight:600}
 .legend .ev{cursor:default;touch-action:auto;font-size:11px;padding:3px 7px}
 /* Nav & overlays */
 nav.tabs{position:fixed;left:0;right:0;bottom:0;background:var(--surface);border-top:1px solid var(--line);display:flex;justify-content:center;padding:6px 6px calc(6px + env(safe-area-inset-bottom));z-index:5}
-nav.tabs .in{display:grid;grid-template-columns:repeat(5,1fr);max-width:760px;width:100%}
-nav.tabs a{text-decoration:none;color:var(--muted);display:flex;flex-direction:column;align-items:center;gap:2px;padding:6px 2px;border-radius:12px;font-size:11.5px;font-weight:700;position:relative}
+nav.tabs .in{display:grid;grid-template-columns:repeat(6,1fr);max-width:760px;width:100%}
+nav.tabs a{text-decoration:none;color:var(--muted);display:flex;flex-direction:column;align-items:center;gap:2px;padding:6px 1px;border-radius:12px;font-size:11px;font-weight:700;position:relative}
 nav.tabs a svg{width:22px;height:22px}
 nav.tabs a.on{color:var(--primary);background:var(--primary-soft)}
 .badge{position:absolute;top:1px;right:calc(50% - 22px);background:var(--bad);color:#fff;font-size:11px;min-width:18px;height:18px;border-radius:9px;display:grid;place-items:center;padding:0 5px}
+.badge[hidden]{display:none}
 .view{display:none}
 .view.on{display:block}
 .toast{position:fixed;left:50%;bottom:86px;transform:translateX(-50%) translateY(20px);background:var(--ink);color:#fff;padding:10px 16px;border-radius:12px;font-size:14px;font-weight:600;opacity:0;transition:.25s;z-index:60;max-width:90vw;text-align:center;pointer-events:none}
@@ -193,6 +194,28 @@ nav.tabs a.on{color:var(--primary);background:var(--primary-soft)}
 .skel{height:110px;border-radius:var(--r);background:linear-gradient(90deg,#eceef4,#f6f7fb,#eceef4);background-size:200% 100%;animation:sk 1.2s infinite;margin-bottom:12px}
 @keyframes sk{to{background-position:-200% 0}}
 @media (min-width:700px){.modal{align-items:center}.month .cell{min-height:110px}.month .ev{font-size:12px}}
+/* Head Creative */
+.hcstat{display:flex;gap:8px;flex-wrap:wrap;align-items:center;font-size:13px;color:var(--muted);margin:-4px 2px 12px}
+.quick{display:flex;gap:6px;overflow-x:auto;padding:2px 0 10px;scrollbar-width:none}
+.quick button{flex:none;border:1px solid var(--line);background:#fff;border-radius:999px;padding:6px 12px;font-size:13px;font-weight:600;cursor:pointer}
+.feed{display:flex;flex-direction:column;gap:8px}
+.msg{border-radius:14px;padding:10px 12px;max-width:92%;font-size:14px;border:1px solid var(--line);background:#fff}
+.msg.me{align-self:flex-end;background:var(--primary-soft);border-color:transparent}
+.msg.lap{max-width:100%;border-left:4px solid var(--mark)}
+.msg .mh{display:flex;gap:6px;align-items:center;font-size:12px;color:var(--muted);margin-bottom:4px;flex-wrap:wrap}
+.msg .mh b{color:var(--ink)}
+.msg .mb{white-space:pre-wrap;word-break:break-word}
+.pl{display:flex;gap:12px;align-items:flex-start}
+.pl .grow{flex:1;min-width:0}
+.pl.off .grow{opacity:.5}
+.pl p{font-size:15px;margin:2px 0 4px}
+select{width:100%;border:1px solid var(--line);border-radius:12px;padding:10px 12px;background:#fff}
+.tblwrap{overflow-x:auto;margin:0 -4px}
+.tbl{width:100%;border-collapse:collapse;font-size:13px}
+.tbl th,.tbl td{padding:8px 6px;border-bottom:1px solid var(--line);text-align:right;white-space:nowrap}
+.tbl th{font-size:12px;color:var(--muted)}
+.tbl th:first-child,.tbl td:first-child{text-align:left;white-space:normal;min-width:150px}
+.tbl tr:last-child td{border-bottom:0}
 </style>
 </head>
 <body>
@@ -213,6 +236,40 @@ nav.tabs a.on{color:var(--primary);background:var(--primary-soft)}
     </button>
   </header>
   <div id="pageNotice"></div>
+
+  <!-- HEAD CREATIVE -->
+  <section class="view" id="v-head">
+    <div class="hero">
+      <div class="grow"><b>Head Creative</b><p>Mimpin Riset, Brief, dan Desain. Belajar dari insight IG dan keputusan lo. Keputusan akhir tetap di lo.</p></div>
+      <button class="btn warn sm" id="hcCall">Minta laporan</button>
+    </div>
+    <div class="hcstat" id="hcStat"></div>
+    <div class="card">
+      <div class="field" style="margin-top:0"><label for="hcMsg">Pesan ke Head Creative</label>
+        <div class="quick" id="hcQuick">
+          <button data-q="Minggu ini fokus ke isu: ">Fokus minggu ini…</button>
+          <button data-q="Siapin ide baru, stok di Bank Ide udah tipis.">Minta ide baru</button>
+          <button data-q="Kenapa postingan terakhir performanya begitu? Kasih analisis singkat.">Bedah post terakhir</button>
+          <button data-q="Gerakin Brief dan Desain buat konten yang udah siap dikerjain.">Gerakin tim</button>
+          <button data-q="Mulai sekarang: ">Kasih aturan baru…</button>
+        </div>
+        <textarea id="hcMsg" placeholder="Misal: minggu ini jangan bahas AI dulu, gue mau fokus ke klien telat bayar." style="min-height:90px"></textarea>
+      </div>
+      <button class="btn primary block" id="hcSend" style="margin-top:10px">Kirim</button>
+    </div>
+    <div class="section-title"><h2>Obrolan & laporan</h2><small id="cntHc"></small></div>
+    <div class="feed" id="hcFeed"><div class="skel"></div></div>
+    <div class="section-title"><h2>Pelajaran tim</h2><small id="cntPl"></small></div>
+    <div class="notice info">Arahan yang dibaca Agent Riset, Brief, dan Desain tiap kali jalan. Matiin yang nggak lo setujui. Head Creative nggak bakal nyalain lagi arahan yang lo matiin.</div>
+    <div id="plList"><div class="skel"></div></div>
+    <details class="card" id="plAdd" style="margin-top:0;border-top:1px solid var(--line)"><summary>Tambah arahan sendiri</summary>
+      <div class="field"><label for="plUntuk">Buat siapa</label><select id="plUntuk"><option>Semua</option><option>Riset</option><option>Brief</option><option>Desain</option></select></div>
+      <div class="field"><label for="plText">Arahan</label><textarea id="plText" placeholder="Misal: hook cover maksimal 10 kata." style="min-height:70px"></textarea></div>
+      <button class="btn ghost block" id="plSave" style="margin-top:10px">Simpan arahan</button>
+    </details>
+    <div class="section-title"><h2>Insight IG</h2><small id="cntIns"></small></div>
+    <div id="insBox"><div class="skel"></div></div>
+  </section>
 
   <!-- IDE -->
   <section class="view" id="v-ide">
@@ -278,6 +335,7 @@ nav.tabs a.on{color:var(--primary);background:var(--primary-soft)}
 </div>
 
 <nav class="tabs" aria-label="Menu"><div class="in">
+  <a href="#head" data-v="head"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="8" r="4"/><path d="M3 21a8 8 0 0 1 13-6.2"/><path d="m18.5 14 1 2.1 2.2.3-1.6 1.5.4 2.2-2-1.1-2 1.1.4-2.2-1.6-1.5 2.2-.3z"/></svg>Head<span class="badge" id="bHead" hidden></span></a>
   <a href="#ide" data-v="ide"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18h6M10 21h4"/><path d="M12 3a6 6 0 0 0-3.5 10.9c.6.5 1 1.2 1 2V16h5v-.1c0-.8.4-1.5 1-2A6 6 0 0 0 12 3z"/></svg>Ide<span class="badge" id="bIde" hidden></span></a>
   <a href="#produksi" data-v="produksi"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="16" rx="3"/><path d="m8 12 3 3 5-6"/></svg>Produksi<span class="badge" id="bProd" hidden></span></a>
   <a href="#kalender" data-v="kalender"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="16" rx="3"/><path d="M3 10h18M8 3v4M16 3v4"/></svg>Kalender</a>
@@ -421,7 +479,7 @@ async function loadAgents(){renderAgents();}
 async function loadAll(){
   $("#updated").textContent="memuat…";
   await loadPanduan();
-  await Promise.allSettled([loadKonten(),loadIde(),loadAgents()]);
+  await Promise.allSettled([loadKonten(),loadIde(),loadAgents(),loadHead()]);
   $("#updated").textContent="diperbarui "+new Date().toLocaleTimeString("id-ID",{hour:"2-digit",minute:"2-digit"});
 }
 
@@ -815,9 +873,112 @@ function renderArsip(){
     try{await writeKonten(x,{[K.st]:b.dataset.to});toast("Balik ke Produksi");renderProduksi();renderCal();renderArsip();}catch(e){toast(errText(e,S_SHEETS));b.disabled=false;}});
 }
 
+/* ---------- HEAD CREATIVE ---------- */
+const HC={id:"trig_01SNBxXxVHwfEXJ1X7xzka2e",label:"Head Creative"};
+let pesan=[],pelajaran=[],insight=null,hcFiredAt=0,hcPoll=null;
+const hcErr=e=>`<div class="notice bad">${esc(errText(e,S_SHEETS))}</div>`;
+async function loadHead(){
+  const [a,b,c]=await Promise.allSettled([getRange("'Head Creative'!A2:E2000"),getRange("Pelajaran!A2:F200"),getRange("'Insight IG'!A1:O200")]);
+  if(a.status==="fulfilled")pesan=a.value.map((v,i)=>({r:i+2,v:Array.from({length:5},(_,k)=>String(v[k]??""))})).filter(x=>x.v[3].trim());
+  else $("#hcFeed").innerHTML=hcErr(a.reason);
+  if(b.status==="fulfilled")pelajaran=b.value.map((v,i)=>({r:i+2,v:Array.from({length:6},(_,k)=>String(v[k]??""))})).filter(x=>x.v[2].trim());
+  else $("#plList").innerHTML=hcErr(b.reason);
+  insight=c.status==="fulfilled"?c.value:null;
+  if(a.status==="fulfilled")renderFeed();
+  if(b.status==="fulfilled")renderPelajaran();
+  renderInsight();renderHcStat();markRead();
+}
+function renderHcStat(){
+  const t=agents[HC.id];
+  if(!t){$("#hcStat").innerHTML=`<span>Laporan otomatis tiap Senin pagi (07:23 WIB).</span>`;return;}
+  const busy=/RUNNING|PENDING/.test(t.last_run?.status||"")||Date.now()-hcFiredAt<90e3;
+  $("#hcStat").innerHTML=busy?`<span class="chip">Lagi kerja</span><span>Balasan muncul di bawah, halaman ini nyegerin sendiri.</span>`
+    :`${runStatus(t)}<span>Terakhir ${esc(fmtDT(t.last_run?.fired_at||t.last_fired_at))} · laporan berikutnya ${t.enabled?esc(fmtDT(t.next_run_at)):"— (jadwal mati)"}</span>`;
+}
+function renderFeed(){
+  const unread=pesan.filter(x=>x.v[1]!=="Oky"&&x.v[4]==="baru").length;
+  const bd=$("#bHead");bd.hidden=!unread;bd.textContent=unread;
+  $("#cntHc").textContent=pesan.length?pesan.length+" pesan":"";
+  if(!pesan.length){$("#hcFeed").innerHTML=`<div class="card empty"><b>Belum ada obrolan</b>Kirim pesan pertama, atau tunggu laporan Senin pagi.</div>`;return;}
+  const stLabel={baru:"Belum dibaca",dibaca:"Nunggu keputusan lo",selesai:"Beres"};
+  const one=x=>{const me=x.v[1]==="Oky",lap=x.v[2]==="laporan";
+    const st=me?`<span class="chip ${x.v[4]==="selesai"?"ok":x.v[4]==="dibaca"?"mark":"grey"}">${esc({baru:"Belum dibaca",dibaca:"Dibaca",selesai:"Beres"}[x.v[4]]||x.v[4])}</span>`:(x.v[4]==="baru"?`<span class="chip bad">Baru</span>`:"");
+    return`<div class="msg ${me?"me":""} ${lap?"lap":""}"><div class="mh"><b>${me?"Lo":"Head Creative"}</b>${lap?`<span class="chip mark">Laporan</span>`:""}<span>${esc(x.v[0].replace(/^'/,""))}</span>${st}</div><div class="mb">${linkify(x.v[3])}</div></div>`;};
+  const list=[...pesan].reverse(),head=list.slice(0,12),rest=list.slice(12);
+  $("#hcFeed").innerHTML=head.map(one).join("")+(rest.length?`<details><summary>${rest.length} pesan lebih lama</summary><div class="feed" style="margin-top:8px">${rest.map(one).join("")}</div></details>`:"");
+}
+async function markRead(){
+  if(!$("#v-head").classList.contains("on"))return;
+  const un=pesan.filter(x=>x.v[1]!=="Oky"&&x.v[4]==="baru");if(!un.length)return;
+  await Promise.allSettled(un.map(x=>setRange(`'Head Creative'!E${x.r}`,[["dibaca"]]).then(()=>{x.v[4]="dibaca";})));
+  const bd=$("#bHead");bd.hidden=true;
+}
+function renderPelajaran(){
+  const on=pelajaran.filter(x=>x.v[4]!=="nonaktif"),off=pelajaran.filter(x=>x.v[4]==="nonaktif");
+  $("#cntPl").textContent=pelajaran.length?`${on.length} aktif`:"";
+  if(!pelajaran.length){$("#plList").innerHTML=`<div class="card empty"><b>Belum ada pelajaran</b>Head Creative bakal nulis arahan pertama pas laporan Senin, atau lo tambahin sendiri di bawah.</div>`;return;}
+  const card=x=>`<div class="card pl ${x.v[4]==="nonaktif"?"off":""}" data-r="${x.r}"><div class="grow"><div class="chips"><span class="chip">${esc(x.v[1]||"Semua")}</span><span class="chip grey">${esc(x.v[0])}</span></div><p>${esc(x.v[2])}</p>${x.v[3]?`<div class="meta">Dasar: ${esc(x.v[3])}</div>`:""}</div><label class="switch" aria-label="Aktifkan arahan ${esc(x.v[0])}"><input type="checkbox" ${x.v[4]!=="nonaktif"?"checked":""}><span></span></label></div>`;
+  $("#plList").innerHTML=on.map(card).join("")+(off.length?`<details><summary>${off.length} arahan nonaktif</summary><div style="margin-top:8px">${off.map(card).join("")}</div></details>`:"");
+  document.querySelectorAll("#plList .pl").forEach(el=>{const x=pelajaran.find(y=>y.r==el.dataset.r),inp=el.querySelector("input");
+    inp.onchange=async()=>{const st=inp.checked?"aktif":"nonaktif";inp.disabled=true;
+      try{await setRange(`Pelajaran!E${x.r}:F${x.r}`,[[st,"'"+nowStamp()]]);x.v[4]=st;toast(st==="aktif"?"Arahan dinyalain":"Arahan dimatiin, agent nggak bakal pakai lagi");renderPelajaran();}
+      catch(e){inp.checked=!inp.checked;inp.disabled=false;toast(errText(e,S_SHEETS));}};});
+}
+$("#plSave").onclick=async e=>{const b=e.currentTarget,t=$("#plText").value.trim();if(!t){toast("Tulis dulu arahannya");return;}
+  const n=pelajaran.reduce((m,x)=>Math.max(m,+(x.v[0].match(/P-(\d+)/)||[0,0])[1]),0)+1,id="P-"+String(n).padStart(2,"0");
+  b.disabled=true;
+  try{await call(S_SHEETS,"append_values",{spreadsheetId:SHEET_ID,range:"Pelajaran!A1",values:[[id,$("#plUntuk").value,txt(t),"Dari Oky","aktif","'"+nowStamp()]]});
+    $("#plText").value="";$("#plAdd").open=false;toast(`Arahan ${id} disimpan`);await loadHead();}
+  catch(err){toast(errText(err,S_SHEETS));}
+  b.disabled=false;};
+function renderInsight(){
+  const box=$("#insBox");
+  if(!insight||insight.length<2){$("#cntIns").textContent="";box.innerHTML=`<div class="card empty"><b>Belum ada data</b>Angka IG ditarik otomatis tiap pagi sekitar 05:40 WIB.</div>`;return;}
+  const h=insight[0],ix=n=>h.indexOf(n),rows=insight.slice(1).filter(r=>r[ix("Link")]);
+  const num=v=>{const n=Number(String(v||"").replace(/[^\d.-]/g,""));return String(v||"").trim()===""?null:n;};
+  const has=rows.some(r=>num(r[ix("Reach")])!==null);
+  rows.sort((a,b)=>String(b[ix("Tayang")]).localeCompare(String(a[ix("Tayang")])));
+  $("#cntIns").textContent=`diperbarui ${esc((rows[0]||[])[ix("Diperbarui")]||"")}`;
+  const note=!has?`<div class="notice warn">Angkanya belum kebaca. ${esc((rows.find(r=>r[ix("Catatan")])||[])[ix("Catatan")]||"")}</div>`:"";
+  const f=v=>{const n=num(v);return n===null?"—":n.toLocaleString("id-ID");};
+  box.innerHTML=note+`<div class="card"><div class="tblwrap"><table class="tbl"><thead><tr><th>Postingan</th><th>Reach</th><th>Save</th><th>Share</th><th>Komen</th><th>Like</th></tr></thead><tbody>${rows.slice(0,12).map(r=>`<tr><td><a href="${esc(r[ix("Link")])}" target="_blank" rel="noopener">${esc(r[ix("Judul")]||"(tanpa judul)")}</a><div class="meta">${esc(String(r[ix("Tayang")]||"").slice(0,10))}</div></td><td>${f(r[ix("Reach")])}</td><td>${f(r[ix("Save")])}</td><td>${f(r[ix("Share")])}</td><td>${f(r[ix("Komentar")])}</td><td>${f(r[ix("Likes")])}</td></tr>`).join("")}</tbody></table></div></div>`;
+}
+async function callHC(manual){
+  const t=agents[HC.id];
+  if(Date.now()-hcFiredAt<90e3||/RUNNING|PENDING/.test(t?.last_run?.status||"")){if(manual)toast("Head Creative lagi kerja, tunggu bentar ya.");return"busy";}
+  try{
+    await call(S_CLAUDE,"fire_trigger",{trigger_id:HC.id,text:manual?"PESAN DARI OKY: kerjakan pesan berstatus \"baru\" di tab Head Creative (kalau ada), lalu kirim laporan singkat kondisi tim sekarang.":"PESAN DARI OKY: ada pesan baru dari Oky di tab Head Creative (Status \"baru\"). Kerjakan dan balas."});
+    hcFiredAt=Date.now();renderHcStat();setTimeout(loadAgents,4000);startPoll();return"ok";
+  }catch(e){
+    if(e?.code==="standalone"){if(manual)hcStandalone();return"standalone";}
+    toast(errText(e,S_CLAUDE));return"fail";
+  }
+}
+function hcStandalone(){
+  const url=typeof CLAUDE_URL!=="undefined"?CLAUDE_URL:"https://claude.ai/artifact/XxoisbLBtWN6ttSnQmBL3A";
+  openModal(`<h3>Panggil Head Creative dari Claude</h3><p>Pesan lo udah kesimpen dan bakal dibaca pas dia jalan berikutnya (Senin pagi). Mau dibaca sekarang? Buka dashboard di Claude lalu tekan Minta laporan.</p><div class="row end"><button class="btn ghost" id="mNo">Nanti aja</button><a class="btn primary" href="${url}" target="_blank" rel="noopener" id="mGo">Buka di Claude</a></div>`);
+  $("#mNo").onclick=closeModal;$("#mGo").onclick=closeModal;
+}
+function startPoll(){clearInterval(hcPoll);let n=0;hcPoll=setInterval(()=>{if(++n>15){clearInterval(hcPoll);return;}loadHead();if(n%3===0)loadAgents();},60000);}
+$("#hcQuick").onclick=e=>{const b=e.target.closest("button");if(!b)return;const ta=$("#hcMsg");ta.value=b.dataset.q;ta.focus();ta.setSelectionRange(ta.value.length,ta.value.length);};
+$("#hcSend").onclick=async e=>{const b=e.currentTarget,t=$("#hcMsg").value.trim();if(!t){toast("Tulis dulu pesannya");return;}
+  b.disabled=true;b.textContent="Ngirim…";
+  try{await call(S_SHEETS,"append_values",{spreadsheetId:SHEET_ID,range:"'Head Creative'!A1",values:[["'"+nowStamp(),"Oky","pesan",txt(t),"baru"]]});$("#hcMsg").value="";}
+  catch(err){toast(errText(err,S_SHEETS));b.disabled=false;b.textContent="Kirim";return;}
+  await loadHead();
+  const r=await callHC(false);
+  if(r==="ok")toast("Terkirim. Head Creative lagi baca, balasannya muncul di sini.");
+  else if(r==="busy")toast("Terkirim. Head Creative lagi kerja, pesan lo kebaca di run berikutnya.");
+  else if(r==="standalone")hcStandalone();
+  else toast("Pesan kesimpen, tapi Head Creative gagal dipanggil. Coba Minta laporan.");
+  b.disabled=false;b.textContent="Kirim";};
+$("#hcCall").onclick=async e=>{const b=e.currentTarget;
+  if(!(typeof CLAUDE_URL!=="undefined")&&!await confirmBox("Minta laporan sekarang?","Head Creative bakal baca pesan lo yang belum dibalas, ngecek kondisi tim, dan nulis laporan singkat di sini.","Panggil","primary"))return;
+  b.disabled=true;const r=await callHC(true);if(r==="ok")toast("Head Creative dipanggil. Laporannya muncul di sini.");b.disabled=false;};
+
 /* ---------- routing & boot ---------- */
-const VIEWS=["ide","produksi","kalender","agent","lainnya"];
-function route(){const h=(location.hash||"#ide").slice(1),v=VIEWS.includes(h)?h:"ide";VIEWS.forEach(n=>$("#v-"+n).classList.toggle("on",n===v));document.querySelectorAll("nav.tabs a").forEach(a=>a.classList.toggle("on",a.dataset.v===v));scrollTo(0,0);}
+const VIEWS=["head","ide","produksi","kalender","agent","lainnya"];
+function route(){const h=(location.hash||"#head").slice(1),v=VIEWS.includes(h)?h:"head";VIEWS.forEach(n=>$("#v-"+n).classList.toggle("on",n===v));document.querySelectorAll("nav.tabs a").forEach(a=>a.classList.toggle("on",a.dataset.v===v));scrollTo(0,0);if(v==="head")markRead();}
 addEventListener("hashchange",route);route();
 $("#refresh").onclick=()=>{imgCache={};loadAll();};
 function openSettings(first){
