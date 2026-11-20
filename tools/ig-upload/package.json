@@ -1,0 +1,9 @@
+{
+  "name": "ig-upload-jejakkarya",
+  "private": true,
+  "type": "module",
+  "description": "Posting carousel Instagram @jejakkarya.kreatif dari sheet Konten IG Jejak Karya",
+  "dependencies": {
+    "sharp": "^0.33.5"
+  }
+}

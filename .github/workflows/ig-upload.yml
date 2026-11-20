@@ -1,0 +1,46 @@
+name: Upload IG Jejak Karya
+
+# Tiap 15 menit ngecek konten berstatus "Approve" di sheet yang jam tayangnya
+# udah tiba, lalu posting ke @jejakkarya.kreatif lewat Instagram API.
+# Secrets yang dibutuhkan: IG_TOKEN (token Instagram), KONTROL_KEY (KEY backend dashboard).
+
+on:
+  schedule:
+    - cron: "7,22,37,52 * * * *"
+  workflow_dispatch:
+    inputs:
+      dry_run:
+        description: "Uji coba tanpa posting (true/false)"
+        required: false
+        default: "true"
+
+permissions:
+  contents: write
+
+concurrency:
+  group: ig-upload
+  cancel-in-progress: false
+
+jobs:
+  upload:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          sparse-checkout: tools/ig-upload
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+      - name: Pasang sharp
+        working-directory: tools/ig-upload
+        run: npm install --no-audit --no-fund
+      - name: Upload
+        working-directory: tools/ig-upload
+        env:
+          IG_TOKEN: ${{ secrets.IG_TOKEN }}
+          KONTROL_KEY: ${{ secrets.KONTROL_KEY }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_REPOSITORY: ${{ github.repository }}
+          DRY_RUN: ${{ github.event_name == 'workflow_dispatch' && inputs.dry_run || 'false' }}
+        run: node upload.mjs
