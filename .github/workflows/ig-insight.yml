@@ -2,7 +2,8 @@ name: Insight IG Jejak Karya
 
 # Tiap pagi (±05:40 WIB) narik views, reach, likes, komentar, save, share
 # postingan @jejakkarya.kreatif ke tab "Insight IG" di sheet.
-# Dibaca Agent Head Creative. Secrets: IG_TOKEN, KONTROL_KEY.
+# Sekalian narik insight utas Threads ke tab "Insight Threads".
+# Dibaca Agent Head Creative. Secrets: IG_TOKEN, THREADS_TOKEN, KONTROL_KEY.
 
 on:
   schedule:
@@ -30,3 +31,10 @@ jobs:
           IG_TOKEN: ${{ secrets.IG_TOKEN }}
           KONTROL_KEY: ${{ secrets.KONTROL_KEY }}
         run: node insight.mjs
+      - name: Tarik insight Threads
+        if: always()
+        working-directory: tools/ig-upload
+        env:
+          THREADS_TOKEN: ${{ secrets.THREADS_TOKEN }}
+          KONTROL_KEY: ${{ secrets.KONTROL_KEY }}
+        run: node threads-insight.mjs
