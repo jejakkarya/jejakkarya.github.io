@@ -230,6 +230,11 @@ select{width:100%;border:1px solid var(--line);border-radius:12px;padding:10px 1
 .schedrow input{min-width:0}
 .schedrow>.btn{grid-column:1/-1}
 @media (min-width:560px){.schedrow:has(>.btn){grid-template-columns:minmax(0,1fr) minmax(0,1fr) auto}.schedrow>.btn{grid-column:auto}}
+/* Threads di kalender */
+.ev.th{background:#fff;color:var(--ink);border:1px solid var(--line);border-left:4px solid var(--ink)}
+.ev.th .at{font-weight:800;flex:none}
+.ev.th.th-draft{border-style:dashed;border-left-style:solid;color:var(--muted)}
+.ev.th.th-up{background:var(--ink);color:#fff;border-color:var(--ink);border-left-color:var(--mark);cursor:pointer}
 </style>
 </head>
 <body>
@@ -324,6 +329,7 @@ select{width:100%;border:1px solid var(--line);border-radius:12px;padding:10px 1
       <div class="seg" id="calMode"><button data-m="bulan" class="on">Bulan</button><button data-m="minggu">Minggu</button><button data-m="hari">Hari</button></div>
       <button class="btn ghost sm" id="calToday">Hari ini</button>
     </div>
+    <div class="calbar"><div class="seg" id="calSrc"><button data-s="all" class="on">Semua</button><button data-s="ig">Instagram</button><button data-s="th">Threads</button></div></div>
     <div class="calbar">
       <button class="navbtn" id="calPrev" aria-label="Sebelumnya">‹</button>
       <div class="title" id="calTitle"></div>
@@ -332,7 +338,7 @@ select{width:100%;border:1px solid var(--line);border-radius:12px;padding:10px 1
     <div class="tray" data-drop="tray"><div class="lbl">Belum dijadwal · seret ke tanggal</div><div class="items" id="trayItems"></div></div>
     <div id="calBody"></div>
     <div class="legend">
-      <span class="ev st-brief"><span class="n">Brief</span></span><span class="ev st-cek"><span class="n">Nunggu dicek</span></span><span class="ev st-desain"><span class="n">Desain</span></span><span class="ev st-approve"><span class="n">Approve</span></span><span class="ev st-up"><span class="n">Tayang</span></span>
+      <span class="ev st-brief"><span class="n">Brief</span></span><span class="ev st-cek"><span class="n">Nunggu dicek</span></span><span class="ev st-desain"><span class="n">Desain</span></span><span class="ev st-approve"><span class="n">Approve</span></span><span class="ev st-up"><span class="n">Tayang</span></span><span class="ev th"><span class="at">@</span><span class="n">Threads</span></span><span class="ev th th-up"><span class="at">@</span><span class="n">Threads tayang</span></span>
     </div>
     <p class="meta">Tahan dan seret kartu buat mindahin jadwal. Di tampilan Hari, seret ke jam lain buat ganti jamnya. Tap kartu buat detail.</p>
   </section>
@@ -386,7 +392,7 @@ const K={id:0,ide:1,judul:2,pilar:3,format:4,tgl:5,jam:6,st:7,hook:8,naskah:9,ca
 const I={id:0,tgl:1,judul:2,angle:3,pilar:4,format:5,hook:6,pemicu:7,sumber:8,st:9};
 
 let mcp=null, konten=[], ide=[], panduan=[], agents={}, imgCache={};
-let ideFilter="baru", calMode="bulan", calRef=todayStr();
+let ideFilter="baru", calMode="bulan", calRef=todayStr(), calSrc="all";
 const $=s=>document.querySelector(s);
 const esc=s=>String(s??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
 
@@ -792,6 +798,11 @@ $("#calMode").onclick=e=>{const b=e.target.closest("button");if(!b)return;calMod
 $("#calPrev").onclick=()=>{calRef=calMode==="bulan"?shiftMonth(calRef,-1):addDays(calRef,calMode==="minggu"?-7:-1);renderCal();};
 $("#calNext").onclick=()=>{calRef=calMode==="bulan"?shiftMonth(calRef,1):addDays(calRef,calMode==="minggu"?7:1);renderCal();};
 $("#calToday").onclick=()=>{calRef=todayStr();renderCal();};
+$("#calSrc").onclick=e=>{const b=e.target.closest("button");if(!b)return;calSrc=b.dataset.s;[...e.currentTarget.children].forEach(x=>x.classList.toggle("on",x===b));renderCal();};
+function thEvHTML(x){const st=x.v[T.st],cls=st==="Tayang"?"th-up":st==="Draft siap"||st==="Revisi"?"th-draft":"";return`<div class="ev th ${cls}" data-th="${x.r}" ${st==="Tayang"?'data-lock="1"':""} title="Threads · ${esc(x.v[T.topik])} · ${esc(st)}"><span class="at">@</span><span class="t">${esc(x.v[T.jam]||thJam())}</span><span class="n">${esc(x.v[T.topik]||x.v[T.id])}</span></div>`;}
+function calDay(d,items){const ig=calSrc==="th"?[]:items.filter(x=>x.v[K.tgl]===d).map(x=>({jam:x.v[K.jam]||"",h:evHTML(x)}));
+  const th=calSrc==="ig"||typeof threads==="undefined"?[]:threads.filter(x=>x.v[T.st]!=="Skip"&&x.v[T.tgl]===d).map(x=>({jam:x.v[T.jam]||thJam(),h:thEvHTML(x)}));
+  return[...ig,...th].sort((a,b)=>(a.jam||"99").localeCompare(b.jam||"99"));}
 function shiftMonth(s,n){const d=D(s);d.setUTCDate(1);d.setUTCMonth(d.getUTCMonth()+n);return S(d);}
 const calItems=()=>konten.filter(x=>x.v[K.st]!=="Skip");
 function evHTML(x){const st=x.v[K.st];const lock=st==="Uploaded";return`<div class="ev ${ST[st]?.ev||""}" data-r="${x.r}" ${lock?'data-lock="1"':""} title="${esc(x.v[K.judul])} · ${esc(st)}"><span class="t">${esc(x.v[K.jam]||"")}</span><span class="n">${esc(x.v[K.judul])}</span></div>`;}
@@ -799,7 +810,8 @@ function renderCal(){
   const items=calItems(),today=todayStr();
   const un=items.filter(x=>!x.v[K.tgl]);
   $("#trayItems").innerHTML=un.length?un.map(evHTML).join(""):`<span class="meta">Semua udah dijadwal.</span>`;
-  const on=d=>items.filter(x=>x.v[K.tgl]===d).sort(byJadwal);
+  document.querySelector("#v-kalender .tray").hidden=calSrc==="th";
+  const on=d=>calDay(d,items);
   let html="";
   if(calMode==="bulan"){
     const d0=D(calRef);d0.setUTCDate(1);const first=S(d0);const m=d0.getUTCMonth();
@@ -807,17 +819,17 @@ function renderCal(){
     const start=addDays(first,-dow(first));const dim=new Date(Date.UTC(d0.getUTCFullYear(),m+1,0)).getUTCDate();const cells=Math.ceil((dow(first)+dim)/7)*7;
     html=`<div class="month">${HARI.map(h=>`<div class="dow">${h}</div>`).join("")}`;
     for(let i=0;i<cells;i++){const d=addDays(start,i);const out=D(d).getUTCMonth()!==m;
-      html+=`<div class="cell ${out?"out":""} ${d===today?"today":""}" data-drop="day" data-date="${d}"><div class="d">${D(d).getUTCDate()}</div>${on(d).map(evHTML).join("")}</div>`;}
+      html+=`<div class="cell ${out?"out":""} ${d===today?"today":""}" data-drop="day" data-date="${d}"><div class="d">${D(d).getUTCDate()}</div>${on(d).map(e=>e.h).join("")}</div>`;}
     html+="</div>";
   }else if(calMode==="minggu"){
     const s=addDays(calRef,-dow(calRef)),e=addDays(s,6);
     $("#calTitle").textContent=`${D(s).getUTCDate()} ${BULAN[D(s).getUTCMonth()].slice(0,3)} – ${D(e).getUTCDate()} ${BULAN[D(e).getUTCMonth()].slice(0,3)} ${D(e).getUTCFullYear()}`;
-    html=`<div class="weeklist">`;for(let i=0;i<7;i++){const d=addDays(s,i);html+=`<div class="day ${d===today?"today":""}" data-drop="day" data-date="${d}"><div class="lab">${HARI[i]}<b>${D(d).getUTCDate()}</b></div><div class="items">${on(d).map(evHTML).join("")||'<span class="meta">—</span>'}</div></div>`;}html+="</div>";
+    html=`<div class="weeklist">`;for(let i=0;i<7;i++){const d=addDays(s,i);html+=`<div class="day ${d===today?"today":""}" data-drop="day" data-date="${d}"><div class="lab">${HARI[i]}<b>${D(d).getUTCDate()}</b></div><div class="items">${on(d).map(e=>e.h).join("")||'<span class="meta">—</span>'}</div></div>`;}html+="</div>";
   }else{
     $("#calTitle").textContent=`${HARI[dow(calRef)]}, ${D(calRef).getUTCDate()} ${BULAN[D(calRef).getUTCMonth()]} ${D(calRef).getUTCFullYear()}`;
     const list=on(calRef);html=`<div class="dayview">`;
-    const noTime=list.filter(x=>!x.v[K.jam]);if(noTime.length)html+=`<div class="hour" data-drop="day" data-date="${calRef}"><div class="lab">—</div><div class="items">${noTime.map(evHTML).join("")}</div></div>`;
-    for(let h=6;h<=23;h++){const hh=String(h).padStart(2,"0");html+=`<div class="hour" data-drop="hour" data-date="${calRef}" data-hour="${hh}"><div class="lab">${hh}:00</div><div class="items">${list.filter(x=>x.v[K.jam]&&x.v[K.jam].slice(0,2)===hh).map(evHTML).join("")}</div></div>`;}
+    const noTime=list.filter(x=>!x.jam);if(noTime.length)html+=`<div class="hour" data-drop="day" data-date="${calRef}"><div class="lab">—</div><div class="items">${noTime.map(e=>e.h).join("")}</div></div>`;
+    for(let h=6;h<=23;h++){const hh=String(h).padStart(2,"0");html+=`<div class="hour" data-drop="hour" data-date="${calRef}" data-hour="${hh}"><div class="lab">${hh}:00</div><div class="items">${list.filter(x=>x.jam&&x.jam.slice(0,2)===hh).map(e=>e.h).join("")}</div></div>`;}
     html+="</div>";
   }
   $("#calBody").innerHTML=html;
@@ -825,8 +837,8 @@ function renderCal(){
 /* drag & drop (mouse + touch) */
 let drag=null;
 document.addEventListener("pointerdown",e=>{
-  const ev=e.target.closest("#v-kalender .ev[data-r]");if(!ev)return;
-  drag={el:ev,r:+ev.dataset.r,x:e.clientX,y:e.clientY,moved:false,lock:!!ev.dataset.lock,ghost:null,over:null,id:e.pointerId};
+  const ev=e.target.closest("#v-kalender .ev[data-r], #v-kalender .ev[data-th]");if(!ev)return;
+  drag={el:ev,r:+ev.dataset.r,th:+ev.dataset.th||0,x:e.clientX,y:e.clientY,moved:false,lock:!!ev.dataset.lock,ghost:null,over:null,id:e.pointerId};
   ev.setPointerCapture?.(e.pointerId);
 });
 document.addEventListener("pointermove",e=>{
@@ -841,6 +853,7 @@ document.addEventListener("pointermove",e=>{
 document.addEventListener("pointerup",async e=>{
   if(!drag||e.pointerId!==drag.id)return;const d=drag;drag=null;
   d.ghost?.remove();d.el.classList.remove("dragging");d.over?.classList.remove("drop-hi");
+  if(d.th){await thDrop(d);return;}
   const x=konten.find(k=>k.r===d.r);if(!x)return;
   if(!d.moved){openDetail(x);return;}
   const t=d.over;if(!t)return;
@@ -851,6 +864,22 @@ document.addEventListener("pointerup",async e=>{
   await moveKonten(x,date,time||defaultJam());
 });
 document.addEventListener("pointercancel",()=>{if(!drag)return;drag.ghost?.remove();drag.el.classList.remove("dragging");drag.over?.classList.remove("drop-hi");drag=null;});
+async function thDrop(d){
+  const x=threads.find(k=>k.r===d.th);if(!x)return;
+  if(!d.moved){openThDetail(x);return;}
+  const t=d.over;if(!t)return;
+  if(t.dataset.drop==="tray"){toast("Utas Threads cuma bisa dipindah ke tanggal lain");return;}
+  let date=t.dataset.date,time=x.v[T.jam]||thJam();if(t.dataset.drop==="hour")time=t.dataset.hour+":"+(time.slice(3,5)||"00");
+  if(date===x.v[T.tgl]&&time===x.v[T.jam])return;
+  if(x.v[T.st]==="Approve"&&`${date} ${time}`<nowStamp()&&!await confirmBox("Jadwal udah lewat","Utas Approve dengan jadwal yang udah lewat bakal langsung diposting dalam beberapa menit. Lanjut?","Lanjut","primary"))return;
+  const old=[x.v[T.tgl],x.v[T.jam]];x.v[T.tgl]=date;x.v[T.jam]=time;renderCal();
+  try{await writeThreads(x,{[T.tgl]:date,[T.jam]:time});toast(`Utas dipindah ke ${fmtDate(date)} · ${time}`);renderThreads();}
+  catch(e){x.v[T.tgl]=old[0];x.v[T.jam]=old[1];renderCal();toast(errText(e,S_SHEETS));}
+}
+function openThDetail(x){const v=x.v;
+  const where={"Draft siap":"Draf, belum di-Approve","Revisi":"Nunggu Agent Threads revisi","Approve":"Tayang otomatis sesuai jadwal","Tayang":"Udah tayang"}[v[T.st]]||"";
+  openModal(`${thHead(x)}<p class="meta">Threads · ${esc(where)}</p>${postsHTML(v[T.utas])}${v[T.link]?`<p><a href="${esc(v[T.link])}" target="_blank" rel="noopener">Buka di Threads</a></p>`:""}<div class="row end"><button class="btn ghost" id="mProd">Buka di Produksi</button><button class="btn primary" id="mNo">Tutup</button></div>`);
+  $("#mNo").onclick=closeModal;$("#mProd").onclick=()=>{closeModal();location.hash="#produksi";$("#prodSeg button[data-p=th]").click();};}
 async function moveKonten(x,date,time){
   const old=[x.v[K.tgl],x.v[K.jam]];
   if(x.v[K.st]==="Approve"&&date&&date<todayStr()&&!await confirmBox("Jadwal udah lewat","Konten Approve dengan tanggal yang udah lewat bakal langsung diposting di run Agent Upload berikutnya. Lanjut?","Lanjut","primary"))return;
@@ -951,6 +980,7 @@ function renderThreads(){
   $("#thApproveList").innerHTML=ap.length?ap.map(thApproveCard).join(""):`<div class="card empty">Belum ada utas terjadwal.</div>`;
   $("#thUpList").innerHTML=up.length?up.slice(0,10).map(x=>`<div class="card">${thHead(x)}${x.v[T.link]?`<a href="${esc(x.v[T.link])}" target="_blank" rel="noopener">Buka di Threads</a>`:""}</div>`).join(""):`<div class="card empty">Belum ada yang tayang.</div>`;
   document.querySelectorAll("#prodTH [data-th]").forEach(el=>bindTh(el,threads.find(y=>y.r==el.dataset.th)));
+  renderCal();
 }
 function bindTh(el,x){
   const q=s=>el.querySelector(s),busy=on=>el.querySelectorAll("button,textarea,input").forEach(b=>b.disabled=on);
