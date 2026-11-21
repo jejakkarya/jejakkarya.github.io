@@ -1,0 +1,32 @@
+name: Insight IG Jejak Karya
+
+# Tiap pagi (±05:40 WIB) narik views, reach, likes, komentar, save, share
+# postingan @jejakkarya.kreatif ke tab "Insight IG" di sheet.
+# Dibaca Agent Head Creative. Secrets: IG_TOKEN, KONTROL_KEY.
+
+on:
+  schedule:
+    - cron: "41 22 * * *"
+  workflow_dispatch:
+
+concurrency:
+  group: ig-insight
+  cancel-in-progress: false
+
+jobs:
+  insight:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          sparse-checkout: tools/ig-upload
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - name: Tarik insight
+        working-directory: tools/ig-upload
+        env:
+          IG_TOKEN: ${{ secrets.IG_TOKEN }}
+          KONTROL_KEY: ${{ secrets.KONTROL_KEY }}
+        run: node insight.mjs

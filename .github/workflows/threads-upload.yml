@@ -1,0 +1,43 @@
+name: Upload Threads Jejak Karya
+
+# Posting utas berstatus "Approve" di tab Threads ke @jejakkarya.kreatif.
+# Biasanya dipicu Apps Script (Pemicu.gs) pas jadwal tiba atau tombol "Upload sekarang".
+# Cron di bawah cuma cadangan. Secrets: THREADS_TOKEN, KONTROL_KEY.
+
+on:
+  schedule:
+    - cron: "11,41 * * * *"
+  workflow_dispatch:
+    inputs:
+      dry_run:
+        description: "Uji coba tanpa posting (true/false)"
+        required: false
+        default: "true"
+      threads_id:
+        description: "ID utas yang mau langsung diposting (kosongin = ambil yang jatuh tempo)"
+        required: false
+        default: ""
+
+concurrency:
+  group: threads-upload
+  cancel-in-progress: false
+
+jobs:
+  upload:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          sparse-checkout: tools/ig-upload
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - name: Posting utas
+        working-directory: tools/ig-upload
+        env:
+          THREADS_TOKEN: ${{ secrets.THREADS_TOKEN }}
+          KONTROL_KEY: ${{ secrets.KONTROL_KEY }}
+          DRY_RUN: ${{ github.event_name == 'workflow_dispatch' && inputs.dry_run || 'false' }}
+          THREADS_ID: ${{ github.event_name == 'workflow_dispatch' && inputs.threads_id || '' }}
+        run: node threads.mjs
