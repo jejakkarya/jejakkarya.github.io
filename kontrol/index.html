@@ -216,6 +216,20 @@ select{width:100%;border:1px solid var(--line);border-radius:12px;padding:10px 1
 .tbl th{font-size:12px;color:var(--muted)}
 .tbl th:first-child,.tbl td:first-child{text-align:left;white-space:normal;min-width:150px}
 .tbl tr:last-child td{border-bottom:0}
+/* Threads */
+.prodseg{margin-bottom:12px}
+.posts{display:flex;flex-direction:column;gap:6px;margin-top:10px}
+.post{border:1px solid var(--line);border-radius:12px;padding:10px 12px;font-size:14px;white-space:pre-wrap;word-break:break-word;position:relative}
+.post .pn{display:flex;justify-content:space-between;font-size:11px;font-weight:700;color:var(--muted);margin-bottom:4px}
+.post .pn .over{color:var(--bad)}
+.post+.post{margin-left:14px}
+.post+.post::before{content:"";position:absolute;left:-9px;top:-7px;bottom:50%;border-left:2px solid var(--line);border-bottom:2px solid var(--line);width:8px;border-bottom-left-radius:8px}
+.cc{font-size:12px;color:var(--muted);margin-top:4px}
+.cc .over{color:var(--bad);font-weight:700}
+.schedrow{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:8px;align-items:end;margin-top:10px}
+.schedrow input{min-width:0}
+.schedrow>.btn{grid-column:1/-1}
+@media (min-width:560px){.schedrow:has(>.btn){grid-template-columns:minmax(0,1fr) minmax(0,1fr) auto}.schedrow>.btn{grid-column:auto}}
 </style>
 </head>
 <body>
@@ -284,11 +298,24 @@ select{width:100%;border:1px solid var(--line);border-radius:12px;padding:10px 1
   <!-- PRODUKSI -->
   <section class="view" id="v-produksi">
     <div class="hero"><div class="grow"><b>Produksi</b><p>Brief dan desain cuma jalan kalau lo suruh. Semua hasil nunggu keputusan lo.</p></div></div>
+    <div class="row prodseg"><div class="seg" id="prodSeg"><button data-p="ig" class="on">Instagram</button><button data-p="th">Threads <span id="thCnt"></span></button></div></div>
+    <div id="prodIG">
     <div id="prodStages"><div class="skel"></div></div>
     <div class="section-title"><h2>Cek brief</h2><small id="cntBrief"></small></div>
     <div id="briefList"></div>
     <div class="section-title"><h2>Cek desain</h2><small id="cntDesain"></small></div>
     <div id="desainList"></div>
+    </div>
+    <div id="prodTH" hidden>
+      <div class="stage col"><div class="stagehead"><div class="num" id="thNum">0</div><div class="grow"><b>Agent Threads</b><span class="meta" id="thMeta">Nulis draf utas teks khas Threads + ngerjain revisi.</span></div>
+        <button class="btn primary sm" id="thRun">Suruh nulis</button></div></div>
+      <div class="section-title"><h2>Cek draf utas</h2><small id="cntThDraft"></small></div>
+      <div id="thDraftList"><div class="skel"></div></div>
+      <div class="section-title"><h2>Terjadwal</h2><small id="cntThApprove"></small></div>
+      <div id="thApproveList"></div>
+      <div class="section-title"><h2>Sudah tayang</h2><small id="cntThUp"></small></div>
+      <div id="thUpList"></div>
+    </div>
   </section>
 
   <!-- KALENDER -->
@@ -351,7 +378,8 @@ const SHEET_ID="1Gh2-4uNna1qWwk2evuxrz49iBL-bljN9IMrhndAMLWA";
 const AG={
   riset:{id:"trig_01Sjoqc4Q7TawWXwi2PH9GwN",label:"Agent Riset & Ide",desc:"Riset tren tiap hari, setor 10 ide ke Bank Ide.",sched:true},
   brief:{id:"trig_01VHH9KKCGCgodCrtTndeEKG",label:"Agent Brief",desc:"Nulis hook, naskah per slide, dan caption untuk ide yang lo pilih.",sched:false},
-  desain:{id:"trig_014RTon7n5PGofotiiXNdzri",label:"Agent Desain",desc:"Bikin carousel PNG dari brief yang udah lo OK-in.",sched:false}
+  desain:{id:"trig_014RTon7n5PGofotiiXNdzri",label:"Agent Desain",desc:"Bikin carousel PNG dari brief yang udah lo OK-in.",sched:false},
+  threads:{id:"trig_01GrGP4benCF1zCsZmeUBe8M",label:"Agent Threads",desc:"Nulis draf utas teks Threads dan ngerjain revisi yang lo minta.",sched:false}
 };
 const S_SHEETS="Google Sheets",S_DRIVE="Google Drive",S_CLAUDE="Claude Code Remote";
 const K={id:0,ide:1,judul:2,pilar:3,format:4,tgl:5,jam:6,st:7,hook:8,naskah:9,caption:10,catatan:11,folder:12,slide:13,link:14,sumber:15,ubah:16,antri:17};
@@ -479,7 +507,7 @@ async function loadAgents(){renderAgents();}
 async function loadAll(){
   $("#updated").textContent="memuat…";
   await loadPanduan();
-  await Promise.allSettled([loadKonten(),loadIde(),loadAgents(),loadHead()]);
+  await Promise.allSettled([loadKonten(),loadIde(),loadAgents(),loadHead(),loadThreads()]);
   $("#updated").textContent="diperbarui "+new Date().toLocaleTimeString("id-ID",{hour:"2-digit",minute:"2-digit"});
 }
 
@@ -872,6 +900,102 @@ function renderArsip(){
   document.querySelectorAll("[data-back]").forEach(b=>b.onclick=async()=>{const x=konten.find(y=>y.r==b.dataset.back);if(!x)return;b.disabled=true;
     try{await writeKonten(x,{[K.st]:b.dataset.to});toast("Balik ke Produksi");renderProduksi();renderCal();renderArsip();}catch(e){toast(errText(e,S_SHEETS));b.disabled=false;}});
 }
+
+/* ---------- THREADS ---------- */
+const T={id:0,dibuat:1,topik:2,pilar:3,utas:4,jumlah:5,sumber:6,tgl:7,jam:8,st:9,catatan:10,link:11,ubah:12,antri:13};
+const TH_MAX=500;
+let threads=[],thFiredAt=0;
+const splitUtas=s=>String(s||"").replace(/\r/g,"").split(/\n\s*-{3,}\s*\n/).map(p=>p.trim()).filter(Boolean);
+const clen=s=>[...String(s)].length;
+function thJam(){const r=panduan.find(v=>/jam threads/i.test(v[0]||""));return cleanTime(r?.[1])||"12:00";}
+function thNextDate(){const used=new Set(threads.filter(x=>x.v[T.st]==="Approve"||x.v[T.st]==="Tayang").map(x=>cleanDate(x.v[T.tgl])));let d=addDays(todayStr(),1);for(let i=0;i<120&&used.has(d);i++)d=addDays(d,1);return d;}
+async function loadThreads(){
+  try{const vals=await getRange("Threads!A2:N1000");
+    threads=vals.map((v,i)=>({r:i+2,v:Array.from({length:14},(_,k)=>String(v[k]??""))})).filter(x=>x.v[T.utas].trim());
+    threads.forEach(x=>{x.v[T.tgl]=cleanDate(x.v[T.tgl]);x.v[T.jam]=cleanTime(x.v[T.jam]);});
+    renderThreads();}
+  catch(e){$("#thDraftList").innerHTML=`<div class="notice bad">${esc(errText(e,S_SHEETS))}</div>`;}
+}
+async function writeThreads(x,cols){
+  cols={...cols,[T.ubah]:nowStamp()};
+  const idx=Object.keys(cols).map(Number).sort((a,b)=>a-b),L=n=>String.fromCharCode(65+n);
+  const fmt=c=>{const v=String(cols[c]??"");if(c===T.tgl||c===T.jam||c===T.ubah)return v?"'"+v:"";return txt(v);};
+  const groups=[];for(const c of idx){const g=groups[groups.length-1];if(g&&c===g[g.length-1]+1)g.push(c);else groups.push([c]);}
+  await Promise.all(groups.map(g=>setRange(`Threads!${L(g[0])}${x.r}:${L(g[g.length-1])}${x.r}`,[g.map(fmt)])));
+  for(const c of idx)x.v[c]=String(cols[c]??"");
+}
+function postsHTML(s){const ps=splitUtas(s);return`<div class="posts">${ps.map((p,i)=>{const n=clen(p);return`<div class="post"><div class="pn"><span>Post ${i+1}/${ps.length}</span><span class="${n>TH_MAX?"over":""}">${n}/${TH_MAX}</span></div>${linkify(p)}</div>`;}).join("")}</div>`;}
+function ccHTML(s){const ps=splitUtas(s);if(!ps.length)return"Kosong";return ps.map((p,i)=>{const n=clen(p);return`<span class="${n>TH_MAX?"over":""}">Post ${i+1}: ${n}</span>`;}).join(" · ")+` · maks ${TH_MAX} per post, pisah post pakai baris ---`;}
+function thHead(x){const v=x.v;return`<div class="chips"><span class="chip ${({"Draft siap":"mark","Revisi":"warn","Approve":"ok","Tayang":"ink"})[v[T.st]]||"grey"}">${esc(v[T.st])}</span>${v[T.pilar]?`<span class="chip">${esc(v[T.pilar])}</span>`:""}<span class="chip grey">${esc(splitUtas(v[T.utas]).length)} post</span>${v[T.tgl]?`<span class="chip grey">${esc(fmtDate(v[T.tgl]))} · ${esc(v[T.jam]||thJam())}</span>`:""}</div><h3>${esc(v[T.topik]||v[T.id])}</h3>`;}
+function thDraftCard(x){const v=x.v;return`<article class="card" data-th="${x.r}">${thHead(x)}
+  <div data-view>${postsHTML(v[T.utas])}</div>
+  <div data-edit hidden><div class="field"><label>Edit utas</label><textarea data-utas style="min-height:220px">${esc(v[T.utas])}</textarea><div class="cc" data-cc>${ccHTML(v[T.utas])}</div></div>
+    <div class="row" style="margin-top:8px"><button class="btn ghost sm" data-a="cancel">Batal</button><button class="btn primary sm" data-a="save">Simpan teks</button></div></div>
+  ${v[T.sumber]?`<details><summary>Sumber</summary><div class="prewrap">${linkify(v[T.sumber])}</div></details>`:""}
+  <div class="field"><label>Catatan buat revisi</label><textarea data-cat placeholder="Misal: hook-nya kurang nendang, post 2 kepanjangan." style="min-height:70px">${esc(v[T.catatan])}</textarea></div>
+  <div class="row" style="margin-top:10px"><button class="btn ghost sm" data-a="edit">Edit teks sendiri</button></div>
+  <div class="actions"><button class="btn ok" data-a="approve">Approve</button><button class="btn warn" data-a="revisi">Revisi</button><button class="btn danger" data-a="skip">Skip</button></div></article>`;}
+function thApproveCard(x){const v=x.v,q=String(v[T.antri]||"");const asked=/^upload(-dikirim)?\|/.test(q);
+  return`<article class="card" data-th="${x.r}">${thHead(x)}<details><summary>Lihat utas</summary>${postsHTML(v[T.utas])}</details>
+  <div class="schedrow"><div class="field" style="margin:0"><label>Tanggal</label><input type="date" data-d value="${esc(v[T.tgl])}"></div><div class="field" style="margin:0"><label>Jam</label><input type="time" data-t value="${esc(v[T.jam]||thJam())}"></div><button class="btn ghost" data-a="resched">Simpan</button></div>
+  <div class="row" style="margin-top:10px">${asked?`<span class="chip">Diminta tayang ${esc(q.split("|")[1]||"")}</span>`:`<button class="btn primary sm" data-a="now">Upload sekarang</button>`}<button class="btn ghost sm" data-a="back">Tarik balik ke draf</button></div></article>`;}
+function renderThreads(){
+  const by=s=>threads.filter(x=>x.v[T.st]===s);
+  const dr=by("Draft siap"),rv=by("Revisi"),ap=by("Approve").sort((a,b)=>(a.v[T.tgl]+a.v[T.jam]).localeCompare(b.v[T.tgl]+b.v[T.jam])),up=by("Tayang").reverse();
+  $("#thCnt").textContent=dr.length?`(${dr.length})`:"";
+  $("#thNum").textContent=dr.length;
+  const t=agents[AG.threads.id],busy=/RUNNING|PENDING/.test(t?.last_run?.status||"")||Date.now()-thFiredAt<90e3;
+  $("#thMeta").innerHTML=busy?"Lagi nulis… draf baru muncul di bawah.":`${dr.length} draf nunggu dicek${rv.length?` · ${rv.length} nunggu revisi agent`:""}`;
+  $("#cntThDraft").textContent=dr.length||"";$("#cntThApprove").textContent=ap.length||"";$("#cntThUp").textContent=up.length||"";
+  $("#thDraftList").innerHTML=dr.length?dr.map(thDraftCard).join(""):`<div class="card empty"><b>Nggak ada draf</b>Tekan "Suruh nulis" buat minta draf utas baru.</div>`;
+  $("#thApproveList").innerHTML=ap.length?ap.map(thApproveCard).join(""):`<div class="card empty">Belum ada utas terjadwal.</div>`;
+  $("#thUpList").innerHTML=up.length?up.slice(0,10).map(x=>`<div class="card">${thHead(x)}${x.v[T.link]?`<a href="${esc(x.v[T.link])}" target="_blank" rel="noopener">Buka di Threads</a>`:""}</div>`).join(""):`<div class="card empty">Belum ada yang tayang.</div>`;
+  document.querySelectorAll("#prodTH [data-th]").forEach(el=>bindTh(el,threads.find(y=>y.r==el.dataset.th)));
+}
+function bindTh(el,x){
+  const q=s=>el.querySelector(s),busy=on=>el.querySelectorAll("button,textarea,input").forEach(b=>b.disabled=on);
+  const act=(a,fn)=>{const b=q(`[data-a=${a}]`);if(b)b.onclick=fn;};
+  const ta=q("[data-utas]");if(ta)ta.oninput=()=>{q("[data-cc]").innerHTML=ccHTML(ta.value);};
+  act("edit",()=>{q("[data-view]").hidden=true;q("[data-edit]").hidden=false;ta.focus();});
+  act("cancel",()=>{ta.value=x.v[T.utas];q("[data-cc]").innerHTML=ccHTML(ta.value);q("[data-view]").hidden=false;q("[data-edit]").hidden=true;});
+  act("save",async()=>{const ps=splitUtas(ta.value);if(!ps.length){toast("Utas nggak boleh kosong");return;}
+    busy(true);try{await writeThreads(x,{[T.utas]:ps.join("\n---\n"),[T.jumlah]:ps.length});toast("Teks disimpan");renderThreads();}catch(e){toast(errText(e,S_SHEETS));busy(false);}});
+  act("approve",async()=>{const ps=splitUtas(x.v[T.utas]),over=ps.findIndex(p=>clen(p)>TH_MAX);
+    if(over>=0){toast(`Post ${over+1} lebih dari ${TH_MAX} karakter. Edit dulu.`);return;}
+    const d0=thNextDate(),j0=thJam();
+    openModal(`<h3>Approve & jadwalin</h3><p>Utas tayang otomatis di Threads pada:</p><div class="schedrow" style="grid-template-columns:1fr 1fr"><div class="field" style="margin:0"><label>Tanggal</label><input type="date" id="mD" value="${d0}"></div><div class="field" style="margin:0"><label>Jam</label><input type="time" id="mT" value="${j0}"></div></div><div class="row end"><button class="btn ghost" id="mNo">Batal</button><button class="btn ok" id="mYes">Approve</button></div>`);
+    $("#mNo").onclick=closeModal;
+    $("#mYes").onclick=async()=>{const d=$("#mD").value,t=$("#mT").value||j0;if(!d){toast("Pilih tanggal");return;}closeModal();busy(true);
+      try{await writeThreads(x,{[T.st]:"Approve",[T.tgl]:d,[T.jam]:t,[T.catatan]:q("[data-cat]").value});toast(`Dijadwal ${fmtDate(d)} · ${t}`);renderThreads();}catch(e){toast(errText(e,S_SHEETS));busy(false);}};});
+  act("revisi",async()=>{const c=q("[data-cat]").value.trim();if(!c){toast("Tulis catatan revisinya dulu");q("[data-cat]").focus();return;}
+    busy(true);try{await writeThreads(x,{[T.st]:"Revisi",[T.catatan]:c});toast("Masuk antrian revisi. Tekan Suruh nulis buat ngerjain.");renderThreads();}catch(e){toast(errText(e,S_SHEETS));busy(false);}});
+  act("skip",async()=>{if(!await confirmBox("Skip draf ini?","Draf nggak bakal diposting.","Skip","danger"))return;
+    busy(true);try{await writeThreads(x,{[T.st]:"Skip",[T.catatan]:q("[data-cat]")?.value||x.v[T.catatan]});toast("Di-skip");renderThreads();}catch(e){toast(errText(e,S_SHEETS));busy(false);}});
+  act("resched",async()=>{const d=q("[data-d]").value,t=q("[data-t]").value;if(!d){toast("Pilih tanggal");return;}
+    busy(true);try{await writeThreads(x,{[T.tgl]:d,[T.jam]:t||thJam(),[T.antri]:""});toast(`Jadwal jadi ${fmtDate(d)} · ${t}`);renderThreads();}catch(e){toast(errText(e,S_SHEETS));busy(false);}});
+  act("now",async()=>{if(!await confirmBox("Upload sekarang?","Utas ini langsung diposting ke Threads dalam beberapa menit.","Upload","primary"))return;
+    busy(true);try{await writeThreads(x,{[T.antri]:"upload|"+nowStamp()});toast("Diminta. Tayang dalam beberapa menit.");renderThreads();}catch(e){toast(errText(e,S_SHEETS));busy(false);}});
+  act("back",async()=>{busy(true);try{await writeThreads(x,{[T.st]:"Draft siap",[T.antri]:""});toast("Balik ke draf");renderThreads();}catch(e){toast(errText(e,S_SHEETS));busy(false);}});
+}
+$("#prodSeg").onclick=e=>{const b=e.target.closest("button");if(!b)return;[...e.currentTarget.children].forEach(x=>x.classList.toggle("on",x===b));$("#prodIG").hidden=b.dataset.p!=="ig";$("#prodTH").hidden=b.dataset.p!=="th";};
+$("#thRun").onclick=async e=>{const b=e.currentTarget;
+  const t=agents[AG.threads.id];
+  if(Date.now()-thFiredAt<90e3||/RUNNING|PENDING/.test(t?.last_run?.status||"")){toast("Agent Threads lagi nulis, tunggu bentar ya.");return;}
+  const rv=threads.filter(x=>x.v[T.st]==="Revisi");
+  openModal(`<h3>Suruh Agent Threads</h3><p>${rv.length?`${rv.length} draf revisi dikerjain dulu, lalu nulis draf baru.`:"Agent bakal nulis draf utas baru."}</p>
+    <div class="field"><label for="mN">Jumlah draf baru</label><select id="mN"><option value="0">Nggak usah, revisi aja</option><option>3</option><option selected>5</option><option>8</option></select></div>
+    <div class="field"><label for="mTop">Topik khusus (opsional)</label><textarea id="mTop" style="min-height:70px" placeholder="Kosongin biar agent milih sendiri"></textarea></div>
+    <div class="row end"><button class="btn ghost" id="mNo">Batal</button><button class="btn primary" id="mYes">Suruh</button></div>`);
+  if(!rv.length)$("#mN").querySelector('option[value="0"]').remove();
+  $("#mNo").onclick=closeModal;
+  $("#mYes").onclick=async()=>{const n=$("#mN").value,top=$("#mTop").value.trim();closeModal();
+    let text=n==="0"?"PERINTAH: kerjakan revisi saja, jangan tulis draf baru.":`PERINTAH: tulis ${n} draf baru.${top?` Topik dari Oky: ${top}`:""}`;
+    if(rv.length)text+="\nANTRIAN DARI OKY (revisi, sesuai urutan):\n"+rv.map((x,i)=>`${i+1}. ${x.v[T.id]} — ${x.v[T.topik]}`).join("\n");
+    b.disabled=true;
+    try{await call(S_CLAUDE,"fire_trigger",{trigger_id:AG.threads.id,text});thFiredAt=Date.now();toast("Agent Threads lagi nulis. Lo dapet notif kalau udah beres.");renderThreads();setTimeout(loadAgents,4000);}
+    catch(err){if(err?.code==="standalone")runAgent("threads");else toast(errText(err,S_CLAUDE));}
+    b.disabled=false;};
+};
 
 /* ---------- HEAD CREATIVE ---------- */
 const HC={id:"trig_01SNBxXxVHwfEXJ1X7xzka2e",label:"Head Creative"};
