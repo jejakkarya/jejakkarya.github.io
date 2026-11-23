@@ -170,7 +170,7 @@ def gemini_tts(text, voice, gaya, out_wav):
     for model in ([os.environ["GEMINI_TTS_MODEL"]] if os.environ.get("GEMINI_TTS_MODEL") else GEMINI_MODELS):
         # model 3.8 baca teks persis (gaya lewat speech_metadata); model lama gaya ditaruh di teks
         for body in (bodies[:1] if model.startswith("gemini-3.8") else bodies[1:]):
-            for attempt in range(8):
+            for attempt in range(12):
                 req = urllib.request.Request(
                     f"https://generativelanguage.googleapis.com/v1beta/models/{model}:generateContent",
                     data=json.dumps({**body, "generationConfig": gen}).encode(),
@@ -189,16 +189,24 @@ def gemini_tts(text, voice, gaya, out_wav):
                             w.setnchannels(1); w.setsampwidth(2); w.setframerate(rate); w.writeframes(raw)
                     return model
                 except urllib.error.HTTPError as e:
-                    last = f"{model} HTTP {e.code}: {e.read()[:300]!r}"
-                    if e.code in (429, 500, 503):
-                        time.sleep(min(90, 15 * (attempt + 1)))
+                    err = e.read().decode("utf-8", "replace")
+                    last = f"{model} HTTP {e.code}: {err[:300]}"
+                    if e.code == 429:
+                        if re.search(r"PerDay", err):
+                            raise SystemExit("Kuota harian Gemini TTS habis. Coba lagi besok, atau pasang billing di Google AI Studio.")
+                        m = re.search(r'"retryDelay"\s*:\s*"(\d+)', err)
+                        time.sleep(min(75, (int(m.group(1)) if m else 30) + 3))
+                        continue
+                    if e.code in (500, 503):
+                        time.sleep(15 * (attempt + 1))
                         continue
                     break  # 400/404: coba bentuk body/model berikutnya
                 except (KeyError, IndexError) as e:
                     last = f"{model}: respons tanpa audio ({e})"
                     break
             else:
-                continue
+                # kena batas terus: jangan pindah model (suaranya bisa beda), berhenti aja
+                raise SystemExit("Gemini TTS kena batas terus: " + last)
     raise SystemExit("Gemini TTS gagal: " + last)
 
 

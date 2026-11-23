@@ -100,9 +100,20 @@ def pick_voice(opts, kid):
     return opts[names.index(min(names, key=lambda n: (count[n], names.index(n))))]
 
 
+def recent_fail():
+    """ID konten yang gagal dirender < 2 jam lalu (biar kuota suara nggak abis buat ngulang yang gagal)."""
+    try:
+        logs = backend({"action": "get", "range": "Log Upload!A2:E5000"}).get("values") or []
+    except Exception:
+        return set()
+    batas = (datetime.now(timezone.utc) + timedelta(hours=7) - timedelta(hours=2)).strftime("%Y-%m-%d %H:%M")
+    return {r[1] for r in logs if len(r) > 3 and r[3] == "Gagal video VO" and str(r[0]).lstrip("'") >= batas}
+
+
 def jobs():
     only = os.environ.get("KONTEN_ID", "").strip()
     rows = backend({"action": "get", "range": "Konten!A2:R1000"}).get("values") or []
+    gagal = set() if only else recent_fail()
     out = []
     for v in rows:
         v = v + [""] * (18 - len(v))
@@ -114,6 +125,9 @@ def jobs():
             continue
         fid = folder_id(v[K["folder"]])
         if not fid:
+            continue
+        if v[K["id"]] in gagal:
+            print(v[K["id"]], "baru gagal < 2 jam lalu, dilewati dulu")
             continue
         files = backend({"action": "files", "folderId": fid}).get("files") or []
         js = sorted([f for f in files if f["title"].lower().endswith(".json") and "naskah" in f["title"].lower()],
@@ -141,6 +155,9 @@ def main():
     if not todo:
         print("Nggak ada Reels yang perlu dirender.")
         return
+    # 1 Reels per jalan (kuota suara gratis terbatas); sisanya diambil jalan berikutnya (±20 menit)
+    todo.sort(key=lambda t: (str(t[0][5]), str(t[0][6])))
+    todo = todo[:int(os.environ.get("MAX_PER_RUN", "1"))]
     opts = voice_cfg()
     print("Pilihan suara:", [o[o.index("--vo") + 1] for o in opts])
     for v, fid, js in todo:
