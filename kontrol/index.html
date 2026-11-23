@@ -259,12 +259,12 @@ select{width:100%;border:1px solid var(--line);border-radius:12px;padding:10px 1
   <!-- HEAD CREATIVE -->
   <section class="view" id="v-head">
     <div class="hero">
-      <div class="grow"><b>Head Creative</b><p>Mimpin Riset, Brief, dan Desain. Belajar dari insight IG dan keputusan lo. Keputusan akhir tetap di lo.</p></div>
+      <div class="grow"><b>Erwin · Head Creative</b><p>Mimpin Hunggie, Armin, Sasha, dan Jean. Belajar dari insight IG dan keputusan lo. Keputusan akhir tetap di lo.</p></div>
       <button class="btn warn sm" id="hcCall">Minta laporan</button>
     </div>
     <div class="hcstat" id="hcStat"></div>
     <div class="card">
-      <div class="field" style="margin-top:0"><label for="hcMsg">Pesan ke Head Creative</label>
+      <div class="field" style="margin-top:0"><label for="hcMsg">Pesan ke Erwin</label>
         <div class="quick" id="hcQuick">
           <button data-q="Minggu ini fokus ke isu: ">Fokus minggu ini…</button>
           <button data-q="Siapin ide baru, stok di Bank Ide udah tipis.">Minta ide baru</button>
@@ -279,7 +279,7 @@ select{width:100%;border:1px solid var(--line);border-radius:12px;padding:10px 1
     <div class="section-title"><h2>Obrolan & laporan</h2><small id="cntHc"></small></div>
     <div class="feed" id="hcFeed"><div class="skel"></div></div>
     <div class="section-title"><h2>Pelajaran tim</h2><small id="cntPl"></small></div>
-    <div class="notice info">Arahan yang dibaca Agent Riset, Brief, dan Desain tiap kali jalan. Matiin yang nggak lo setujui. Head Creative nggak bakal nyalain lagi arahan yang lo matiin.</div>
+    <div class="notice info">Arahan yang dibaca Hunggie, Armin, Sasha, dan Jean tiap kali jalan. Matiin yang nggak lo setujui. Erwin nggak bakal nyalain lagi arahan yang lo matiin.</div>
     <div id="plList"><div class="skel"></div></div>
     <details class="card" id="plAdd" style="margin-top:0;border-top:1px solid var(--line)"><summary>Tambah arahan sendiri</summary>
       <div class="field"><label for="plUntuk">Buat siapa</label><select id="plUntuk"><option>Semua</option><option>Riset</option><option>Brief</option><option>Desain</option></select></div>
@@ -312,7 +312,7 @@ select{width:100%;border:1px solid var(--line);border-radius:12px;padding:10px 1
     <div id="desainList"></div>
     </div>
     <div id="prodTH" hidden>
-      <div class="stage col"><div class="stagehead"><div class="num" id="thNum">0</div><div class="grow"><b>Agent Threads</b><span class="meta" id="thMeta">Nulis draf utas teks khas Threads + ngerjain revisi.</span></div>
+      <div class="stage col"><div class="stagehead"><div class="num" id="thNum">0</div><div class="grow"><b>Jean (Threads)</b><span class="meta" id="thMeta">Nulis draf utas teks khas Threads + ngerjain revisi.</span></div>
         <button class="btn primary sm" id="thRun">Suruh nulis</button></div></div>
       <div class="section-title"><h2>Cek draf utas</h2><small id="cntThDraft"></small></div>
       <div id="thDraftList"><div class="skel"></div></div>
@@ -382,10 +382,10 @@ select{width:100%;border:1px solid var(--line);border-radius:12px;padding:10px 1
 <script>
 const SHEET_ID="1Gh2-4uNna1qWwk2evuxrz49iBL-bljN9IMrhndAMLWA";
 const AG={
-  riset:{id:"trig_01Sjoqc4Q7TawWXwi2PH9GwN",label:"Agent Riset & Ide",desc:"Riset tren tiap hari, setor 10 ide ke Bank Ide.",sched:true},
-  brief:{id:"trig_01VHH9KKCGCgodCrtTndeEKG",label:"Agent Brief",desc:"Nulis hook, naskah per slide, dan caption untuk ide yang lo pilih.",sched:false},
-  desain:{id:"trig_014RTon7n5PGofotiiXNdzri",label:"Agent Desain",desc:"Bikin carousel PNG dari brief yang udah lo OK-in.",sched:false},
-  threads:{id:"trig_01GrGP4benCF1zCsZmeUBe8M",label:"Agent Threads",desc:"Nulis draf utas teks Threads dan ngerjain revisi yang lo minta.",sched:false}
+  riset:{id:"trig_01Sjoqc4Q7TawWXwi2PH9GwN",label:"Hunggie (Riset & Ide)",desc:"Riset tren tiap hari, setor 10 ide ke Bank Ide.",sched:true},
+  brief:{id:"trig_01VHH9KKCGCgodCrtTndeEKG",label:"Armin (Brief)",desc:"Nulis hook, naskah per slide, dan caption untuk ide yang lo pilih.",sched:false},
+  desain:{id:"trig_014RTon7n5PGofotiiXNdzri",label:"Sasha (Desain)",desc:"Bikin carousel PNG dari brief yang udah lo OK-in.",sched:false},
+  threads:{id:"trig_01GrGP4benCF1zCsZmeUBe8M",label:"Jean (Threads)",desc:"Nulis draf utas teks Threads dan ngerjain revisi yang lo minta.",sched:false}
 };
 const S_SHEETS="Google Sheets",S_DRIVE="Google Drive",S_CLAUDE="Claude Code Remote";
 const K={id:0,ide:1,judul:2,pilar:3,format:4,tgl:5,jam:6,st:7,hook:8,naskah:9,caption:10,catatan:11,folder:12,slide:13,link:14,sumber:15,ubah:16,antri:17};
@@ -531,7 +531,7 @@ function renderIde(){
   const baru=ide.filter(x=>(x.v[I.st]||"baru")==="baru");
   const b=$("#bIde");b.hidden=!baru.length;b.textContent=baru.length;
   const list=ide.filter(x=>(x.v[I.st]||"baru")===ideFilter).sort((a,b)=>b.r-a.r);
-  if(!list.length){$("#ideList").innerHTML=`<div class="card empty"><b>${ideFilter==="baru"?"Belum ada ide baru":"Kosong"}</b>${ideFilter==="baru"?"Tekan \"Minta 10 ide\" atau tunggu run harian Agent Riset.":""}</div>`;return;}
+  if(!list.length){$("#ideList").innerHTML=`<div class="card empty"><b>${ideFilter==="baru"?"Belum ada ide baru":"Kosong"}</b>${ideFilter==="baru"?"Tekan \"Minta 10 ide\" atau tunggu run harian Hunggie.":""}</div>`;return;}
   $("#ideList").innerHTML=list.map(x=>{const v=x.v;return`<article class="card" id="i${x.r}">
     <div class="chips"><span class="chip">${esc(v[I.pilar]||"Tanpa pilar")}</span><span class="chip grey">${esc(fmtDate(cleanDate(v[I.tgl])))}</span></div>
     <h3>${esc(v[I.judul])}</h3>
@@ -564,7 +564,7 @@ async function ideAction(x,a,btn){
     try{
       await call(S_SHEETS,"append_values",{spreadsheetId:SHEET_ID,range:"Konten!A1",values:[row]});
       await setRange(`'Bank Ide'!J${x.r}`,[["pilih"]]);x.v[I.st]="pilih";closeModal();
-      toast("Masuk Produksi. Suruh Agent Brief kalau udah siap.");
+      toast("Masuk Produksi. Suruh Armin kalau udah siap.");
       await loadKonten();renderIde();
     }catch(e){toast(errText(e,S_SHEETS));$("#mYes").disabled=false;}
   };
@@ -637,8 +637,8 @@ function busyAll(el,on){el.querySelectorAll("button,textarea").forEach(b=>b.disa
 function bindBrief(x){
   const el=$("#b"+x.r);bindAset(el,x);const f=n=>el.querySelector(`[data-f=${n}]`);
   const edits=()=>{const c={};if(f("caption").value!==x.v[K.caption])c[K.caption]=f("caption").value;if(f("naskah").value!==x.v[K.naskah])c[K.naskah]=f("naskah").value;return c;};
-  el.querySelector("[data-a=ok]").onclick=async()=>{busyAll(el,true);try{await writeKonten(x,{...edits(),[K.st]:"Brief OK",[K.catatan]:f("note").value});toast("Brief OK. Suruh Agent Desain kalau mau langsung dibikin.");renderProduksi();renderCal();}catch(e){toast(errText(e,S_SHEETS));busyAll(el,false);}};
-  el.querySelector("[data-a=rev]").onclick=async()=>{const n=f("note").value.trim();if(!n){f("note").focus();toast("Isi catatan dulu biar agent tau apa yang dibenerin");return;}busyAll(el,true);try{await writeKonten(x,{...edits(),[K.st]:"Revisi brief",[K.catatan]:n});toast("Masuk antrian revisi. Suruh Agent Brief buat ngerjain.");renderProduksi();}catch(e){toast(errText(e,S_SHEETS));busyAll(el,false);}};
+  el.querySelector("[data-a=ok]").onclick=async()=>{busyAll(el,true);try{await writeKonten(x,{...edits(),[K.st]:"Brief OK",[K.catatan]:f("note").value});toast("Brief OK. Suruh Sasha kalau mau langsung dibikin.");renderProduksi();renderCal();}catch(e){toast(errText(e,S_SHEETS));busyAll(el,false);}};
+  el.querySelector("[data-a=rev]").onclick=async()=>{const n=f("note").value.trim();if(!n){f("note").focus();toast("Isi catatan dulu biar agent tau apa yang dibenerin");return;}busyAll(el,true);try{await writeKonten(x,{...edits(),[K.st]:"Revisi brief",[K.catatan]:n});toast("Masuk antrian revisi. Suruh Armin buat ngerjain.");renderProduksi();}catch(e){toast(errText(e,S_SHEETS));busyAll(el,false);}};
   el.querySelector("[data-a=skip]").onclick=()=>skipKonten(x,el);
 }
 function bindDesain(x){
@@ -651,7 +651,7 @@ function bindDesain(x){
     if(!await confirmBox("Approve konten ini?",`"${x.v[K.judul]}" bakal diposting ${fmtDate(x.v[K.tgl])} ${x.v[K.jam]||"19:00"} WIB.`+warn,"Approve","ok"))return;
     busyAll(el,true);try{await writeKonten(x,{...edits(),[K.st]:"Approve",[K.catatan]:f("note").value});toast("Approved. Masuk antrian upload.");renderProduksi();renderCal();renderArsip();}catch(e){toast(errText(e,S_SHEETS));busyAll(el,false);}
   };
-  el.querySelector("[data-a=rev]").onclick=async()=>{const n=f("note").value.trim();if(!n){f("note").focus();toast("Isi catatan dulu biar agent tau apa yang dibenerin");return;}busyAll(el,true);try{await writeKonten(x,{...edits(),[K.st]:"Revisi desain",[K.catatan]:n});toast("Masuk antrian revisi. Suruh Agent Desain buat ngerjain.");renderProduksi();}catch(e){toast(errText(e,S_SHEETS));busyAll(el,false);}};
+  el.querySelector("[data-a=rev]").onclick=async()=>{const n=f("note").value.trim();if(!n){f("note").focus();toast("Isi catatan dulu biar agent tau apa yang dibenerin");return;}busyAll(el,true);try{await writeKonten(x,{...edits(),[K.st]:"Revisi desain",[K.catatan]:n});toast("Masuk antrian revisi. Suruh Sasha buat ngerjain.");renderProduksi();}catch(e){toast(errText(e,S_SHEETS));busyAll(el,false);}};
   el.querySelector("[data-a=skip]").onclick=()=>skipKonten(x,el);
 }
 async function skipKonten(x,el){
@@ -749,7 +749,7 @@ function pickImage(x,slide,el){
         asetData[id]=`data:image/${ext==="png"?"png":"jpeg"};base64,${b64}`;
         URL.revokeObjectURL(prev);closeModal();
         await loadAset();renderProduksi();
-        toast(x.v[K.st]==="Desain siap"?"Gambar masuk. Tekan Revisi biar Agent Desain masang gambarnya.":"Gambar masuk. Bakal dipasang pas Agent Desain kerja.");
+        toast(x.v[K.st]==="Desain siap"?"Gambar masuk. Tekan Revisi biar Sasha masang gambarnya.":"Gambar masuk. Bakal dipasang pas Sasha kerja.");
       }catch(e){$("#upMsg").textContent=errText(e,S_SHEETS);$("#mYes").disabled=false;$("#mNo").disabled=false;}
     };
   };
@@ -877,7 +877,7 @@ async function thDrop(d){
   catch(e){x.v[T.tgl]=old[0];x.v[T.jam]=old[1];renderCal();toast(errText(e,S_SHEETS));}
 }
 function openThDetail(x){const v=x.v;
-  const where={"Draft siap":"Draf, belum di-Approve","Revisi":"Nunggu Agent Threads revisi","Approve":"Tayang otomatis sesuai jadwal","Tayang":"Udah tayang"}[v[T.st]]||"";
+  const where={"Draft siap":"Draf, belum di-Approve","Revisi":"Nunggu Jean revisi","Approve":"Tayang otomatis sesuai jadwal","Tayang":"Udah tayang"}[v[T.st]]||"";
   openModal(`${thHead(x)}<p class="meta">Threads · ${esc(where)}</p>${postsHTML(v[T.utas])}${v[T.link]?`<p><a href="${esc(v[T.link])}" target="_blank" rel="noopener">Buka di Threads</a></p>`:""}<div class="row end"><button class="btn ghost" id="mProd">Buka di Produksi</button><button class="btn primary" id="mNo">Tutup</button></div>`);
   $("#mNo").onclick=closeModal;$("#mProd").onclick=()=>{closeModal();location.hash="#produksi";$("#prodSeg button[data-p=th]").click();};}
 async function moveKonten(x,date,time){
@@ -889,7 +889,7 @@ async function moveKonten(x,date,time){
 }
 function openDetail(x){
   const v=x.v,lock=v[K.st]==="Uploaded";
-  const where={"Brief siap":"Cek di Produksi → Cek brief","Desain siap":"Cek di Produksi → Cek desain","Perlu brief":"Nunggu Agent Brief","Revisi brief":"Nunggu Agent Brief revisi","Brief OK":"Nunggu Agent Desain","Revisi desain":"Nunggu Agent Desain revisi","Approve":"Nunggu Agent Upload","Uploaded":"Udah tayang"}[v[K.st]]||"";
+  const where={"Brief siap":"Cek di Produksi → Cek brief","Desain siap":"Cek di Produksi → Cek desain","Perlu brief":"Nunggu Armin","Revisi brief":"Nunggu Armin revisi","Brief OK":"Nunggu Sasha","Revisi desain":"Nunggu Sasha revisi","Approve":"Nunggu Agent Upload","Uploaded":"Udah tayang"}[v[K.st]]||"";
   openModal(`${headHTML(x)}<p class="meta">${esc(where)}</p>
     ${v[K.link]?`<p style="margin-top:8px"><a href="${esc(v[K.link])}" target="_blank" rel="noopener">Buka post di Instagram</a></p>`:""}
     ${lock?"":`<div class="row"><div class="field" style="flex:1"><label for="eD">Tanggal</label><input type="date" id="eD" value="${esc(v[K.tgl])}"></div><div class="field" style="flex:1"><label for="eT">Jam</label><input type="time" id="eT" value="${esc(v[K.jam]||defaultJam())}"></div></div>`}
@@ -1010,9 +1010,9 @@ function bindTh(el,x){
 $("#prodSeg").onclick=e=>{const b=e.target.closest("button");if(!b)return;[...e.currentTarget.children].forEach(x=>x.classList.toggle("on",x===b));$("#prodIG").hidden=b.dataset.p!=="ig";$("#prodTH").hidden=b.dataset.p!=="th";};
 $("#thRun").onclick=async e=>{const b=e.currentTarget;
   const t=agents[AG.threads.id];
-  if(Date.now()-thFiredAt<90e3||/RUNNING|PENDING/.test(t?.last_run?.status||"")){toast("Agent Threads lagi nulis, tunggu bentar ya.");return;}
+  if(Date.now()-thFiredAt<90e3||/RUNNING|PENDING/.test(t?.last_run?.status||"")){toast("Jean lagi nulis, tunggu bentar ya.");return;}
   const rv=threads.filter(x=>x.v[T.st]==="Revisi");
-  openModal(`<h3>Suruh Agent Threads</h3><p>${rv.length?`${rv.length} draf revisi dikerjain dulu, lalu nulis draf baru.`:"Agent bakal nulis draf utas baru."}</p>
+  openModal(`<h3>Suruh Jean</h3><p>${rv.length?`${rv.length} draf revisi dikerjain dulu, lalu nulis draf baru.`:"Agent bakal nulis draf utas baru."}</p>
     <div class="field"><label for="mN">Jumlah draf baru</label><select id="mN"><option value="0">Nggak usah, revisi aja</option><option>3</option><option selected>5</option><option>8</option></select></div>
     <div class="field"><label for="mTop">Topik khusus (opsional)</label><textarea id="mTop" style="min-height:70px" placeholder="Kosongin biar agent milih sendiri"></textarea></div>
     <div class="row end"><button class="btn ghost" id="mNo">Batal</button><button class="btn primary" id="mYes">Suruh</button></div>`);
@@ -1022,13 +1022,13 @@ $("#thRun").onclick=async e=>{const b=e.currentTarget;
     let text=n==="0"?"PERINTAH: kerjakan revisi saja, jangan tulis draf baru.":`PERINTAH: tulis ${n} draf baru.${top?` Topik dari Oky: ${top}`:""}`;
     if(rv.length)text+="\nANTRIAN DARI OKY (revisi, sesuai urutan):\n"+rv.map((x,i)=>`${i+1}. ${x.v[T.id]} — ${x.v[T.topik]}`).join("\n");
     b.disabled=true;
-    try{await call(S_CLAUDE,"fire_trigger",{trigger_id:AG.threads.id,text});thFiredAt=Date.now();toast("Agent Threads lagi nulis. Lo dapet notif kalau udah beres.");renderThreads();setTimeout(loadAgents,4000);}
+    try{await call(S_CLAUDE,"fire_trigger",{trigger_id:AG.threads.id,text});thFiredAt=Date.now();toast("Jean lagi nulis. Lo dapet notif kalau udah beres.");renderThreads();setTimeout(loadAgents,4000);}
     catch(err){if(err?.code==="standalone")runAgent("threads");else toast(errText(err,S_CLAUDE));}
     b.disabled=false;};
 };
 
 /* ---------- HEAD CREATIVE ---------- */
-const HC={id:"trig_01SNBxXxVHwfEXJ1X7xzka2e",label:"Head Creative"};
+const HC={id:"trig_01SNBxXxVHwfEXJ1X7xzka2e",label:"Erwin"};
 let pesan=[],pelajaran=[],insight=null,hcFiredAt=0,hcPoll=null;
 const hcErr=e=>`<div class="notice bad">${esc(errText(e,S_SHEETS))}</div>`;
 async function loadHead(){
@@ -1057,7 +1057,7 @@ function renderFeed(){
   const stLabel={baru:"Belum dibaca",dibaca:"Nunggu keputusan lo",selesai:"Beres"};
   const one=x=>{const me=x.v[1]==="Oky",lap=x.v[2]==="laporan";
     const st=me?`<span class="chip ${x.v[4]==="selesai"?"ok":x.v[4]==="dibaca"?"mark":"grey"}">${esc({baru:"Belum dibaca",dibaca:"Dibaca",selesai:"Beres"}[x.v[4]]||x.v[4])}</span>`:(x.v[4]==="baru"?`<span class="chip bad">Baru</span>`:"");
-    return`<div class="msg ${me?"me":""} ${lap?"lap":""}"><div class="mh"><b>${me?"Lo":"Head Creative"}</b>${lap?`<span class="chip mark">Laporan</span>`:""}<span>${esc(x.v[0].replace(/^'/,""))}</span>${st}</div><div class="mb">${linkify(x.v[3])}</div></div>`;};
+    return`<div class="msg ${me?"me":""} ${lap?"lap":""}"><div class="mh"><b>${me?"Lo":"Erwin"}</b>${lap?`<span class="chip mark">Laporan</span>`:""}<span>${esc(x.v[0].replace(/^'/,""))}</span>${st}</div><div class="mb">${linkify(x.v[3])}</div></div>`;};
   const list=[...pesan].reverse(),head=list.slice(0,12),rest=list.slice(12);
   $("#hcFeed").innerHTML=head.map(one).join("")+(rest.length?`<details><summary>${rest.length} pesan lebih lama</summary><div class="feed" style="margin-top:8px">${rest.map(one).join("")}</div></details>`:"");
 }
@@ -1070,7 +1070,7 @@ async function markRead(){
 function renderPelajaran(){
   const on=pelajaran.filter(x=>x.v[4]!=="nonaktif"),off=pelajaran.filter(x=>x.v[4]==="nonaktif");
   $("#cntPl").textContent=pelajaran.length?`${on.length} aktif`:"";
-  if(!pelajaran.length){$("#plList").innerHTML=`<div class="card empty"><b>Belum ada pelajaran</b>Head Creative bakal nulis arahan pertama pas laporan Senin, atau lo tambahin sendiri di bawah.</div>`;return;}
+  if(!pelajaran.length){$("#plList").innerHTML=`<div class="card empty"><b>Belum ada pelajaran</b>Erwin bakal nulis arahan pertama pas laporan Senin, atau lo tambahin sendiri di bawah.</div>`;return;}
   const card=x=>`<div class="card pl ${x.v[4]==="nonaktif"?"off":""}" data-r="${x.r}"><div class="grow"><div class="chips"><span class="chip">${esc(x.v[1]||"Semua")}</span><span class="chip grey">${esc(x.v[0])}</span></div><p>${esc(x.v[2])}</p>${x.v[3]?`<div class="meta">Dasar: ${esc(x.v[3])}</div>`:""}</div><label class="switch" aria-label="Aktifkan arahan ${esc(x.v[0])}"><input type="checkbox" ${x.v[4]!=="nonaktif"?"checked":""}><span></span></label></div>`;
   $("#plList").innerHTML=on.map(card).join("")+(off.length?`<details><summary>${off.length} arahan nonaktif</summary><div style="margin-top:8px">${off.map(card).join("")}</div></details>`:"");
   document.querySelectorAll("#plList .pl").forEach(el=>{const x=pelajaran.find(y=>y.r==el.dataset.r),inp=el.querySelector("input");
@@ -1099,7 +1099,7 @@ function renderInsight(){
 }
 async function callHC(manual){
   const t=agents[HC.id];
-  if(Date.now()-hcFiredAt<90e3||/RUNNING|PENDING/.test(t?.last_run?.status||"")){if(manual)toast("Head Creative lagi kerja, tunggu bentar ya.");return"busy";}
+  if(Date.now()-hcFiredAt<90e3||/RUNNING|PENDING/.test(t?.last_run?.status||"")){if(manual)toast("Erwin lagi kerja, tunggu bentar ya.");return"busy";}
   try{
     await call(S_CLAUDE,"fire_trigger",{trigger_id:HC.id,text:manual?"PESAN DARI OKY: kerjakan pesan berstatus \"baru\" di tab Head Creative (kalau ada), lalu kirim laporan singkat kondisi tim sekarang.":"PESAN DARI OKY: ada pesan baru dari Oky di tab Head Creative (Status \"baru\"). Kerjakan dan balas."});
     hcFiredAt=Date.now();renderHcStat();setTimeout(loadAgents,4000);startPoll();return"ok";
@@ -1110,7 +1110,7 @@ async function callHC(manual){
 }
 function hcStandalone(){
   const url=typeof CLAUDE_URL!=="undefined"?CLAUDE_URL:"https://claude.ai/artifact/XxoisbLBtWN6ttSnQmBL3A";
-  openModal(`<h3>Panggil Head Creative dari Claude</h3><p>Pesan lo udah kesimpen dan bakal dibaca pas dia jalan berikutnya (Senin pagi). Mau dibaca sekarang? Buka dashboard di Claude lalu tekan Minta laporan.</p><div class="row end"><button class="btn ghost" id="mNo">Nanti aja</button><a class="btn primary" href="${url}" target="_blank" rel="noopener" id="mGo">Buka di Claude</a></div>`);
+  openModal(`<h3>Panggil Erwin dari Claude</h3><p>Pesan lo udah kesimpen dan bakal dibaca pas dia jalan berikutnya (Senin pagi). Mau dibaca sekarang? Buka dashboard di Claude lalu tekan Minta laporan.</p><div class="row end"><button class="btn ghost" id="mNo">Nanti aja</button><a class="btn primary" href="${url}" target="_blank" rel="noopener" id="mGo">Buka di Claude</a></div>`);
   $("#mNo").onclick=closeModal;$("#mGo").onclick=closeModal;
 }
 function startPoll(){clearInterval(hcPoll);let n=0;hcPoll=setInterval(()=>{if(++n>15){clearInterval(hcPoll);return;}loadHead();if(n%3===0)loadAgents();},60000);}
@@ -1121,14 +1121,14 @@ $("#hcSend").onclick=async e=>{const b=e.currentTarget,t=$("#hcMsg").value.trim(
   catch(err){toast(errText(err,S_SHEETS));b.disabled=false;b.textContent="Kirim";return;}
   await loadHead();
   const r=await callHC(false);
-  if(r==="ok")toast("Terkirim. Head Creative lagi baca, balasannya muncul di sini.");
-  else if(r==="busy")toast("Terkirim. Head Creative lagi kerja, pesan lo kebaca di run berikutnya.");
+  if(r==="ok")toast("Terkirim. Erwin lagi baca, balasannya muncul di sini.");
+  else if(r==="busy")toast("Terkirim. Erwin lagi kerja, pesan lo kebaca di run berikutnya.");
   else if(r==="standalone")hcStandalone();
-  else toast("Pesan kesimpen, tapi Head Creative gagal dipanggil. Coba Minta laporan.");
+  else toast("Pesan kesimpen, tapi Erwin gagal dipanggil. Coba Minta laporan.");
   b.disabled=false;b.textContent="Kirim";};
 $("#hcCall").onclick=async e=>{const b=e.currentTarget;
-  if(!(typeof CLAUDE_URL!=="undefined")&&!await confirmBox("Minta laporan sekarang?","Head Creative bakal baca pesan lo yang belum dibalas, ngecek kondisi tim, dan nulis laporan singkat di sini.","Panggil","primary"))return;
-  b.disabled=true;const r=await callHC(true);if(r==="ok")toast("Head Creative dipanggil. Laporannya muncul di sini.");b.disabled=false;};
+  if(!(typeof CLAUDE_URL!=="undefined")&&!await confirmBox("Minta laporan sekarang?","Erwin bakal baca pesan lo yang belum dibalas, ngecek kondisi tim, dan nulis laporan singkat di sini.","Panggil","primary"))return;
+  b.disabled=true;const r=await callHC(true);if(r==="ok")toast("Erwin dipanggil. Laporannya muncul di sini.");b.disabled=false;};
 
 /* ---------- routing & boot ---------- */
 const VIEWS=["head","ide","produksi","kalender","agent","lainnya"];
