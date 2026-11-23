@@ -1,0 +1,24 @@
+name: Contoh VO Reels
+on:
+  push:
+    branches: [vo-contoh]
+jobs:
+  render:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with: { python-version: "3.12" }
+      - run: |
+          sudo apt-get update -qq && sudo apt-get install -y -qq ffmpeg
+          pip install -q playwright edge-tts
+          python -m playwright install --with-deps chromium
+      - run: |
+          cd tools/video
+          python render_video.py contoh/revisi-dikit.json /tmp/contoh-cowok-ardi.mp4 --vo id-ID-ArdiNeural --rate +5%
+          python render_video.py contoh/revisi-dikit.json /tmp/contoh-cewek-gadis.mp4 --vo id-ID-GadisNeural --rate +5%
+      - uses: actions/upload-artifact@v4
+        with:
+          name: contoh-vo
+          path: /tmp/contoh-*.mp4

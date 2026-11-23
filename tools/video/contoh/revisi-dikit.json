@@ -1,0 +1,6 @@
+{"judul_kecil":"Klien vs desainer","judul":"\"Revisi dikit\"\n==itu seberapa dikit?==","adegan":[
+{"vo":"Klien bilang: revisi dikit ya kak.","highlight":"dikit","visual":{"tipe":"chat","nama":"Klien","pesan":[{"dari":"dia","teks":"Kak, revisi **dikit** ya","jam":"23.40"},{"dari":"gue","teks":"Siap kak, bagian mana?","jam":"23.41"}]}},
+{"vo":"Sebulan kemudian, file lo udah sampai final versi sembilan.","highlight":"versi sembilan","visual":{"tipe":"daftar","ikon":"file","item":[{"judul":"final.psd","sub":"1 Okt"},{"judul":"final_v2.psd","sub":"8 Okt"},{"judul":"final_FIX_v9.psd","sub":"31 Okt"}],"angka":{"label":"revisi ke-","dari":1,"ke":9}}},
+{"vo":"Masalahnya bukan lo kurang sabar. Kesepakatannya yang kosong.","highlight":"kosong","visual":{"tipe":"teks","teks":"Bukan kurang sabar.\n==Kesepakatannya kosong.=="}},
+{"vo":"Tulis batas revisi di penawaran, sebelum mulai kerja.","highlight":"batas revisi","visual":{"tipe":"checklist","judul":"Penawaran Desain","sub":"tulis sebelum mulai kerja","item":["Termasuk 2x revisi","Revisi ke-3 dst bayar per putaran","Revisi = ubah, bukan konsep baru"]}},
+{"vo":"Simpan ini buat proyek berikutnya.","highlight":"Simpan","visual":{"tipe":"teks","teks":"Batas revisi\n==ditulis di awal.=="},"cta":{"judul":"Simpan buat proyek berikutnya","sub":"jejakkarya.github.io"}}]}
