@@ -5,8 +5,8 @@ Nyari konten Format = Reels, Status = "Desain siap", yang foldernya punya naskah
 lebih baru dari video "-vo.mp4" (atau belum ada). Naskah dirender pakai render_video.py --vo,
 lalu MP4 disimpan balik ke folder Drive konten itu sebagai "<ID>-vo.mp4".
 
-Env: KONTROL_KEY (wajib), KONTEN_ID (opsional, paksa satu konten), VO_VOICE / VO_RATE (opsional,
-kalau kosong diambil dari tab Panduan baris "Suara VO Reels", isi contoh: "id-ID-ArdiNeural, +5%").
+Env: KONTROL_KEY (wajib), GEMINI_API_KEY (kalau suara Gemini), KONTEN_ID (opsional, paksa satu konten),
+VO_VOICE (opsional; kalau kosong diambil dari tab Panduan baris "Suara VO Reels", contoh "gemini: Achird").
 """
 import base64, json, os, re, subprocess, sys, tempfile, time, urllib.request
 from datetime import datetime, timedelta, timezone
@@ -53,18 +53,26 @@ def folder_id(s):
 
 
 def voice_cfg():
-    v, r = os.environ.get("VO_VOICE", "").strip(), os.environ.get("VO_RATE", "").strip()
+    """Dari Panduan baris "Suara VO Reels". Format:
+    gemini: Achird | arah gaya bicara (opsional)      -> Gemini TTS (butuh GEMINI_API_KEY)
+    id-ID-ArdiNeural, +5%                             -> Microsoft edge-tts
+    Balikin list argumen buat render_video.py."""
+    v = os.environ.get("VO_VOICE", "").strip()
     if not v:
         rows = backend({"action": "get", "range": "Panduan!A1:B60"}).get("values") or []
         for row in rows:
             if row and re.match(r"suara vo", str(row[0]), re.I) and len(row) > 1:
-                parts = [p.strip() for p in str(row[1]).split(",")]
-                v = parts[0]
-                if len(parts) > 1 and not r:
-                    r = parts[1]
+                v = str(row[1]).strip()
                 break
-    m = re.search(r"[a-z]{2}-[A-Z]{2}-\w+Neural", v or "")
-    return (m.group(0) if m else "id-ID-ArdiNeural"), (r if re.fullmatch(r"[+-]\d{1,2}%", r or "") else "+5%")
+    m = re.match(r"\s*gemini\s*:?\s*([A-Za-z]+)\s*(?:\|\s*(.+))?$", v or "", re.S | re.I)
+    if m:
+        args = ["--tts", "gemini", "--vo", m.group(1)]
+        if m.group(2) and m.group(2).strip():
+            args += ["--gaya", m.group(2).strip()]
+        return args
+    n = re.search(r"[a-z]{2}-[A-Z]{2}-\w+Neural", v or "")
+    r = re.search(r"[+-]\d{1,2}%", v or "")
+    return ["--vo", n.group(0) if n else "id-ID-ArdiNeural", "--rate", r.group(0) if r else "+5%"]
 
 
 def jobs():
@@ -108,8 +116,8 @@ def main():
     if not todo:
         print("Nggak ada Reels yang perlu dirender.")
         return
-    voice, rate = voice_cfg()
-    print("Suara:", voice, rate)
+    vargs = voice_cfg()
+    print("Suara:", " ".join(vargs))
     for v, fid, js in todo:
         kid, judul = v[K["id"]], v[K["judul"]]
         try:
@@ -117,11 +125,11 @@ def main():
             with tempfile.TemporaryDirectory() as td:
                 jp, mp = os.path.join(td, "naskah.json"), os.path.join(td, f"{kid}-vo.mp4")
                 open(jp, "wb").write(naskah)
-                subprocess.run([sys.executable, os.path.join(HERE, "render_video.py"), jp, mp, "--vo", voice, "--rate", rate], check=True)
+                subprocess.run([sys.executable, os.path.join(HERE, "render_video.py"), jp, mp, *vargs], check=True)
                 data = base64.b64encode(open(mp, "rb").read()).decode()
                 mb = os.path.getsize(mp) / 1e6
             backend({"action": "upload", "folderId": fid, "name": f"{kid}-vo.mp4", "mimeType": "video/mp4", "data": data, "replace": True})
-            log(kid, judul, "Video VO", f"{kid}-vo.mp4 ({mb:.1f} MB) dari {js['title']}, suara {voice} {rate}")
+            log(kid, judul, "Video VO", f"{kid}-vo.mp4 ({mb:.1f} MB) dari {js['title']}, suara {' '.join(vargs[:4])}")
             print(kid, "beres")
         except Exception as e:
             msg = str(e)

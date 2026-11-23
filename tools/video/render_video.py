@@ -149,7 +149,7 @@ async def tts(text, voice, rate):
     return bytes(audio), wb
 
 
-GEMINI_MODELS = ["gemini-3.8-flash-tts", "gemini-3.8-flash-lite-tts", "gemini-3.1-flash-tts-preview"]
+GEMINI_MODELS = ["gemini-3.8-flash-tts", "gemini-3.1-flash-tts-preview"]
 GAYA_DEFAULT = ("Casual Jakarta-style Indonesian, like chatting with a friend who is also a creative worker. "
                 "Relaxed, warm, a little playful and lightly sarcastic, natural conversational rhythm and intonation, "
                 "medium-fast pace. Not a news anchor, not an ad voice-over.")
@@ -168,8 +168,9 @@ def gemini_tts(text, voice, gaya, out_wav):
     gen = {"responseModalities": ["AUDIO"], "speechConfig": {"voiceConfig": {"prebuiltVoiceConfig": {"voiceName": voice}}}}
     last = ""
     for model in ([os.environ["GEMINI_TTS_MODEL"]] if os.environ.get("GEMINI_TTS_MODEL") else GEMINI_MODELS):
-        for body in bodies:
-            for attempt in range(6):
+        # model 3.8 baca teks persis (gaya lewat speech_metadata); model lama gaya ditaruh di teks
+        for body in (bodies[:1] if model.startswith("gemini-3.8") else bodies[1:]):
+            for attempt in range(8):
                 req = urllib.request.Request(
                     f"https://generativelanguage.googleapis.com/v1beta/models/{model}:generateContent",
                     data=json.dumps({**body, "generationConfig": gen}).encode(),
@@ -190,7 +191,7 @@ def gemini_tts(text, voice, gaya, out_wav):
                 except urllib.error.HTTPError as e:
                     last = f"{model} HTTP {e.code}: {e.read()[:300]!r}"
                     if e.code in (429, 500, 503):
-                        time.sleep(min(60, 8 * (attempt + 1)))
+                        time.sleep(min(90, 15 * (attempt + 1)))
                         continue
                     break  # 400/404: coba bentuk body/model berikutnya
                 except (KeyError, IndexError) as e:
@@ -221,9 +222,17 @@ def make_vo(data, voice, rate, workdir, engine="edge", gaya=""):
         wv = os.path.join(workdir, f"a{i}.wav")
         if engine == "gemini":
             raw = os.path.join(workdir, f"a{i}_raw.wav")
-            used = gemini_tts(text, voice, gaya or GAYA_DEFAULT, raw)
-            print(f"adegan {i + 1}: {used}")
-            trim_silence(ff, raw, wv)
+            maks = len(words(text)) / 1.3 + 2.5  # lebih lama dari ini = kemungkinan suaranya ngaco
+            for coba in range(3):
+                used = gemini_tts(text, voice, gaya or GAYA_DEFAULT, raw)
+                trim_silence(ff, raw, wv)
+                with wave.open(wv) as w:
+                    pj = w.getnframes() / w.getframerate()
+                print(f"adegan {i + 1}: {used} {pj:.1f} dtk")
+                if pj <= maks:
+                    break
+            else:
+                raise SystemExit(f"Suara adegan {i + 1} kepanjangan ({pj:.1f} dtk), kemungkinan ngaco.")
             wb = []
         else:
             mp3, wb = asyncio.run(tts(text, voice, rate))

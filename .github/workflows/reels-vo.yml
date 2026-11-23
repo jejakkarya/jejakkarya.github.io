@@ -1,8 +1,8 @@
 name: Render Reels + VO
 
 # Tiap ±20 menit nyari Reels berstatus "Desain siap" yang naskah.json-nya belum dirender pakai suara,
-# lalu render ulang video + voice over (suara AI Microsoft) dan simpan "<ID>-vo.mp4" ke folder Drive konten.
-# Suara diatur di tab Panduan baris "Suara VO Reels". Secret: KONTROL_KEY.
+# lalu render ulang video + voice over (Gemini TTS / Microsoft) dan simpan "<ID>-vo.mp4" ke folder Drive konten.
+# Suara diatur di tab Panduan baris "Suara VO Reels". Secret: KONTROL_KEY, GEMINI_API_KEY.
 
 on:
   schedule:
@@ -44,5 +44,6 @@ jobs:
         if: steps.cek.outputs.ok == '1'
         env:
           KONTROL_KEY: ${{ secrets.KONTROL_KEY }}
+          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
           KONTEN_ID: ${{ github.event_name == 'workflow_dispatch' && inputs.konten_id || '' }}
         run: python tools/video/reels_job.py
