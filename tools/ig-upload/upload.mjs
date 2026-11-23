@@ -12,7 +12,7 @@ const EXPECT_USERNAME = "jejakkarya.kreatif";
 const IG_API = "https://graph.instagram.com/v22.0";
 const MEDIA_BRANCH = "ig-media";
 const DEFAULT_JAM = "19:00";
-const K = { id: 0, ide: 1, judul: 2, tgl: 5, jam: 6, st: 7, caption: 10, folder: 12, slide: 13, link: 14, ubah: 16, antri: 17 };
+const K = { id: 0, ide: 1, judul: 2, format: 4, tgl: 5, jam: 6, st: 7, caption: 10, folder: 12, slide: 13, link: 14, ubah: 16, antri: 17 };
 
 const { IG_TOKEN, KONTROL_KEY, GITHUB_TOKEN, GITHUB_REPOSITORY } = process.env;
 const DRY = String(process.env.DRY_RUN || "").toLowerCase() === "true";
@@ -105,6 +105,63 @@ async function waitPublic(url) {
   throw new Error(`Gambar belum bisa diakses publik: ${url}`);
 }
 
+
+/* ---------- Reels ---------- */
+async function postReels(x, me, fid, caption, now) {
+  const v = x.v, kid = v[K.id], judul = v[K.judul];
+  const vids = ((await backend({ action: "files", folderId: fid, type: "video/" })).files || [])
+    .filter(f => /\.mp4$/i.test(f.title || "") || /video/.test(f.mimeType || ""));
+  if (!vids.length) throw new Error("Folder desain nggak ada file video MP4-nya.");
+  if (vids.length > 1) log(`Ada ${vids.length} video, dipakai yang pertama: ${vids[0].title}`);
+  const b = await backend({ action: "file", fileId: vids[0].id });
+  const buf = Buffer.from(b.data, "base64");
+  if (buf.length < 50000) throw new Error(`File video kekecilan (${buf.length} byte), kemungkinan rusak.`);
+  if (buf.length > 300 * 1024 * 1024) throw new Error("File video lebih dari 300 MB.");
+  log(`Video siap: ${vids[0].title} (${(buf.length / 1048576).toFixed(1)} MB)`);
+  if (DRY) { log("[UJI] Berhenti di sini, nggak ada yang diposting. Semua pengecekan lolos."); return; }
+
+  const base = { media_type: "REELS", caption, share_to_feed: "true", thumb_offset: "2500" };
+  let creation, hosted = null;
+  try {
+    // 1) Upload langsung ke Instagram (resumable), nggak perlu hosting.
+    const c = await ig("POST", `/${me.user_id}/media`, { ...base, upload_type: "resumable" });
+    const uri = c.uri || `https://rupload.facebook.com/ig-api-upload/${IG_API.split("/").pop()}/${c.id}`;
+    const up = await fetch(uri, { method: "POST", headers: { Authorization: `OAuth ${IG_TOKEN}`, offset: "0", file_size: String(buf.length) }, body: buf });
+    const uj = await up.json().catch(() => ({}));
+    if (!up.ok || uj.success === false || uj.error) throw new Error(`upload video ditolak: ${uj.error?.message || uj.debug_info?.message || up.status}`);
+    creation = c.id;
+    log("Video terkirim ke Instagram (resumable).");
+  } catch (e) {
+    // 2) Cadangan: taruh sementara di branch ig-media, kasih link-nya ke Instagram.
+    log(`Upload langsung gagal (${e.message}), coba lewat link sementara.`);
+    await ensureBranch();
+    const path = `ig/${kid}-${Date.now().toString(36)}/reel.mp4`;
+    hosted = { path, ...(await putMedia(path, buf)) };
+    await waitPublic(hosted.url);
+    creation = (await ig("POST", `/${me.user_id}/media`, { ...base, video_url: hosted.url })).id;
+  }
+  try {
+    // Video butuh waktu diproses Instagram; tunggu sampai FINISHED (maks ±5 menit).
+    for (let i = 0; i < 60; i++) {
+      const j = await ig("GET", `/${creation}`, { fields: "status_code,status" });
+      if (j.status_code === "FINISHED") break;
+      if (j.status_code === "ERROR" || j.status_code === "EXPIRED") throw new Error(`Instagram gagal proses video: ${j.status || j.status_code}`);
+      if (i === 59) throw new Error("Instagram kelamaan proses video (lebih dari 5 menit).");
+      await sleep(5000);
+    }
+    const pub = await ig("POST", `/${me.user_id}/media_publish`, { creation_id: creation });
+    const info = await ig("GET", `/${pub.id}`, { fields: "permalink" });
+    log(`Tayang (Reels): ${info.permalink}`);
+    await setCell(`Konten!H${x.r}`, "Uploaded");
+    await setCell(`Konten!O${x.r}`, info.permalink || "");
+    await setCell(`Konten!Q${x.r}`, "'" + wib().stamp);
+    await setCell(`Konten!R${x.r}`, "");
+    await logRow(kid, judul, "Uploaded", "Reels: " + info.permalink);
+  } finally {
+    if (hosted) await delMedia(hosted.path, hosted.sha);
+  }
+}
+
 /* ---------- utama ---------- */
 async function main() {
   if (!IG_TOKEN || !KONTROL_KEY) throw new Error("Secret IG_TOKEN atau KONTROL_KEY belum diisi di repo.");
@@ -153,6 +210,8 @@ async function main() {
 
   const fid = (String(v[K.folder]).match(/folders\/([\w-]+)/) || [])[1];
   if (!fid) throw new Error(`Folder desain kosong atau bukan link folder: ${v[K.folder]}`);
+
+  if (/reels?/i.test(String(v[K.format] || ""))) { await postReels(x, me, fid, caption, now); return; }
   const files = ((await backend({ action: "files", folderId: fid, type: "image/" })).files || [])
     .map(f => ({ ...f, n: +((f.title || "").match(/(\d+)\.\w+$/) || [0, 0])[1] }))
     .filter(f => f.n > 0).sort((a, b) => a.n - b.n);

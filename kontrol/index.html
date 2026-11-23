@@ -235,6 +235,11 @@ select{width:100%;border:1px solid var(--line);border-radius:12px;padding:10px 1
 .ev.th .at{font-weight:800;flex:none}
 .ev.th.th-draft{border-style:dashed;border-left-style:solid;color:var(--muted)}
 .ev.th.th-up{background:var(--ink);color:#fff;border-color:var(--ink);border-left-color:var(--mark);cursor:pointer}
+/* Reels */
+.slides video{width:100%;max-width:360px;aspect-ratio:9/16;border-radius:16px;background:#141826;display:block}
+.adegan .s b.t{display:block;color:var(--blue);font-size:12px;letter-spacing:.06em;text-transform:uppercase;margin-bottom:2px}
+.adegan .s .vo{font-weight:700}
+.adegan .s .vi{color:var(--muted);font-size:13px;margin-top:4px}
 </style>
 </head>
 <body>
@@ -555,12 +560,13 @@ async function ideAction(x,a,btn){
   openModal(`<h3>Pilih ide ini</h3><p>${esc(x.v[I.judul])}</p>
     <div class="row" style="margin-top:4px"><div class="field" style="flex:1"><label for="pD">Rencana tayang</label><input type="date" id="pD" value="${d}"></div><div class="field" style="flex:1"><label for="pT">Jam</label><input type="time" id="pT" value="${t}"></div></div>
     <p class="meta" style="margin-top:8px">Bisa digeser nanti di Kalender. Kosongin tanggal kalau belum mau dijadwal.</p>
+    <div class="field"><label for="pF">Format</label><select id="pF"><option ${/reels?/i.test(x.v[I.format]||"")?"":"selected"}>Carousel</option><option ${/reels?/i.test(x.v[I.format]||"")?"selected":""}>Reels</option></select></div>
     <div class="row end"><button class="btn ghost" id="mNo">Batal</button><button class="btn ok" id="mYes">Masukin Produksi</button></div>`);
   $("#mNo").onclick=closeModal;
   $("#mYes").onclick=async()=>{
     const date=$("#pD").value,time=$("#pT").value||t;$("#mYes").disabled=true;
     const id="K-"+x.v[I.id].replace(/^I-/,"");
-    const row=[id,x.v[I.id],txt(x.v[I.judul]),x.v[I.pilar],x.v[I.format]||"Carousel",date?"'"+date:"",time?"'"+time:"","Perlu brief",txt(x.v[I.hook]),"","","","","","",txt([x.v[I.pemicu],x.v[I.sumber]].filter(Boolean).join(" | ")),"'"+nowStamp()];
+    const row=[id,x.v[I.id],txt(x.v[I.judul]),x.v[I.pilar],($("#pF")?.value)||x.v[I.format]||"Carousel",date?"'"+date:"",time?"'"+time:"","Perlu brief",txt(x.v[I.hook]),"","","","","","",txt([x.v[I.pemicu],x.v[I.sumber]].filter(Boolean).join(" | ")),"'"+nowStamp()];
     try{
       await call(S_SHEETS,"append_values",{spreadsheetId:SHEET_ID,range:"Konten!A1",values:[row]});
       await setRange(`'Bank Ide'!J${x.r}`,[["pilih"]]);x.v[I.st]="pilih";closeModal();
@@ -614,22 +620,34 @@ function renderProduksi(){
   $("#desainList").innerHTML=dsn.length?dsn.map(desainCard).join(""):`<div class="card empty">Belum ada desain yang nunggu dicek.</div>`;
   siap.forEach(bindBrief);dsn.forEach(bindDesain);
 }
+const isReels=x=>/reels?/i.test(String(x.v[K.format]||""));
+function adeganList(naskah){
+  const lines=String(naskah||"").split(/\n+/).filter(l=>l.trim());
+  if(!lines.length)return`<p class="meta">Naskah kosong.</p>`;
+  return`<div class="slidelist adegan">${lines.map(l=>{
+    const m=l.match(/^(Adegan\s*\d+\s*(\([^)]*\))?)\s*:\s*(.*)$/i);
+    if(!m)return`<div class="s"><span class="meta">${esc(l)}</span></div>`;
+    const part=k=>{const r=m[3].match(new RegExp(k+"\\s*:\\s*([^|]*)","i"));return r?r[1].trim():"";};
+    const vo=part("VO"),h=part("Highlight"),vi=part("Visual"),lb=part("Label"),cta=part("CTA");
+    let voH=esc(vo);if(h)voH=voH.replace(esc(h),`<mark>${esc(h)}</mark>`);
+    return`<div class="s"><b class="t">${esc(m[1])}</b><div class="vo">${voH||esc(m[3])}</div>${vi?`<div class="vi">Visual: ${esc(vi)}</div>`:""}${lb&&lb!=="-"?`<div class="vi">Label: ${esc(lb)}</div>`:""}${cta?`<div class="vi">CTA: ${esc(cta)}</div>`:""}</div>`;}).join("")}</div>`;
+}
 function slideList(naskah,x,editable){
   const lines=String(naskah||"").split(/\n+/).filter(l=>l.trim());
   if(!lines.length)return`<p class="meta">Naskah kosong.</p>`;
   return`<div class="slidelist">${lines.map((l,i)=>{const m=l.match(/^(Slide\s*\d+\s*(\([^)]*\))?)\s*:\s*(.*)$/i);return`<div class="s">${m?`<b>${esc(m[1])}</b>${hl(m[3]).replace(/ \| /g,"<br>")}`:hl(l)}${x?asetHTML(x,i+1,editable):""}</div>`;}).join("")}</div>`;
 }
-function headHTML(x){const v=x.v;return`<div class="chips">${chip(v[K.st])}<span class="chip">${esc(v[K.pilar]||"")}</span><span class="chip grey">${esc(fmtDate(v[K.tgl]))}${v[K.jam]?" · "+esc(v[K.jam]):""}</span>${v[K.slide]?`<span class="chip grey">${esc(v[K.slide])} slide</span>`:""}${(aset[v[K.id]]||[]).length?`<span class="chip mark">${(aset[v[K.id]]||[]).length} gambar</span>`:""}</div><h3>${esc(v[K.judul])}</h3>${v[K.hook]?`<div class="hook">${esc(v[K.hook])}</div>`:""}`;}
+function headHTML(x){const v=x.v;return`<div class="chips">${chip(v[K.st])}<span class="chip">${esc(v[K.pilar]||"")}</span><span class="chip grey">${esc(fmtDate(v[K.tgl]))}${v[K.jam]?" · "+esc(v[K.jam]):""}</span>${isReels(x)?`<span class="chip ink">Reels</span>`:""}${v[K.slide]?`<span class="chip grey">${esc(v[K.slide])} ${isReels(x)?"adegan":"slide"}</span>`:""}${(aset[v[K.id]]||[]).length?`<span class="chip mark">${(aset[v[K.id]]||[]).length} gambar</span>`:""}</div><h3>${esc(v[K.judul])}</h3>${v[K.hook]?`<div class="hook">${esc(v[K.hook])}</div>`:""}`;}
 function briefCard(x){const v=x.v;return`<article class="card" id="b${x.r}">${headHTML(x)}
-  ${slideList(v[K.naskah],x,true)}
+  ${isReels(x)?adeganList(v[K.naskah]):slideList(v[K.naskah],x,true)}
   <details><summary>Edit naskah sendiri</summary><textarea data-f="naskah" style="min-height:180px;margin-top:8px">${esc(v[K.naskah])}</textarea></details>
   <div class="field"><label>Caption (bisa lo edit)</label><textarea data-f="caption">${esc(v[K.caption])}</textarea></div>
   ${v[K.sumber]?`<details><summary>Sumber</summary><div class="prewrap">${linkify(v[K.sumber])}</div></details>`:""}
   <div class="field"><label>Catatan buat agent (wajib kalau Revisi)</label><textarea data-f="note" style="min-height:64px" placeholder="Misal: hook kurang nyelekit, slide 3 kepanjangan"></textarea></div>
   <div class="actions"><button class="btn ok" data-a="ok">Brief OK</button><button class="btn warn" data-a="rev">Revisi</button><button class="btn ghost" data-a="skip">Skip</button></div></article>`;}
 function desainCard(x){const v=x.v;const fid=folderId(v[K.folder]);return`<article class="card" id="d${x.r}">${headHTML(x)}
-  ${fid?`<div class="slides" data-slides><div class="ph">Tap "Muat desain"</div></div><button class="btn ghost sm" data-a="load">Muat desain</button> <a href="${esc(v[K.folder])}" target="_blank" rel="noopener" class="meta">Buka di Drive</a>`:`<div class="notice bad">Folder desain belum ada.</div>`}
-  <details ${(aset[v[K.id]]||[]).length?"open":""}><summary>Naskah & gambar</summary>${slideList(v[K.naskah],x,true)}</details>
+  ${fid?`<div class="slides" data-slides><div class="ph">Tap "${isReels(x)?"Muat video":"Muat desain"}"</div></div><button class="btn ghost sm" data-a="load">${isReels(x)?"Muat video":"Muat desain"}</button> <a href="${esc(v[K.folder])}" target="_blank" rel="noopener" class="meta">Buka di Drive</a>`:`<div class="notice bad">Folder desain belum ada.</div>`}
+  ${isReels(x)?`<details><summary>Naskah adegan</summary>${adeganList(v[K.naskah])}</details>`:`<details ${(aset[v[K.id]]||[]).length?"open":""}><summary>Naskah & gambar</summary>${slideList(v[K.naskah],x,true)}</details>`}
   <div class="field"><label>Caption (bisa lo edit)</label><textarea data-f="caption">${esc(v[K.caption])}</textarea></div>
   <div class="field"><label>Catatan buat agent (wajib kalau Revisi)</label><textarea data-f="note" style="min-height:64px" placeholder="Misal: slide 2 teksnya kepanjangan, ganti jadi kutipan"></textarea></div>
   <div class="actions"><button class="btn ok" data-a="approve">Approve</button><button class="btn warn" data-a="rev">Revisi</button><button class="btn ghost" data-a="skip">Skip</button></div></article>`;}
@@ -658,13 +676,26 @@ async function skipKonten(x,el){
   if(!await confirmBox("Skip konten ini?","Nggak akan diproduksi atau diposting. Bisa dibalikin dari Lainnya → Arsip.","Skip","danger"))return;
   busyAll(el,true);try{await writeKonten(x,{[K.st]:"Skip"});toast("Di-skip");renderProduksi();renderCal();renderArsip();}catch(e){toast(errText(e,S_SHEETS));busyAll(el,false);}
 }
-function imgFromResult(r){
-  for(const b of(r?.content||[])){if(b.type==="image"&&b.data)return`data:${b.mimeType||"image/png"};base64,${b.data}`;if(b.type==="resource"&&b.resource?.blob)return`data:${b.resource.mimeType||"image/png"};base64,${b.resource.blob}`;}
-  const p=unwrap(r?.payload);if(p&&typeof p==="object"){const d=p.content||p.data||p.base64Content;if(typeof d==="string"&&d.length>100)return`data:${p.mimeType||"image/png"};base64,${d}`;}
+function imgFromResult(r,def="image/png"){
+  for(const b of(r?.content||[])){if(b.type==="image"&&b.data)return`data:${b.mimeType||def};base64,${b.data}`;if(b.type==="resource"&&b.resource?.blob)return`data:${b.resource.mimeType||def};base64,${b.resource.blob}`;}
+  const p=unwrap(r?.payload);if(p&&typeof p==="object"){const d=p.content||p.data||p.base64Content;if(typeof d==="string"&&d.length>100)return`data:${p.mimeType||def};base64,${d}`;}
   return null;
 }
 async function loadSlides(x,el,btn){
   const box=el.querySelector("[data-slides]"),fid=folderId(x.v[K.folder]);btn.disabled=true;
+  if(isReels(x)){
+    if(imgCache[fid]){box.innerHTML=`<video src="${imgCache[fid]}" controls playsinline></video>`;btn.remove();return;}
+    box.innerHTML=`<div class="ph">Nyari video…</div>`;
+    try{
+      const p=payload(await call(S_DRIVE,"search_files",{query:`parentId = '${fid}' and mimeType contains 'video/'`,excludeContentSnippets:true,pageSize:5}));
+      const f=(p?.files||[])[0];if(!f){box.innerHTML=`<div class="ph">Video belum ada di folder</div>`;btn.disabled=false;return;}
+      box.innerHTML=`<div class="ph">Ngunduh video…</div>`;
+      const u=imgFromResult(await call(S_DRIVE,"download_file_content",{fileId:f.id}),"video/mp4");
+      if(!u){box.innerHTML=`<div class="ph">Video gagal dimuat. Buka di Drive.</div>`;btn.disabled=false;return;}
+      imgCache[fid]=u;box.innerHTML=`<video src="${u}" controls playsinline></video>`;btn.remove();
+    }catch(e){box.innerHTML=`<div class="notice bad">${esc(errText(e,S_DRIVE))}</div>`;btn.disabled=false;}
+    return;
+  }
   if(imgCache[fid]){box.innerHTML=imgCache[fid].map((u,i)=>u?`<img src="${u}" alt="Slide ${i+1}">`:`<div class="ph">Slide ${i+1} gagal</div>`).join("");btn.remove();return;}
   box.innerHTML=`<div class="ph">Nyari file…</div>`;
   try{
