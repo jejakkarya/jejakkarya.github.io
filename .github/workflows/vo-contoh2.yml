@@ -1,0 +1,30 @@
+name: Contoh VO Gemini
+on:
+  push:
+    branches: [vo-contoh2]
+permissions:
+  contents: write
+jobs:
+  render:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with: { python-version: "3.12" }
+      - run: |
+          sudo apt-get update -qq && sudo apt-get install -y -qq ffmpeg
+          pip install -q playwright
+          python -m playwright install --with-deps chromium
+      - env:
+          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+        run: |
+          cd tools/video
+          for v in Zubenelgenubi Achird Callirrhoe Leda; do
+            python render_video.py contoh/revisi-dikit.json /tmp/gemini-$v.mp4 --tts gemini --vo $v || echo "GAGAL $v"
+          done
+          ls -la /tmp/*.mp4
+      - run: |
+          mkdir /tmp/out && cd /tmp/out && git init -q -b vo-hasil2 && cp /tmp/gemini-*.mp4 .
+          git -c user.name=bot -c user.email=bot@users.noreply.github.com add . && git -c user.name=bot -c user.email=bot@users.noreply.github.com commit -qm hasil
+          git push -f "https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}" vo-hasil2
