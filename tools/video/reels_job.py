@@ -55,8 +55,9 @@ def folder_id(s):
 def voice_cfg():
     """Dari Panduan baris "Suara VO Reels". Format:
     gemini: Achird | arah gaya bicara (opsional)      -> Gemini TTS (butuh GEMINI_API_KEY)
+    gemini: Zubenelgenubi / Callirrhoe                -> A/B test, suara digilir per konten
     id-ID-ArdiNeural, +5%                             -> Microsoft edge-tts
-    Balikin list argumen buat render_video.py."""
+    Balikin list pilihan (tiap pilihan = list argumen buat render_video.py)."""
     v = os.environ.get("VO_VOICE", "").strip()
     if not v:
         rows = backend({"action": "get", "range": "Panduan!A1:B60"}).get("values") or []
@@ -64,15 +65,39 @@ def voice_cfg():
             if row and re.match(r"suara vo", str(row[0]), re.I) and len(row) > 1:
                 v = str(row[1]).strip()
                 break
-    m = re.match(r"\s*gemini\s*:?\s*([A-Za-z]+)\s*(?:\|\s*(.+))?$", v or "", re.S | re.I)
+    m = re.match(r"\s*gemini\s*:?\s*([A-Za-z /,]+?)\s*(?:\|\s*(.+))?$", v or "", re.S | re.I)
     if m:
-        args = ["--tts", "gemini", "--vo", m.group(1)]
-        if m.group(2) and m.group(2).strip():
-            args += ["--gaya", m.group(2).strip()]
-        return args
+        names = [x for x in re.split(r"[\s/,]+", m.group(1)) if x]
+        gaya = ["--gaya", m.group(2).strip()] if m.group(2) and m.group(2).strip() else []
+        return [["--tts", "gemini", "--vo", n, *gaya] for n in names]
     n = re.search(r"[a-z]{2}-[A-Z]{2}-\w+Neural", v or "")
     r = re.search(r"[+-]\d{1,2}%", v or "")
-    return ["--vo", n.group(0) if n else "id-ID-ArdiNeural", "--rate", r.group(0) if r else "+5%"]
+    return [["--vo", n.group(0) if n else "id-ID-ArdiNeural", "--rate", r.group(0) if r else "+5%"]]
+
+
+def pick_voice(opts, kid):
+    """1 suara: pakai itu. Lebih dari 1 (A/B test): konten yang pernah dirender tetap pakai suara yang sama,
+    konten baru dapet suara yang paling jarang dipakai (dihitung dari Log Upload "Video VO")."""
+    if len(opts) == 1:
+        return opts[0]
+    names = [o[o.index("--vo") + 1] for o in opts]
+    try:
+        logs = backend({"action": "get", "range": "Log Upload!A2:E5000"}).get("values") or []
+    except Exception:
+        logs = []
+    used, count = {}, {n: 0 for n in names}
+    for row in logs:
+        row = row + [""] * 5
+        if row[3] != "Video VO":
+            continue
+        mm = re.search(r"--vo (\S+)", row[4])
+        if mm and mm.group(1) in count:
+            if row[1] not in used:
+                count[mm.group(1)] += 1
+            used[row[1]] = mm.group(1)
+    if kid in used:
+        return opts[names.index(used[kid])]
+    return opts[names.index(min(names, key=lambda n: (count[n], names.index(n))))]
 
 
 def jobs():
@@ -116,11 +141,13 @@ def main():
     if not todo:
         print("Nggak ada Reels yang perlu dirender.")
         return
-    vargs = voice_cfg()
-    print("Suara:", " ".join(vargs))
+    opts = voice_cfg()
+    print("Pilihan suara:", [o[o.index("--vo") + 1] for o in opts])
     for v, fid, js in todo:
         kid, judul = v[K["id"]], v[K["judul"]]
         try:
+            vargs = pick_voice(opts, kid)
+            print(kid, "suara:", " ".join(vargs[:4]))
             naskah = base64.b64decode(backend({"action": "file", "fileId": js["id"]})["data"])
             with tempfile.TemporaryDirectory() as td:
                 jp, mp = os.path.join(td, "naskah.json"), os.path.join(td, f"{kid}-vo.mp4")
@@ -129,7 +156,7 @@ def main():
                 data = base64.b64encode(open(mp, "rb").read()).decode()
                 mb = os.path.getsize(mp) / 1e6
             backend({"action": "upload", "folderId": fid, "name": f"{kid}-vo.mp4", "mimeType": "video/mp4", "data": data, "replace": True})
-            log(kid, judul, "Video VO", f"{kid}-vo.mp4 ({mb:.1f} MB) dari {js['title']}, suara {' '.join(vargs[:4])}")
+            log(kid, judul, "Video VO", f"{kid}-vo.mp4 ({mb:.1f} MB) dari {js['title']}, suara {' '.join(vargs[:4])}{' (A/B test)' if len(opts) > 1 else ''}")
             print(kid, "beres")
         except Exception as e:
             msg = str(e)
