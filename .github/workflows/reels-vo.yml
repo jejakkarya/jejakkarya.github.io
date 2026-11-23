@@ -1,0 +1,48 @@
+name: Render Reels + VO
+
+# Tiap ±20 menit nyari Reels berstatus "Desain siap" yang naskah.json-nya belum dirender pakai suara,
+# lalu render ulang video + voice over (suara AI Microsoft) dan simpan "<ID>-vo.mp4" ke folder Drive konten.
+# Suara diatur di tab Panduan baris "Suara VO Reels". Secret: KONTROL_KEY.
+
+on:
+  schedule:
+    - cron: "3,23,43 * * * *"
+  workflow_dispatch:
+    inputs:
+      konten_id:
+        description: "ID konten Reels yang mau dirender ulang (kosongin = semua yang perlu)"
+        required: false
+        default: ""
+
+concurrency:
+  group: reels-vo
+  cancel-in-progress: false
+
+jobs:
+  render:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          sparse-checkout: tools/video
+      - uses: actions/setup-python@v5
+        with: { python-version: "3.12" }
+      - name: Cek ada kerjaan
+        id: cek
+        env:
+          KONTROL_KEY: ${{ secrets.KONTROL_KEY }}
+          KONTEN_ID: ${{ github.event_name == 'workflow_dispatch' && inputs.konten_id || '' }}
+        run: python tools/video/reels_job.py --cek
+      - name: Pasang alat
+        if: steps.cek.outputs.ok == '1'
+        run: |
+          sudo apt-get update -qq && sudo apt-get install -y -qq ffmpeg
+          pip install -q playwright edge-tts
+          python -m playwright install --with-deps chromium
+      - name: Render
+        if: steps.cek.outputs.ok == '1'
+        env:
+          KONTROL_KEY: ${{ secrets.KONTROL_KEY }}
+          KONTEN_ID: ${{ github.event_name == 'workflow_dispatch' && inputs.konten_id || '' }}
+        run: python tools/video/reels_job.py

@@ -6,14 +6,15 @@
  * File ini idealnya tidak perlu diubah lagi.
  *
  * Bisa: baca/tulis/tambah baris di tab mana pun pada spreadsheet SHEET_ID,
- * bikin tab baru, baca daftar tab, dan ambil gambar dari Drive (milik akun ini).
+ * bikin tab baru, baca daftar tab, ambil file dari Drive, dan simpan file ke folder Drive
+ * (dipakai render video Reels di GitHub Actions).
  * Semua permintaan wajib membawa KEY yang cocok (Script Properties > KEY).
  *
  * Kalau file ini diganti: Deploy > Manage deployments > ikon pensil >
  * Version: New version > Deploy. URL /exec tetap sama.
  */
 const SHEET_ID = '1Gh2-4uNna1qWwk2evuxrz49iBL-bljN9IMrhndAMLWA';
-const VERSION = 2;
+const VERSION = 3;
 
 function doGet() {
   return out_({ ok: true, service: 'kontrol-jejakkarya', version: VERSION });
@@ -93,13 +94,25 @@ function run_(op) {
       while (it.hasNext()) {
         const f = it.next();
         const type = String(f.getMimeType());
-        if (!op.type || type.indexOf(op.type) === 0) files.push({ id: f.getId(), title: f.getName(), mimeType: type });
+        if (!op.type || type.indexOf(op.type) === 0) files.push({ id: f.getId(), title: f.getName(), mimeType: type, updated: f.getLastUpdated().toISOString(), size: f.getSize() });
       }
       return { ok: true, files: files };
     }
     case 'file': {
       const blob = DriveApp.getFileById(String(op.fileId)).getBlob();
       return { ok: true, mimeType: blob.getContentType(), data: Utilities.base64Encode(blob.getBytes()) };
+    }
+    case 'upload': {
+      // Simpan file (base64) ke folder Drive. replace: true = file lama dengan nama sama dibuang ke sampah.
+      const folder = DriveApp.getFolderById(String(op.folderId));
+      const name = String(op.name || 'file');
+      if (op.replace) {
+        const old = folder.getFilesByName(name);
+        while (old.hasNext()) old.next().setTrashed(true);
+      }
+      const blob = Utilities.newBlob(Utilities.base64Decode(String(op.data || '')), String(op.mimeType || 'application/octet-stream'), name);
+      const f = folder.createFile(blob);
+      return { ok: true, id: f.getId(), title: f.getName() };
     }
     default:
       return { ok: false, code: 'bad_request', message: 'Aksi tidak dikenal: ' + op.action };

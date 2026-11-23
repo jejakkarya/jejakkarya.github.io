@@ -691,12 +691,13 @@ async function loadSlides(x,el,btn){
     if(imgCache[fid]){box.innerHTML=`<video src="${imgCache[fid]}" controls playsinline></video>`;btn.remove();return;}
     box.innerHTML=`<div class="ph">Nyari video…</div>`;
     try{
-      const p=payload(await call(S_DRIVE,"search_files",{query:`parentId = '${fid}' and mimeType contains 'video/'`,excludeContentSnippets:true,pageSize:5}));
-      const f=(p?.files||[])[0];if(!f){box.innerHTML=`<div class="ph">Video belum ada di folder</div>`;btn.disabled=false;return;}
+      const p=payload(await call(S_DRIVE,"search_files",{query:`parentId = '${fid}' and mimeType contains 'video/'`,excludeContentSnippets:true,pageSize:10}));
+      const fs=p?.files||[];const f=fs.find(z=>/-vo\.mp4$/i.test(z.title||z.name||""))||fs[0];if(!f){box.innerHTML=`<div class="ph">Video belum ada di folder</div>`;btn.disabled=false;return;}
+      const tanpaVO=!/-vo\.mp4$/i.test(f.title||f.name||"");
       box.innerHTML=`<div class="ph">Ngunduh video…</div>`;
       const u=imgFromResult(await call(S_DRIVE,"download_file_content",{fileId:f.id}),"video/mp4");
       if(!u){box.innerHTML=`<div class="ph">Video gagal dimuat. Buka di Drive.</div>`;btn.disabled=false;return;}
-      imgCache[fid]=u;box.innerHTML=`<video src="${u}" controls playsinline></video>`;btn.remove();
+      imgCache[fid]=u;box.innerHTML=`<video src="${u}" controls playsinline></video>${tanpaVO?`<p class="meta">Ini versi tanpa suara. Versi pakai VO lagi dibikin otomatis (±20–40 menit), muat ulang nanti.</p>`:""}`;btn.remove();
     }catch(e){box.innerHTML=`<div class="notice bad">${esc(errText(e,S_DRIVE))}</div>`;btn.disabled=false;}
     return;
   }
