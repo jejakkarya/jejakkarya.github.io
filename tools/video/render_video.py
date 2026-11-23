@@ -5,7 +5,12 @@ Pakai:
   python3 render_video.py naskah.json hasil.mp4            # render penuh
   python3 render_video.py naskah.json --frames 2.5 7 11    # simpan frame JPG buat dicek (frame_2.5.jpg, ...)
 
+  python3 render_video.py naskah.json hasil.mp4 --tts gemini --vo Achird [--gaya "arah gaya bicara"]   # VO Gemini (env GEMINI_API_KEY)
+  python3 render_video.py naskah.json hasil.mp4 --vo id-ID-ArdiNeural [--rate +5%]   # VO Microsoft (edge-tts)
+
 Butuh: playwright (python) + Chromium, ffmpeg. Font & logo diunduh otomatis ke folder skrip kalau belum ada.
+--vo butuh: pip install edge-tts, plus akses internet ke layanan suara Microsoft (jalan di GitHub Actions).
+Pakai --vo: durasi tiap adegan otomatis ngikut panjang suara, subtitle karaoke pas sama kata yang diucapin.
 Env opsional: CHROME (path Chrome/Chromium).
 
 FORMAT JSON
@@ -72,12 +77,191 @@ def normalize(data):
     for a in sc:
         if not a.get("visual"):
             raise SystemExit(f"Adegan tanpa visual: {a.get('vo','')[:40]}")
+        if "_asli" not in a:
+            a["_asli"] = a.get("durasi")
         n = len(words(a.get("vo")))
         a["durasi"] = float(a.get("durasi") or max(2.5, n / 2.6 + 0.7))
         a["mulai"] = round(t, 3)
         t += a["durasi"]
     data["total"] = round(t, 3)
     return data
+
+
+def find_ffmpeg():
+    ff = shutil.which("ffmpeg")
+    if ff:
+        return ff
+    try:
+        import imageio_ffmpeg
+        return imageio_ffmpeg.get_ffmpeg_exe()
+    except ImportError:
+        raise SystemExit("ffmpeg nggak ada. Pasang: pip install imageio-ffmpeg --break-system-packages")
+
+
+def bare(w):
+    return re.sub(r"[^\w]", "", str(w).lower())
+
+
+def align(ws, wb, lead, span):
+    """Waktu mulai tiap kata caption (detik, relatif adegan) dari WordBoundary edge-tts."""
+    out, j = [None] * len(ws), 0
+    for i, w in enumerate(ws):
+        b = bare(w)
+        for k in range(j, min(j + 4, len(wb))):
+            c = bare(wb[k][2])
+            if b and c and (b == c or b.startswith(c) or c.startswith(b) or c in b):
+                out[i], j = lead + wb[k][0], k + 1
+                break
+    # isi yang nggak ketemu: interpolasi
+    known = [(i, t) for i, t in enumerate(out) if t is not None]
+    if not known:
+        tot = sum(len(w) + 2 for w in ws) or 1
+        acc = 0
+        for i, w in enumerate(ws):
+            out[i] = lead + span * acc / tot
+            acc += len(w) + 2
+        return [round(t, 3) for t in out]
+    first_i, first_t = known[0]
+    for i in range(first_i):
+        out[i] = lead + (first_t - lead) * i / max(first_i, 1)
+    for (i0, t0), (i1, t1) in zip(known, known[1:]):
+        for i in range(i0 + 1, i1):
+            out[i] = t0 + (t1 - t0) * (i - i0) / (i1 - i0)
+    last_i, last_t = known[-1]
+    end = lead + span
+    for i in range(last_i + 1, len(ws)):
+        out[i] = last_t + (end - last_t) * (i - last_i) / (len(ws) - last_i)
+    return [round(t, 3) for t in out]
+
+
+async def tts(text, voice, rate):
+    import edge_tts
+    try:
+        comm = edge_tts.Communicate(text, voice, rate=rate, boundary="WordBoundary")
+    except TypeError:
+        comm = edge_tts.Communicate(text, voice, rate=rate)
+    audio, wb = bytearray(), []
+    async for ch in comm.stream():
+        if ch["type"] == "audio":
+            audio += ch["data"]
+        elif ch["type"] == "WordBoundary":
+            wb.append((ch["offset"] / 1e7, ch["duration"] / 1e7, ch["text"]))
+    return bytes(audio), wb
+
+
+GEMINI_MODELS = ["gemini-3.8-flash-tts", "gemini-3.1-flash-tts-preview"]
+GAYA_DEFAULT = ("Casual Jakarta-style Indonesian, like chatting with a friend who is also a creative worker. "
+                "Relaxed, warm, a little playful and lightly sarcastic, natural conversational rhythm and intonation, "
+                "medium-fast pace. Not a news anchor, not an ad voice-over.")
+
+
+def gemini_tts(text, voice, gaya, out_wav):
+    """Suara dari Gemini TTS (WAV 24 kHz). Butuh env GEMINI_API_KEY."""
+    import base64, urllib.error, time
+    key = os.environ.get("GEMINI_API_KEY", "")
+    if not key:
+        raise SystemExit("GEMINI_API_KEY kosong.")
+    bodies = [
+        {"contents": [{"role": "user", "parts": [{"text": text, "speech_metadata": {"style": gaya}}]}]},
+        {"contents": [{"role": "user", "parts": [{"text": f"{gaya}\nSay the following in Indonesian:\n{text}"}]}]},
+    ]
+    gen = {"responseModalities": ["AUDIO"], "speechConfig": {"voiceConfig": {"prebuiltVoiceConfig": {"voiceName": voice}}}}
+    last = ""
+    for model in ([os.environ["GEMINI_TTS_MODEL"]] if os.environ.get("GEMINI_TTS_MODEL") else GEMINI_MODELS):
+        # model 3.8 baca teks persis (gaya lewat speech_metadata); model lama gaya ditaruh di teks
+        for body in (bodies[:1] if model.startswith("gemini-3.8") else bodies[1:]):
+            for attempt in range(8):
+                req = urllib.request.Request(
+                    f"https://generativelanguage.googleapis.com/v1beta/models/{model}:generateContent",
+                    data=json.dumps({**body, "generationConfig": gen}).encode(),
+                    headers={"x-goog-api-key": key, "Content-Type": "application/json"})
+                try:
+                    j = json.loads(urllib.request.urlopen(req, timeout=120).read())
+                    part = j["candidates"][0]["content"]["parts"][0]["inlineData"]
+                    raw = base64.b64decode(part["data"])
+                    mime = part.get("mimeType", "")
+                    if raw[:4] == b"RIFF":
+                        open(out_wav, "wb").write(raw)
+                    else:  # PCM mentah 16-bit mono
+                        import wave
+                        rate = int((re.search(r"rate=(\d+)", mime) or [0, 24000])[1])
+                        with wave.open(out_wav, "wb") as w:
+                            w.setnchannels(1); w.setsampwidth(2); w.setframerate(rate); w.writeframes(raw)
+                    return model
+                except urllib.error.HTTPError as e:
+                    last = f"{model} HTTP {e.code}: {e.read()[:300]!r}"
+                    if e.code in (429, 500, 503):
+                        time.sleep(min(90, 15 * (attempt + 1)))
+                        continue
+                    break  # 400/404: coba bentuk body/model berikutnya
+                except (KeyError, IndexError) as e:
+                    last = f"{model}: respons tanpa audio ({e})"
+                    break
+            else:
+                continue
+    raise SystemExit("Gemini TTS gagal: " + last)
+
+
+def trim_silence(ff, src, dst):
+    subprocess.run([ff, "-v", "error", "-y", "-i", src, "-af",
+                    "silenceremove=start_periods=1:start_threshold=-45dB,areverse,silenceremove=start_periods=1:start_threshold=-45dB,areverse",
+                    "-ar", "44100", "-ac", "1", dst], check=True)
+
+
+def make_vo(data, voice, rate, workdir, engine="edge", gaya=""):
+    """Bikin suara per adegan, set durasi & waktu kata, lalu gabung jadi satu WAV. Balikin path WAV."""
+    import wave
+    ff = find_ffmpeg()
+    os.makedirs(workdir, exist_ok=True)
+    LEAD, TAIL = 0.3, 0.45
+    sc = data["adegan"]
+    for i, a in enumerate(sc):
+        text = re.sub(r"\*\*|==", "", str(a.get("vo") or "")).strip()
+        if not text:
+            continue
+        wv = os.path.join(workdir, f"a{i}.wav")
+        if engine == "gemini":
+            raw = os.path.join(workdir, f"a{i}_raw.wav")
+            maks = len(words(text)) / 1.3 + 2.5  # lebih lama dari ini = kemungkinan suaranya ngaco
+            for coba in range(3):
+                used = gemini_tts(text, voice, gaya or GAYA_DEFAULT, raw)
+                trim_silence(ff, raw, wv)
+                with wave.open(wv) as w:
+                    pj = w.getnframes() / w.getframerate()
+                print(f"adegan {i + 1}: {used} {pj:.1f} dtk")
+                if pj <= maks:
+                    break
+            else:
+                raise SystemExit(f"Suara adegan {i + 1} kepanjangan ({pj:.1f} dtk), kemungkinan ngaco.")
+            wb = []
+        else:
+            mp3, wb = asyncio.run(tts(text, voice, rate))
+            if not mp3:
+                raise SystemExit(f"Suara kosong buat adegan {i + 1}.")
+            mp = os.path.join(workdir, f"a{i}.mp3")
+            open(mp, "wb").write(mp3)
+            subprocess.run([ff, "-v", "error", "-y", "-i", mp, "-ar", "44100", "-ac", "1", wv], check=True)
+        with wave.open(wv) as w:
+            ln = w.getnframes() / w.getframerate()
+        a["_wav"], a["_len"] = wv, ln
+        a["durasi"] = round(max(float(a.get("_asli") or 0), LEAD + ln + TAIL, 2.0), 3)
+        a["kata"] = align(words(a.get("vo")), wb, LEAD, ln)
+    normalize(data)
+    ins, flt = [], []
+    for a in sc:
+        if a.get("_wav"):
+            ms = int(round((a["mulai"] + LEAD) * 1000))
+            k = len(ins) // 2
+            flt.append(f"[{k}:a]adelay={ms}|{ms}[v{k}]")
+            ins += ["-i", a.pop("_wav")]
+            a.pop("_len", None)
+    out = os.path.join(workdir, "vo.wav")
+    n = len(ins) // 2
+    if not n:
+        return None
+    mix = "".join(f"[v{k}]" for k in range(n)) + f"amix=inputs={n}:normalize=0:dropout_transition=0,apad,atrim=0:{data['total']:.3f}[o]"
+    subprocess.run([ff, "-v", "error", "-y", *ins, "-filter_complex", ";".join(flt + [mix]), "-map", "[o]", "-ar", "44100", "-ac", "2", out], check=True)
+    return out
 
 
 CSS = r"""
@@ -243,7 +427,8 @@ D.adegan.forEach((A,si)=>{
   const ws=String(A.vo||"").trim().split(/\s+/).filter(Boolean);
   const hl=String(A.highlight||"").toLowerCase().split(/\s+/).filter(Boolean).map(x=>x.replace(/[^\p{L}\p{N}-]/gu,""));
   const tot=ws.reduce((n,w)=>n+w.length+2,0)||1;let acc=0;
-  const cw=ws.map(w=>{const at=dur*(.08+.77*acc/tot);acc+=w.length+2;const bare=w.toLowerCase().replace(/[^\p{L}\p{N}-]/gu,"");return{w,at,hl:hl.includes(bare)};});
+  const K=Array.isArray(A.kata)&&A.kata.length===ws.length?A.kata:null;
+  const cw=ws.map((w,i)=>{const at=K?K[i]:dur*(.08+.77*acc/tot);acc+=w.length+2;const bare=w.toLowerCase().replace(/[^\p{L}\p{N}-]/gu,"");return{w,at,hl:hl.includes(bare)};});
   scenes.push({s,start:A.mulai,dur,anims,cw});
 });
 
@@ -296,7 +481,7 @@ def build_html(data):
 <script>{ENGINE}</script></body></html>"""
 
 
-async def run(data, out=None, frames=None):
+async def run(data, out=None, frames=None, audio=None):
     from playwright.async_api import async_playwright
     page_path = os.path.join(HERE, "_video.html")
     with open(page_path, "w", encoding="utf-8") as f:
@@ -319,18 +504,13 @@ async def run(data, out=None, frames=None):
                 await pg.screenshot(path=f"frame_{t}.jpg", type="jpeg", quality=88)
                 print(f"frame_{t}.jpg")
         else:
-            ff = shutil.which("ffmpeg")
-            if not ff:
-                try:
-                    import imageio_ffmpeg
-                    ff = imageio_ffmpeg.get_ffmpeg_exe()
-                except ImportError:
-                    raise SystemExit("ffmpeg nggak ada. Pasang: pip install imageio-ffmpeg --break-system-packages")
+            ff = find_ffmpeg()
+            ain = ["-i", audio] if audio else ["-f", "lavfi", "-i", "anullsrc=r=44100:cl=stereo"]
             tmp = out + ".part.mp4"
             proc = subprocess.Popen([ff, "-v", "error", "-y", "-f", "image2pipe", "-framerate", str(FPS), "-c:v", "mjpeg", "-i", "-",
-                                     "-f", "lavfi", "-i", "anullsrc=r=44100:cl=stereo", "-shortest",
+                                     *ain, "-af", "apad", "-shortest",
                                      "-c:v", "libx264", "-preset", "veryfast", "-crf", "18", "-pix_fmt", "yuv420p",
-                                     "-c:a", "aac", "-b:a", "64k", "-movflags", "+faststart", tmp], stdin=subprocess.PIPE)
+                                     "-c:a", "aac", "-b:a", "128k" if audio else "64k", "-movflags", "+faststart", tmp], stdin=subprocess.PIPE)
             n = int(round(total * FPS))
             for i in range(n):
                 await pg.evaluate(f"render({i / FPS})")
@@ -348,13 +528,23 @@ def main():
     if not a:
         print(__doc__)
         sys.exit(1)
+    opt = {}
+    for k in ("--vo", "--rate", "--tts", "--gaya"):
+        if k in a:
+            i = a.index(k)
+            opt[k] = a[i + 1]
+            del a[i:i + 2]
     data = normalize(json.load(open(a[0], encoding="utf-8")))
     ensure_assets()
+    audio = None
+    if opt.get("--vo") and not (len(a) > 1 and a[1] == "--frames"):
+        audio = make_vo(data, opt["--vo"], opt.get("--rate", "+0%"), os.path.join(HERE, "_vo"),
+                        engine=opt.get("--tts", "edge"), gaya=opt.get("--gaya", ""))
     if len(a) > 1 and a[1] == "--frames":
         asyncio.run(run(data, frames=[float(x) for x in a[2:]] or [1.0]))
     else:
         out = a[1] if len(a) > 1 else os.path.splitext(a[0])[0] + ".mp4"
-        asyncio.run(run(data, out=out))
+        asyncio.run(run(data, out=out, audio=audio))
 
 
 if __name__ == "__main__":

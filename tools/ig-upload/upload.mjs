@@ -112,7 +112,13 @@ async function postReels(x, me, fid, caption, now) {
   const vids = ((await backend({ action: "files", folderId: fid, type: "video/" })).files || [])
     .filter(f => /\.mp4$/i.test(f.title || "") || /video/.test(f.mimeType || ""));
   if (!vids.length) throw new Error("Folder desain nggak ada file video MP4-nya.");
-  if (vids.length > 1) log(`Ada ${vids.length} video, dipakai yang pertama: ${vids[0].title}`);
+  // utamain video ber-VO (hasil workflow reels-vo), lalu yang paling baru
+  vids.sort((a, b) => (/-vo\.mp4$/i.test(b.title || "") - /-vo\.mp4$/i.test(a.title || "")) || String(b.updated || "").localeCompare(String(a.updated || "")));
+  if (!/-vo\.mp4$/i.test(vids[0].title || "")) {
+    const all = (await backend({ action: "files", folderId: fid })).files || [];
+    if (all.some(f => /naskah.*\.json$/i.test(f.title || ""))) throw new Error("Video pakai VO belum jadi (workflow Render Reels + VO). Coba lagi nanti.");
+  }
+  log(`Video dipakai: ${vids[0].title}`);
   const b = await backend({ action: "file", fileId: vids[0].id });
   const buf = Buffer.from(b.data, "base64");
   if (buf.length < 50000) throw new Error(`File video kekecilan (${buf.length} byte), kemungkinan rusak.`);
