@@ -7,7 +7,10 @@
  *    konten Approve yang tanggal + jam tayangnya udah lewat → workflow ig-upload.yml
  *  - tab Threads: utas yang diminta "Upload sekarang" (kolom N diawali "upload|") atau
  *    utas Approve yang jadwalnya udah lewat → workflow threads-upload.yml
- * Nggak manggil GitHub kalau nggak ada yang perlu diposting.
+ *  - jam 06:50 & 13:50 WIB: tarik insight IG + Threads → workflow ig-insight.yml
+ *    (jadwal bawaan GitHub sering telat/kelewat, jadi dipicu dari sini)
+ *  - ada Reels "Desain siap": tiap 20 menit → workflow reels-vo.yml (render suara)
+ * Nggak manggil GitHub kalau nggak ada yang perlu dikerjain.
  *
  * Pasang (sekali):
  * 1. Script Properties > GH_TOKEN = token GitHub (fine-grained, repo jejakkarya.github.io,
@@ -45,6 +48,8 @@ function cekPemicu() {
       try { p_cek_(ss, job, now, props); }
       catch (e) { console.error(job.tab + ': ' + e.message); }
     });
+    try { p_harian_(now, props); } catch (e) { console.error('Insight: ' + e.message); }
+    try { p_reels_(ss, props); } catch (e) { console.error('Reels VO: ' + e.message); }
   } finally {
     lock.releaseLock();
   }
@@ -86,11 +91,37 @@ function p_cek_(ss, job, now, props) {
   props.setProperty(key, String(Date.now()));
 }
 
-function p_dispatch_(workflow, inputName, id) {
+// Insight IG + Threads, 2x sehari (sebelum Erwin jalan 07:23 & 14:23)
+const P_JAM_INSIGHT = ['06:50', '13:50'];
+function p_harian_(now, props) {
+  const tgl = now.slice(0, 10), jam = now.slice(11);
+  P_JAM_INSIGHT.forEach(function (j) {
+    const key = 'INS_' + tgl + '_' + j;
+    if (jam >= j && !props.getProperty(key)) {
+      props.setProperty(key, '1');
+      p_dispatch_('ig-insight.yml', null, null, {});
+    }
+  });
+}
+
+// Render suara Reels: selama ada Reels "Desain siap", picu tiap 20 menit (workflow-nya sendiri yang ngecek perlu atau nggak)
+function p_reels_(ss, props) {
+  const sh = ss.getSheetByName('Konten');
+  if (!sh || sh.getLastRow() < 2) return;
+  const vals = sh.getRange(2, 5, sh.getLastRow() - 1, 4).getDisplayValues(); // E Format .. H Status
+  const ada = vals.some(function (v) { return /reels?/i.test(v[0]) && v[3] === 'Desain siap'; });
+  if (!ada) return;
+  const last = Number(props.getProperty('LAST_REELS_VO') || 0);
+  if (Date.now() - last < 20 * 60000) return;
+  props.setProperty('LAST_REELS_VO', String(Date.now()));
+  p_dispatch_('reels-vo.yml', null, null, { konten_id: '' });
+}
+
+function p_dispatch_(workflow, inputName, id, inputsOverride) {
   const token = PropertiesService.getScriptProperties().getProperty('GH_TOKEN');
   if (!token) throw new Error('GH_TOKEN belum diisi di Script Properties.');
-  const inputs = { dry_run: 'false' };
-  inputs[inputName] = String(id || '');
+  const inputs = inputsOverride || { dry_run: 'false' };
+  if (inputName) inputs[inputName] = String(id || '');
   const res = UrlFetchApp.fetch('https://api.github.com/repos/' + P_REPO + '/actions/workflows/' + workflow + '/dispatches', {
     method: 'post',
     contentType: 'application/json',
