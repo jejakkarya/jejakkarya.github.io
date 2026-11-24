@@ -240,6 +240,17 @@ select{width:100%;border:1px solid var(--line);border-radius:12px;padding:10px 1
 .adegan .s b.t{display:block;color:var(--blue);font-size:12px;letter-spacing:.06em;text-transform:uppercase;margin-bottom:2px}
 .adegan .s .vo{font-weight:700}
 .adegan .s .vi{color:var(--muted);font-size:13px;margin-top:4px}
+/* preview gaya gambar */
+.gprev{display:flex;gap:14px;align-items:flex-start;margin:6px 0 10px}
+.gprev .pbox{flex:none;width:216px;height:270px;border-radius:10px;overflow:hidden;box-shadow:0 2px 10px rgba(20,24,38,.18);background:#f6f7fb;position:relative}
+.gprev .pin{position:absolute;left:0;top:0;width:1080px;height:1350px;transform:scale(.2);transform-origin:0 0;font-family:system-ui,-apple-system,"Segoe UI",sans-serif;color:#141826}
+.gprev .pin img{display:block}
+.gprev .pin .ptx{position:absolute;left:80px;right:80px;display:flex;flex-direction:column;gap:28px}
+.gprev .pin .pj{font-size:76px;line-height:1.05;font-weight:800;letter-spacing:-.01em}
+.gprev .pin .pt{font-size:40px;line-height:1.35;opacity:.85}
+.gprev .pin mark{background:#ffcf4a;color:inherit;padding:0 6px}
+.gprev .pnote{font-size:13px;color:var(--muted);line-height:1.4}
+@media (max-width:420px){.gprev{flex-direction:column;align-items:center}.gprev .pnote{text-align:center}}
 </style>
 </head>
 <body>
@@ -758,6 +769,18 @@ function bindAset(el,x){
   el.querySelectorAll("[data-add]").forEach(b=>b.onclick=()=>pickImage(x,+b.dataset.add,el));
 }
 function slideTipe(x,slide){const l=String(x.v[K.naskah]||"").split(/\n+/).filter(s=>s.trim())[slide-1]||"";const m=l.match(/\((cover|isi|kutipan|cta)\)/i);return m?m[1].toLowerCase():"isi";}
+function slideTeks(x,slide){
+  const l=String(x.v[K.naskah]||"").split(/\n+/).filter(s=>s.trim())[slide-1]||"";
+  const body=l.replace(/^Slide\s*\d+\s*(\([^)]*\))?\s*:\s*/i,"");const p=body.split(" | ");
+  const fmt=s=>esc(String(s||"").trim()).replace(/==(.+?)==/g,"<mark>$1</mark>");
+  return{j:fmt(p[0]||String(x.v[K.judul]||"")),t:fmt(p.slice(1).join(" "))};
+}
+function gayaPreview(src,gaya,tx){
+  const t=`<div class="pj">${tx.j}</div>${tx.t?`<div class="pt">${tx.t}</div>`:""}`;
+  if(gaya==="latar")return`<div class="pin" style="background:#141826"><img src="${src}" alt="" style="position:absolute;inset:0;width:1080px;height:1350px;object-fit:cover"><div style="position:absolute;inset:0;background:linear-gradient(180deg,rgba(20,24,38,.15) 0%,rgba(20,24,38,.55) 45%,rgba(20,24,38,.92) 100%)"></div><div class="ptx" style="bottom:110px;color:#fff">${t}</div></div>`;
+  if(gaya==="bingkai")return`<div class="pin"><div style="position:absolute;left:114px;top:110px;width:852px;height:560px;background:#fff;border-radius:28px;box-shadow:0 12px 40px rgba(20,24,38,.18);padding:22px;box-sizing:border-box"><img src="${src}" alt="" style="width:100%;height:100%;object-fit:contain;border-radius:14px"></div><div class="ptx" style="top:740px">${t}</div></div>`;
+  return`<div class="pin"><img src="${src}" alt="" style="position:absolute;left:0;top:0;width:1080px;height:600px;object-fit:cover"><div class="ptx" style="top:670px">${t}</div></div>`;
+}
 function pickImage(x,slide,el){
   const inp=document.createElement("input");inp.type="file";inp.accept="image/*";
   inp.onchange=()=>{const f=inp.files&&inp.files[0];if(!f)return;
@@ -765,10 +788,12 @@ function pickImage(x,slide,el){
     const tipe=slideTipe(x,slide);const def=(tipe==="cover"||tipe==="cta"||tipe==="kutipan")?"latar":"atas";
     const prev=URL.createObjectURL(f);
     const ada=asetFor(x.v[K.id],slide).length;
-    openModal(`<h3>${ada?"Ganti gambar":"Gambar buat"} slide ${slide}</h3>${ada?`<p class="meta">Gambar lama di slide ini bakal diganti.</p>`:""}<img src="${prev}" alt="" style="width:100%;max-height:240px;object-fit:contain;border-radius:12px;background:#eef0f5;margin:6px 0 10px">
+    openModal(`<h3>${ada?"Ganti gambar":"Gambar buat"} slide ${slide}</h3>${ada?`<p class="meta">Gambar lama di slide ini bakal diganti.</p>`:""}<div class="gprev"><div class="pbox" id="gPrev" aria-label="Perkiraan tampilan slide">${gayaPreview(prev,def,slideTeks(x,slide))}</div><p class="pnote">Perkiraan tampilan slide ${slide}. Ganti pilihan di bawah buat liat bedanya. Hasil akhir dari Sasha bisa sedikit beda (teks bisa dipendekin biar muat).</p></div>
       <div class="gayas">${Object.entries(GAYA).map(([k,v])=>`<label class="gopt"><input type="radio" name="gaya" value="${k}" ${k===def?"checked":""}><span><b>${v}</b><small>${{atas:"Gambar di setengah atas, teks di bawah.",latar:"Gambar jadi latar, teks putih di atas lapisan gelap.",bingkai:"Gambar utuh dalam bingkai putih. Cocok buat screenshot."}[k]}</small></span></label>`).join("")}</div>
       <p class="meta" id="upMsg" style="margin-top:8px"></p>
       <div class="row end"><button class="btn ghost" id="mNo">Batal</button><button class="btn primary" id="mYes">Upload</button></div>`);
+    const tx=slideTeks(x,slide);
+    document.querySelectorAll('input[name=gaya]').forEach(r=>r.onchange=()=>{$("#gPrev").innerHTML=gayaPreview(prev,r.value,tx);});
     $("#mNo").onclick=()=>{URL.revokeObjectURL(prev);closeModal();};
     $("#mYes").onclick=async()=>{
       const gaya=(document.querySelector('input[name=gaya]:checked')||{}).value||def;
