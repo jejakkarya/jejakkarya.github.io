@@ -142,9 +142,27 @@ def jobs():
     return out
 
 
+def manual_mode():
+    """Panduan "Suara VO Reels" diisi "manual": Oky rekam VO sendiri, render otomatis berhenti."""
+    v = os.environ.get("VO_VOICE", "").strip()
+    if not v:
+        rows = backend({"action": "get", "range": "Panduan!A1:B60"}).get("values") or []
+        for row in rows:
+            if row and re.match(r"suara vo", str(row[0]), re.I) and len(row) > 1:
+                v = str(row[1]).strip()
+                break
+    return bool(re.match(r"\s*manual", v or "", re.I))
+
+
 def main():
     if not KEY:
         sys.exit("KONTROL_KEY kosong.")
+    if not os.environ.get("KONTEN_ID", "").strip() and manual_mode():
+        print("Suara VO Reels = manual, render otomatis dimatiin.")
+        gh = os.environ.get("GITHUB_OUTPUT")
+        if gh and "--cek" in sys.argv:
+            open(gh, "a").write("ok=0\n")
+        return
     todo = jobs()
     if "--cek" in sys.argv:
         print(f"{len(todo)} Reels perlu dirender")
