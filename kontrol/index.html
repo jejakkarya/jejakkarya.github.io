@@ -779,7 +779,8 @@ function gayaPreview(src,gaya,tx){
   const t=`<div class="pj">${tx.j}</div>${tx.t?`<div class="pt">${tx.t}</div>`:""}`;
   if(gaya==="latar")return`<div class="pin" style="background:#141826"><img src="${src}" alt="" style="position:absolute;inset:0;width:1080px;height:1350px;object-fit:cover"><div style="position:absolute;inset:0;background:linear-gradient(180deg,rgba(20,24,38,.15) 0%,rgba(20,24,38,.55) 45%,rgba(20,24,38,.92) 100%)"></div><div class="ptx" style="bottom:110px;color:#fff">${t}</div></div>`;
   if(gaya==="bingkai")return`<div class="pin"><div style="position:absolute;left:114px;top:110px;width:852px;height:560px;background:#fff;border-radius:28px;box-shadow:0 12px 40px rgba(20,24,38,.18);padding:22px;box-sizing:border-box"><img src="${src}" alt="" style="width:100%;height:100%;object-fit:contain;border-radius:14px"></div><div class="ptx" style="top:740px">${t}</div></div>`;
-  return`<div class="pin"><img src="${src}" alt="" style="position:absolute;left:0;top:0;width:1080px;height:600px;object-fit:cover"><div class="ptx" style="top:670px">${t}</div></div>`;
+  const ta=t.replace('class="pj"','class="pj" style="font-size:62px"').replace('class="pt"','class="pt" style="font-size:30px"');
+  return`<div class="pin"><img src="${src}" alt="" style="position:absolute;left:0;top:0;width:1080px;height:820px;object-fit:cover"><div class="ptx" style="top:870px;gap:18px">${ta}</div></div>`;
 }
 function pickImage(x,slide,el){
   const inp=document.createElement("input");inp.type="file";inp.accept="image/*";
@@ -789,7 +790,7 @@ function pickImage(x,slide,el){
     const prev=URL.createObjectURL(f);
     const ada=asetFor(x.v[K.id],slide).length;
     openModal(`<h3>${ada?"Ganti gambar":"Gambar buat"} slide ${slide}</h3>${ada?`<p class="meta">Gambar lama di slide ini bakal diganti.</p>`:""}<div class="gprev"><div class="pbox" id="gPrev" aria-label="Perkiraan tampilan slide">${gayaPreview(prev,def,slideTeks(x,slide))}</div><p class="pnote">Perkiraan tampilan slide ${slide}. Ganti pilihan di bawah buat liat bedanya. Hasil akhir dari Sasha bisa sedikit beda (teks bisa dipendekin biar muat).</p></div>
-      <div class="gayas">${Object.entries(GAYA).map(([k,v])=>`<label class="gopt"><input type="radio" name="gaya" value="${k}" ${k===def?"checked":""}><span><b>${v}</b><small>${{atas:"Gambar di setengah atas, teks di bawah.",latar:"Gambar jadi latar, teks putih di atas lapisan gelap.",bingkai:"Gambar utuh dalam bingkai putih. Cocok buat screenshot."}[k]}</small></span></label>`).join("")}</div>
+      <div class="gayas">${Object.entries(GAYA).map(([k,v])=>`<label class="gopt"><input type="radio" name="gaya" value="${k}" ${k===def?"checked":""}><span><b>${v}</b><small>${{atas:"Gambar dominan di atas, teks lebih kecil di bawah.",latar:"Gambar jadi latar, teks putih di atas lapisan gelap.",bingkai:"Gambar utuh dalam bingkai putih. Cocok buat screenshot."}[k]}</small></span></label>`).join("")}</div>
       <p class="meta" id="upMsg" style="margin-top:8px"></p>
       <div class="row end"><button class="btn ghost" id="mNo">Batal</button><button class="btn primary" id="mYes">Upload</button></div>`);
     const tx=slideTeks(x,slide);
